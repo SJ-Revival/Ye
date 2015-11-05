@@ -198,10 +198,15 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
                 .convertPose2GLMatrix(result.getPose());
             float[] modelViewMatrix = modelViewMatrix_Vuforia.getData();
             
-            int textureIndex = trackable.getName().equalsIgnoreCase("stones") ? 0
-                : 1;
+            /*int textureIndex = trackable.getName().equalsIgnoreCase("stones") ? 0
+                : 1;*/
+            int textureIndex = trackable.getName().equalsIgnoreCase("ye") ? 0
+                    : 1;
             textureIndex = trackable.getName().equalsIgnoreCase("tarmac") ? 2
                 : textureIndex;
+
+            /*textureIndex = trackable.getName().equalsIgnoreCase("ye") ? 3
+                    : textureIndex;*/
             
             // deal with the modelview and projection matrices
             float[] modelViewProjection = new float[16];

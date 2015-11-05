@@ -106,8 +106,10 @@ public class ImageTargets extends Activity implements SampleApplicationControl,
         vuforiaAppSession = new SampleApplicationSession(this);
         
         startLoadingAnimation();
-        mDatasetStrings.add("StonesAndChips.xml");
+        //mDatasetStrings.add("StonesAndChips.xml");
+        mDatasetStrings.add("Ye.xml");
         mDatasetStrings.add("Tarmac.xml");
+        //mDatasetStrings.add("Ye.xml");
         
         vuforiaAppSession
             .initAR(this, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -638,8 +640,10 @@ public class ImageTargets extends Activity implements SampleApplicationControl,
         mStartDatasetsIndex = CMD_DATASET_START_INDEX;
         mDatasetsNumber = mDatasetStrings.size();
         
-        group.addRadioItem("Stones & Chips", mStartDatasetsIndex, true);
+        //group.addRadioItem("Stones & Chips", mStartDatasetsIndex, true);
+        group.addRadioItem("Ye", mStartDatasetsIndex, true);
         group.addRadioItem("Tarmac", mStartDatasetsIndex + 1, false);
+        //group.addRadioItem("Ye", mStartDatasetsIndex + 2, false);
         
         mSampleAppMenu.attachMenu();
     }
