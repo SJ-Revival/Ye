@@ -67,5 +67,8 @@
     <string name="menu_button_green">Green</string>
         
     <string name="splash_screen_description">Vuforia Splash</string>
-    
+    <string name="scan">Scan</string>
+
+
+    <string name="vbb_api">6e6081da-576d-4e07-9c52-3430865da569</string>
 </resources>

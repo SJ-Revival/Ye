@@ -90,15 +90,33 @@
             android:screenOrientation="portrait"
             android:noHistory="true"
             >
+
+         </activity>
+        
+        <activity
+            android:name=".ui.ActivityList.ActivityLauncher"
+            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
+            android:screenOrientation="portrait"
+            >
+        </activity>
+
+        <activity
+            android:name="de.ye.yeapp.MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
+            android:screenOrientation="portrait"
+            >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-         </activity>
-        
+
+        </activity>
+
+
         <activity
-            android:name=".ui.ActivityList.ActivityLauncher"
+            android:name="de.ye.yeapp.ScanActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
             android:screenOrientation="portrait"
             >
