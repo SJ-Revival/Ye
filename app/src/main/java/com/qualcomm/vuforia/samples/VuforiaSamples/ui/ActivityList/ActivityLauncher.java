@@ -17,7 +17,8 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.qualcomm.vuforia.samples.VuforiaSamples.R;
+import de.ye.yeapp.R;
+//import com.qualcomm.vuforia.samples.VuforiaSamples.R;
 
 
 // This activity starts activities which demonstrate the Vuforia features

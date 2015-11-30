@@ -6,15 +6,15 @@ package de.ye.yeapp.data;
 public class User {
 
 
-    public Position getPosition() {
-        return position;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setPosition(Position position) {
-        this.position = position;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
-    private Position position;
-    //private Setting settings;
+    private Address address;
+
 
 }

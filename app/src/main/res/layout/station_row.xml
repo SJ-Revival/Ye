@@ -3,10 +3,15 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <ListView
-        android:id="@+id/listStations"
+    <TextView
+        android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></ListView>
+        android:layout_height="wrap_content"
+        android:text="text"
+
+
+        android:fontFamily="sans-serif-thin"
+        android:textSize="22dp"
+        />
 
 </LinearLayout>

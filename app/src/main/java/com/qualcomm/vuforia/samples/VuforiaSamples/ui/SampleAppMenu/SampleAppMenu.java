@@ -26,7 +26,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.qualcomm.vuforia.samples.VuforiaSamples.R;
+import de.ye.yeapp.R;
+//import com.qualcomm.vuforia.samples.VuforiaSamples.R;
 
 
 // Handles the sample apps menu settings

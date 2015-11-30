@@ -71,4 +71,6 @@
 
 
     <string name="vbb_api">6e6081da-576d-4e07-9c52-3430865da569</string>
+    <string name="google_android_api">AIzaSyC9KWrcKCE3ZpnHrfhq-hW7KIzaNzCyjbo</string>
+    <string name="google_browser_api">AIzaSyA7R3wx5JCbcSeIZL_MPsVXktYhEgE3fJk</string>
 </resources>

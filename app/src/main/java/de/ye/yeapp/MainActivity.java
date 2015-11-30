@@ -6,7 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.qualcomm.vuforia.samples.VuforiaSamples.R;
+import de.ye.yeapp.R;
+//import com.qualcomm.vuforia.samples.VuforiaSamples.R;
 
 
 /**

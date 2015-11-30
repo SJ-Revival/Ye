@@ -28,7 +28,6 @@ public class JsonParser {
     static String json = "";
     private static final String TAG = JsonParser.class.getSimpleName();
 
-    //public JSONObject getJSONFromUrl(String request_url, Map<String,String> map, String type) {
     public JSONArray getJSONArrayFromUrl(String request_url, Map<String,String> map, String type) {
         Log.d(TAG, "getJSONArrayFromUrl() "+request_url);
         // versuche Request
@@ -101,7 +100,7 @@ public class JsonParser {
             }
             is.close();
             json = sb.toString();
-            Log.d(TAG, "JSON: "+json);
+            //Log.d(TAG, "JSON: "+json);
 
         } catch (Exception e) {
             Log.e(TAG, "Error converting result " + e.toString());

@@ -26,7 +26,8 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.qualcomm.vuforia.samples.VuforiaSamples.R;
+import de.ye.yeapp.R;
+//import com.qualcomm.vuforia.samples.VuforiaSamples.R;
 
 
 public class AboutScreen extends Activity implements OnClickListener

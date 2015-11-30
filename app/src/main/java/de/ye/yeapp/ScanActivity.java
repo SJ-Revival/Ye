@@ -1,22 +1,32 @@
 package de.ye.yeapp;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.qualcomm.vuforia.samples.VuforiaSamples.R;
+import de.ye.yeapp.R;
+//import com.qualcomm.vuforia.samples.VuforiaSamples.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.ye.yeapp.data.Station;
 import de.ye.yeapp.utils.JsonParser;
+import de.ye.yeapp.utils.StationAdapter;
 import de.ye.yeapp.utils.StationFactory;
 
 /**
@@ -24,12 +34,39 @@ import de.ye.yeapp.utils.StationFactory;
  */
 public class ScanActivity extends Activity{
 
+    private static final String TAG = ScanActivity.class.getSimpleName();
     private TextView txtOutput;
+    private List<Station> listStation;
+    private ListView listView;
+    private StationAdapter stationAdapter;
+
+    private Context context;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.scan_layout);
 
-        txtOutput = (TextView) findViewById(R.id.txtOutput);
+        context = this.getApplicationContext();
+
+        listView = (ListView)findViewById(R.id.listStations);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "onListItemClick");
+
+                Station station = (Station) listStation.get(position);
+                Toast.makeText(ScanActivity.this, station.getName()+ "", Toast.LENGTH_LONG).show();
+
+                Intent intent = new Intent(context, RouteActivity.class);
+
+                intent.putExtra("destination", ""+station.getName());
+
+                startActivity(intent);
+
+            }
+        });
+
+        listStation = new ArrayList<Station>();
 
         new AsyncTaskParseLocation().execute();
 
@@ -73,7 +110,7 @@ public class ScanActivity extends Activity{
                 for(int i = 0; i < jsonArray.length(); i++){
                     JSONObject jsonObjectLocation = jsonArray.getJSONObject(i);
                     station = StationFactory.createStation(jsonObjectLocation);
-
+                    listStation.add(station);
                     //txtOutput.setText(txtOutput.getText()+" "+station.getName());
                 }
                 //txtOutput.setText(""+jsonArray.toString());
@@ -89,7 +126,30 @@ public class ScanActivity extends Activity{
         protected void onPostExecute(String strFromDoInBg) {
             super.onPostExecute(strFromDoInBg);
 
+            String str = "";
+
+            /*for (Station station: listStation
+                 ) {
+
+                 str += station.getName()+"\r\n";
+
+            }*/
+
+            stationAdapter = new StationAdapter(getApplicationContext(), R.layout.station_row, listStation);
+
+            listView.setAdapter(stationAdapter);
+
+            //txtOutput.setText(str);
+
         }
+    }
+
+    //@Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        // TODO Auto-generated method stub
+        //super.onListItemClick(l, v, position, id);
+        String selection = l.getItemAtPosition(position).toString();
+        Toast.makeText(this, selection, Toast.LENGTH_LONG).show();
     }
 }
 

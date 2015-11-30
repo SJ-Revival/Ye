@@ -17,7 +17,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
-import com.qualcomm.vuforia.samples.VuforiaSamples.R;
+import de.ye.yeapp.R;
+//import com.qualcomm.vuforia.samples.VuforiaSamples.R;
 
 
 public class ActivitySplashScreen extends Activity

@@ -5,23 +5,23 @@ package de.ye.yeapp.data;
  */
 public class Position {
 
-    private float x;
-    private float y;
+    private float lat;
+    private float lon;
 
-    public float getY() {
-        return y;
+    public float getLat() {
+        return lat;
     }
 
-    public void setY(float y) {
-        this.y = y;
+    public void setLat(float y) {
+        this.lat = lat;
     }
 
-    public float getX() {
-        return x;
+    public float getLon() {
+        return lon;
     }
 
-    public void setX(float x) {
-        this.x = x;
+    public void setLon(float x) {
+        this.lon = lon;
     }
 
 

@@ -37,7 +37,7 @@ public class StationFactory {
                 value = jsonObject.get(key);
 
                 if(value instanceof String) {
-                    Log.d(TAG, "createLocation() String: "+key);
+                    Log.d(TAG, "createStation() String: "+key);
                     String stringValue = (String)value;
                     if(key.equals("name")) {
                         station.setName(stringValue);
@@ -49,21 +49,21 @@ public class StationFactory {
 
                     //Log.d(TAG, "Key:  " + key + " Value String: " + value);
                 }else if(value instanceof Boolean) {
-                    //Log.d(TAG, "createLocation() Boolean: "+key);
+                    //Log.d(TAG, "createStation() Boolean: "+key);
                     Boolean booleanValue = (Boolean)value;
                     /*if(key.equals("isOpen")){
                         location.setIsOpen(booleanValue);
                     }*/
                 }else if(value instanceof Integer) {
-                    //Log.d(TAG, "createLocation() Integer: "+key);
+                    //Log.d(TAG, "createStation() Integer: "+key);
                     Integer intValue = (Integer)value;
 
                 }else if(value instanceof Double) {
-                    //Log.d(TAG, "createLocation() Double: "+key);
+                    //Log.d(TAG, "createStation() Double: "+key);
                     //Double doubleValue = (Double)value;
 
                 }else if(value instanceof JSONArray) {
-                    //Log.d(TAG, "createLocation() Array: "+key);
+                    //Log.d(TAG, "createStation() Array: "+key);
                     JSONArray listValue = (JSONArray)value;
 
 
