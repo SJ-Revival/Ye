@@ -6,9 +6,8 @@ public class Util {
 
     }
 
-    public int combineSecondsAndMilliseconds(int seconds, int milliseconds) {
-        seconds = seconds * 1000;
-        return seconds + milliseconds;
+    public float combineSecondsAndMilliseconds(int seconds, int milliseconds) {
+        return (seconds * 1000) + milliseconds;
     }
 
 }

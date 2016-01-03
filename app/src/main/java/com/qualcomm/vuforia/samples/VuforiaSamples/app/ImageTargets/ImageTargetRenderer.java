@@ -35,6 +35,8 @@ import com.qualcomm.vuforia.Vuforia;
 import com.qualcomm.vuforia.samples.SampleApplication.SampleApplicationSession;
 import com.qualcomm.vuforia.samples.SampleApplication.utils.*;
 
+import com.yeBerlin.app.util.*;
+
 
 // The renderer class for the ImageTargets sample. 
 public class ImageTargetRenderer implements GLSurfaceView.Renderer
@@ -185,12 +187,14 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
         int seconds = calendar.get(Calendar.SECOND);
         int milliseconds = calendar.get(Calendar.MILLISECOND);
 
-        float animationFactor = (((seconds * 1000) + milliseconds) - 30000) / 30000f;
+        Util util = new Util();
+        float animationFactor = util.combineSecondsAndMilliseconds(seconds, milliseconds);
+        animationFactor = (animationFactor - 30000) / 30000f;
 
         float translateX = maxTranslateX * animationFactor;
         float translateY = maxTranslateY * animationFactor;
 
-        Log.d("ANIMATION: ", Float.toString(animationFactor));
+        // Log.d("ANIMATION: ", Float.toString(animationFactor));
 
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
         
