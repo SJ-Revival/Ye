@@ -266,8 +266,6 @@ public class RouteActivity extends Activity implements LocationListener {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-
-            //new AsyncTaskUserData().execute();
         }
     }
 }
