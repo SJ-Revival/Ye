@@ -8,6 +8,10 @@ and other countries. Trademarks of QUALCOMM Incorporated are used with permissio
 package com.qualcomm.vuforia.samples.VuforiaSamples.app.ImageTargets;
 
 import java.io.IOException;
+import java.lang.annotation.Target;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Vector;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -16,6 +20,8 @@ import javax.microedition.khronos.opengles.GL10;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
+import android.provider.CalendarContract;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.qualcomm.vuforia.Matrix44F;
@@ -27,12 +33,9 @@ import com.qualcomm.vuforia.TrackableResult;
 import com.qualcomm.vuforia.VIDEO_BACKGROUND_REFLECTION;
 import com.qualcomm.vuforia.Vuforia;
 import com.qualcomm.vuforia.samples.SampleApplication.SampleApplicationSession;
-import com.qualcomm.vuforia.samples.SampleApplication.utils.CubeShaders;
-import com.qualcomm.vuforia.samples.SampleApplication.utils.LoadingDialogHandler;
-import com.qualcomm.vuforia.samples.SampleApplication.utils.SampleApplication3DModel;
-import com.qualcomm.vuforia.samples.SampleApplication.utils.SampleUtils;
-import com.qualcomm.vuforia.samples.SampleApplication.utils.Teapot;
-import com.qualcomm.vuforia.samples.SampleApplication.utils.Texture;
+import com.qualcomm.vuforia.samples.SampleApplication.utils.*;
+
+import com.yeBerlin.app.util.*;
 
 
 // The renderer class for the ImageTargets sample. 
@@ -58,6 +61,7 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
     private int texSampler2DHandle;
     
     private Teapot mTeapot;
+    private CubeObject mCube;
     
     private float kBuildingScale = 12.0f;
     private SampleApplication3DModel mBuildingsModel;
@@ -117,7 +121,8 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
     // Function for initializing the renderer.
     private void initRendering()
     {
-        mTeapot = new Teapot();
+        // mTeapot = new Teapot();
+        mCube = new CubeObject();
         
         mRenderer = Renderer.getInstance();
         
@@ -172,6 +177,25 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
     // The render function.
     private void renderFrame()
     {
+        float maxTranslateX = 210f;
+        float maxTranslateY = 148.485489f;
+
+        Calendar calendar = Calendar.getInstance();
+        Date date = new Date();
+        calendar.setTime(date);
+
+        int seconds = calendar.get(Calendar.SECOND);
+        int milliseconds = calendar.get(Calendar.MILLISECOND);
+
+        Util util = new Util();
+        float animationFactor = util.combineSecondsAndMilliseconds(seconds, milliseconds);
+        animationFactor = (animationFactor - 30000) / 30000f;
+
+        float translateX = maxTranslateX * animationFactor;
+        float translateY = maxTranslateY * animationFactor;
+
+        // Log.d("ANIMATION: ", Float.toString(animationFactor));
+
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
         
         State state = mRenderer.begin();
@@ -197,6 +221,8 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
             Matrix44F modelViewMatrix_Vuforia = Tool
                 .convertPose2GLMatrix(result.getPose());
             float[] modelViewMatrix = modelViewMatrix_Vuforia.getData();
+
+            Log.d(LOGTAG, "Matrix: " + Arrays.toString(modelViewMatrix)); // TODO remove logging
             
             /*int textureIndex = trackable.getName().equalsIgnoreCase("stones") ? 0
                 : 1;*/
@@ -213,7 +239,7 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
             
             if (!mActivity.isExtendedTrackingActive())
             {
-                Matrix.translateM(modelViewMatrix, 0, 0.0f, 0.0f,
+                Matrix.translateM(modelViewMatrix, 0, translateX, translateY,
                     OBJECT_SCALE_FLOAT);
                 Matrix.scaleM(modelViewMatrix, 0, OBJECT_SCALE_FLOAT,
                     OBJECT_SCALE_FLOAT, OBJECT_SCALE_FLOAT);
@@ -233,11 +259,11 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
             if (!mActivity.isExtendedTrackingActive())
             {
                 GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT,
-                    false, 0, mTeapot.getVertices());
+                    false, 0, mCube.getVertices());
                 GLES20.glVertexAttribPointer(normalHandle, 3, GLES20.GL_FLOAT,
-                    false, 0, mTeapot.getNormals());
+                    false, 0, mCube.getNormals());
                 GLES20.glVertexAttribPointer(textureCoordHandle, 2,
-                    GLES20.GL_FLOAT, false, 0, mTeapot.getTexCoords());
+                    GLES20.GL_FLOAT, false, 0, mCube.getTexCoords());
                 
                 GLES20.glEnableVertexAttribArray(vertexHandle);
                 GLES20.glEnableVertexAttribArray(normalHandle);
@@ -253,10 +279,10 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
                 GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false,
                     modelViewProjection, 0);
                 
-                // finally draw the teapot
+                // finally draw the object
                 GLES20.glDrawElements(GLES20.GL_TRIANGLES,
-                    mTeapot.getNumObjectIndex(), GLES20.GL_UNSIGNED_SHORT,
-                    mTeapot.getIndices());
+                        mCube.getNumObjectIndex(), GLES20.GL_UNSIGNED_SHORT,
+                        mCube.getIndices());
                 
                 // disable the enabled arrays
                 GLES20.glDisableVertexAttribArray(vertexHandle);

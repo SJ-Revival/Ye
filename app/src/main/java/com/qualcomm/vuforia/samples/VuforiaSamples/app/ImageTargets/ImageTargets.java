@@ -303,6 +303,8 @@ public class ImageTargets extends Activity implements SampleApplicationControl,
     {
         mUILayout = (RelativeLayout) View.inflate(this, R.layout.camera_overlay,
             null);
+
+        Log.d(LOGTAG, "" + ""); // TODO remove logging
         
         mUILayout.setVisibility(View.VISIBLE);
         mUILayout.setBackgroundColor(Color.BLACK);
