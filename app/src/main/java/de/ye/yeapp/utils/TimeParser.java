@@ -1,8 +1,8 @@
-package com.yeBerlin.app.util;
+package de.ye.yeapp.utils;
 
-public class Util {
+public class TimeParser {
 
-    public Util () {
+    public TimeParser() {
 
     }
 

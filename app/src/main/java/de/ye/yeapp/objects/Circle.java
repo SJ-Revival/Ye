@@ -1,4 +1,4 @@
-package com.yeBerlin.app.objects;
+package de.ye.yeapp.objects;
 
 import com.qualcomm.vuforia.samples.SampleApplication.utils.MeshObject;
 
