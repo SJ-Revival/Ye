@@ -121,7 +121,7 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
     // Function for initializing the renderer.
     private void initRendering()
     {
-        // mTeapot = new Teapot();
+        mTeapot = new Teapot();
         mCube = new CubeObject();
         
         mRenderer = Renderer.getInstance();
@@ -222,7 +222,7 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
                 .convertPose2GLMatrix(result.getPose());
             float[] modelViewMatrix = modelViewMatrix_Vuforia.getData();
 
-            Log.d(LOGTAG, "Matrix: " + Arrays.toString(modelViewMatrix)); // TODO remove logging
+            // Log.d(LOGTAG, "Matrix: " + Arrays.toString(modelViewMatrix)); // TODO remove logging
             
             /*int textureIndex = trackable.getName().equalsIgnoreCase("stones") ? 0
                 : 1;*/
@@ -264,6 +264,13 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
                     false, 0, mCube.getNormals());
                 GLES20.glVertexAttribPointer(textureCoordHandle, 2,
                     GLES20.GL_FLOAT, false, 0, mCube.getTexCoords());
+
+                GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT,
+                        false, 0, mTeapot.getVertices());
+                GLES20.glVertexAttribPointer(normalHandle, 3, GLES20.GL_FLOAT,
+                        false, 0, mTeapot.getNormals());
+                GLES20.glVertexAttribPointer(textureCoordHandle, 2,
+                        GLES20.GL_FLOAT, false, 0, mTeapot.getTexCoords());
                 
                 GLES20.glEnableVertexAttribArray(vertexHandle);
                 GLES20.glEnableVertexAttribArray(normalHandle);
@@ -283,6 +290,10 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
                 GLES20.glDrawElements(GLES20.GL_TRIANGLES,
                         mCube.getNumObjectIndex(), GLES20.GL_UNSIGNED_SHORT,
                         mCube.getIndices());
+
+                GLES20.glDrawElements(GLES20.GL_TRIANGLES,
+                        mTeapot.getNumObjectIndex(), GLES20.GL_UNSIGNED_SHORT,
+                        mTeapot.getIndices());
                 
                 // disable the enabled arrays
                 GLES20.glDisableVertexAttribArray(vertexHandle);

@@ -9,7 +9,7 @@ package com.qualcomm.vuforia.samples.SampleApplication.utils;
 
 public class CubeShaders
 {
-    
+    // TODO replace with content from Ye\app\src\main\assets\YeShader\cube_mesh.vs.glsl
     public static final String CUBE_MESH_VERTEX_SHADER = " \n" + "\n"
         + "attribute vec4 vertexPosition; \n"
         + "attribute vec4 vertexNormal; \n"
@@ -20,12 +20,12 @@ public class CubeShaders
         + "   gl_Position = modelViewProjectionMatrix * vertexPosition; \n"
         + "   normal = vertexNormal; \n" + "   texCoord = vertexTexCoord; \n"
         + "} \n";
-    
+
+    // TODO replace with content from Ye\app\src\main\assets\YeShader\cube_mesh.fs.glsl
     public static final String CUBE_MESH_FRAGMENT_SHADER = " \n" + "\n"
         + "precision mediump float; \n" + " \n" + "varying vec2 texCoord; \n"
         + "varying vec4 normal; \n" + " \n"
         + "uniform sampler2D texSampler2D; \n" + " \n" + "void main() \n"
         + "{ \n" + "   gl_FragColor = texture2D(texSampler2D, texCoord); \n"
         + "} \n";
-    
 }
