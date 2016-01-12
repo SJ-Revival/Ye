@@ -5,35 +5,23 @@ Vuforia is a trademark of QUALCOMM Incorporated, registered in the United States
 and other countries. Trademarks of QUALCOMM Incorporated are used with permission.
 ===============================================================================*/
 
-package com.qualcomm.vuforia.samples.VuforiaSamples.app.ImageTargets;
-
-import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Vector;
-
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
+package de.ye.yeapp.actions;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.Log;
-
-import com.qualcomm.vuforia.Matrix44F;
-import com.qualcomm.vuforia.Renderer;
-import com.qualcomm.vuforia.State;
-import com.qualcomm.vuforia.Tool;
-import com.qualcomm.vuforia.Trackable;
-import com.qualcomm.vuforia.TrackableResult;
-import com.qualcomm.vuforia.VIDEO_BACKGROUND_REFLECTION;
-import com.qualcomm.vuforia.Vuforia;
-import com.qualcomm.vuforia.samples.SampleApplication.SampleApplicationSession;
-import com.qualcomm.vuforia.samples.SampleApplication.utils.*;
-
-import com.qualcomm.vuforia.samples.SampleApplication.utils.SampleApplication3DModel;
-import com.qualcomm.vuforia.samples.SampleApplication.utils.SampleUtils;
+import com.qualcomm.vuforia.*;
+import de.ye.yeapp.ApplicationSession;
 import de.ye.yeapp.utils.*;
+import de.ye.yeapp.objects.*;
+
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL10;
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Vector;
 
 
 // The renderer class for the ImageTargets sample. 
@@ -41,7 +29,7 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
 {
     private static final String LOGTAG = "ImageTargetRenderer";
     
-    private SampleApplicationSession vuforiaAppSession;
+    private ApplicationSession vuforiaAppSession;
     private ImageTargets mActivity;
     
     private Vector<Texture> mTextures;
@@ -62,7 +50,7 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
     private CubeObject mCube;
     
     private float kBuildingScale = 12.0f;
-    private SampleApplication3DModel mBuildingsModel;
+    private Application3DModel mBuildingsModel;
     
     private Renderer mRenderer;
     
@@ -72,7 +60,7 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
     
     
     public ImageTargetRenderer(ImageTargets activity,
-        SampleApplicationSession session)
+        ApplicationSession session)
     {
         mActivity = activity;
         vuforiaAppSession = session;
@@ -140,7 +128,7 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
                 GLES20.GL_UNSIGNED_BYTE, t.mData);
         }
         
-        shaderProgramID = SampleUtils.createProgramFromShaderSrc(
+        shaderProgramID = Utils.createProgramFromShaderSrc(
             CubeShaders.CUBE_MESH_VERTEX_SHADER,
             CubeShaders.CUBE_MESH_FRAGMENT_SHADER);
         
@@ -157,7 +145,7 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
         
         try
         {
-            mBuildingsModel = new SampleApplication3DModel();
+            mBuildingsModel = new Application3DModel();
             mBuildingsModel.loadModel(mActivity.getResources().getAssets(),
                 "ImageTargets/Buildings.txt");
         } catch (IOException e)
@@ -320,10 +308,10 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
                 GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0,
                     mBuildingsModel.getNumObjectVertex());
                 
-                SampleUtils.checkGLError("Renderer DrawBuildings");
+                Utils.checkGLError("Renderer DrawBuildings");
             }
             
-            SampleUtils.checkGLError("Render Frame");
+            Utils.checkGLError("Render Frame");
             
         }
         
