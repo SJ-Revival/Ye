@@ -124,7 +124,7 @@ public class StepFactory {
         return step;
     }
 
-    public static List<Stop> getStops(int ){
+    public static List<Stop> getStops( ){
         List<Stop> stops = new ArrayList<Stop>();
 
             for (int i = 0; i < 5; i++)
