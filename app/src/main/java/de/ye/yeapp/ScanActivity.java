@@ -42,19 +42,12 @@ import com.qualcomm.vuforia.VideoBackgroundConfig;
 import com.qualcomm.vuforia.VideoMode;
 import com.qualcomm.vuforia.Vuforia;
 import com.qualcomm.vuforia.WordList;
-import com.qualcomm.vuforia.samples.SampleApplication.SampleApplicationControl;
-import com.qualcomm.vuforia.samples.SampleApplication.SampleApplicationException;
-import com.qualcomm.vuforia.samples.SampleApplication.SampleApplicationSession;
-import com.qualcomm.vuforia.samples.SampleApplication.utils.LoadingDialogHandler;
-import com.qualcomm.vuforia.samples.SampleApplication.utils.SampleApplicationGLView;
-import com.qualcomm.vuforia.samples.SampleApplication.utils.SampleUtils;
 
-import com.qualcomm.vuforia.samples.VuforiaSamples.ui.SampleAppMenu.SampleAppMenu;
-import com.qualcomm.vuforia.samples.VuforiaSamples.ui.SampleAppMenu.SampleAppMenuGroup;
-import com.qualcomm.vuforia.samples.VuforiaSamples.ui.SampleAppMenu.SampleAppMenuInterface;
-
-//import com.qualcomm.vuforia.samples.VuforiaSamples.R;
-
+import de.ye.yeapp.objects.LoadingDialogHandler;
+import de.ye.yeapp.ui.AppMenu.AppMenu;
+import de.ye.yeapp.ui.AppMenu.AppMenuGroup;
+import de.ye.yeapp.ui.AppMenu.AppMenuInterface;
+import de.ye.yeapp.utils.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -65,15 +58,12 @@ import java.util.List;
 import java.util.Map;
 
 import de.ye.yeapp.data.Station;
-import de.ye.yeapp.utils.JsonParser;
-import de.ye.yeapp.utils.StationAdapter;
-import de.ye.yeapp.utils.StationFactory;
 
 /**
  * Created by bianca on 20.11.15.
  */
-public class ScanActivity extends Activity implements SampleApplicationControl,
-        SampleAppMenuInterface {
+public class ScanActivity extends Activity implements ApplicationControl,
+        AppMenuInterface {
 
     private static final String TAG = ScanActivity.class.getSimpleName();
     private TextView txtOutput;
@@ -86,18 +76,18 @@ public class ScanActivity extends Activity implements SampleApplicationControl,
 
     private static final String LOGTAG = "TextReco";
 
-    SampleApplicationSession vuforiaAppSession;
+    ApplicationSession vuforiaAppSession;
 
     private final static int COLOR_OPAQUE = Color.argb(178, 0, 0, 0);
     private final static int WORDLIST_MARGIN = 10;
 
     // Our OpenGL view:
-    private SampleApplicationGLView mGlView;
+    private ApplicationGLView mGlView;
 
     // Our renderer:
     private TextRecoRenderer mRenderer;
 
-    private SampleAppMenu mSampleAppMenu;
+    private AppMenu mAppMenu;
 
     private ArrayList<View> mSettingsAdditionalViews;
 
@@ -143,7 +133,7 @@ public class ScanActivity extends Activity implements SampleApplicationControl,
         listStation = new ArrayList<Station>();
 
 
-        vuforiaAppSession = new SampleApplicationSession(this);
+        vuforiaAppSession = new ApplicationSession(this);
 
         startLoadingAnimation();
 
@@ -294,7 +284,7 @@ public class ScanActivity extends Activity implements SampleApplicationControl,
         try
         {
             vuforiaAppSession.resumeAR();
-        } catch (SampleApplicationException e)
+        } catch (ApplicationException e)
         {
             Log.e(LOGTAG, e.getString());
         }
@@ -330,7 +320,7 @@ public class ScanActivity extends Activity implements SampleApplicationControl,
     public boolean onTouchEvent(MotionEvent event)
     {
         // Process the Gestures
-        if (mSampleAppMenu != null && mSampleAppMenu.processEvent(event))
+        if (mAppMenu != null && mAppMenu.processEvent(event))
             return true;
 
         return mGestureDetector.onTouchEvent(event);
@@ -353,7 +343,7 @@ public class ScanActivity extends Activity implements SampleApplicationControl,
         try
         {
             vuforiaAppSession.pauseAR();
-        } catch (SampleApplicationException e)
+        } catch (ApplicationException e)
         {
             Log.e(LOGTAG, e.getString());
         }
@@ -372,7 +362,7 @@ public class ScanActivity extends Activity implements SampleApplicationControl,
         try
         {
             vuforiaAppSession.stopAR();
-        } catch (SampleApplicationException e)
+        } catch (ApplicationException e)
         {
             Log.e(LOGTAG, e.getString());
         }
@@ -413,7 +403,7 @@ public class ScanActivity extends Activity implements SampleApplicationControl,
         int stencilSize = 0;
         boolean translucent = Vuforia.requiresAlpha();
 
-        mGlView = new SampleApplicationGLView(this);
+        mGlView = new ApplicationGLView(this);
         mGlView.init(translucent, depthSize, stencilSize);
 
         mRenderer = new TextRecoRenderer(this, vuforiaAppSession);
@@ -478,7 +468,7 @@ public class ScanActivity extends Activity implements SampleApplicationControl,
         int[] loupeCenterY = { 0 };
         int[] loupeWidth = { 0 };
         int[] loupeHeight = { 0 };
-        SampleUtils.screenCoordToCameraCoord((int) mRenderer.ROICenterX,
+        Utils.screenCoordToCameraCoord((int) mRenderer.ROICenterX,
                 (int) mRenderer.ROICenterY, (int) mRenderer.ROIWidth,
                 (int) mRenderer.ROIHeight, screenWidth, screenHeight,
                 vm.getWidth(), vm.getHeight(), loupeCenterX, loupeCenterY,
@@ -722,7 +712,7 @@ public class ScanActivity extends Activity implements SampleApplicationControl,
 
 
     @Override
-    public void onInitARDone(SampleApplicationException exception)
+    public void onInitARDone(ApplicationException exception)
     {
 
         if (exception == null)
@@ -757,7 +747,7 @@ public class ScanActivity extends Activity implements SampleApplicationControl,
             try
             {
                 vuforiaAppSession.startAR(CameraDevice.CAMERA.CAMERA_DEFAULT);
-            } catch (SampleApplicationException e)
+            } catch (ApplicationException e)
             {
                 Log.e(LOGTAG, e.getString());
             }
@@ -766,10 +756,10 @@ public class ScanActivity extends Activity implements SampleApplicationControl,
 
             postStartCamera();
 
-            setSampleAppMenuAdditionalViews();
-            mSampleAppMenu = new SampleAppMenu(this, this, "Text Reco",
+            setAppMenuAdditionalViews();
+            mAppMenu = new AppMenu(this, this, "Text Reco",
                     mGlView, mUILayout, mSettingsAdditionalViews);
-            setSampleAppMenuSettings();
+            setAppMenuSettings();
 
         } else
         {
@@ -927,7 +917,7 @@ public class ScanActivity extends Activity implements SampleApplicationControl,
 
 
     // This method sets the additional views to be moved along with the GLView
-    private void setSampleAppMenuAdditionalViews()
+    private void setAppMenuAdditionalViews()
     {
         mSettingsAdditionalViews = new ArrayList<View>();
         mSettingsAdditionalViews.add(mUILayout.findViewById(R.id.topMargin));
@@ -937,14 +927,14 @@ public class ScanActivity extends Activity implements SampleApplicationControl,
 
 
     // This method sets the menu's settings
-    private void setSampleAppMenuSettings()
+    private void setAppMenuSettings()
     {
-        SampleAppMenuGroup group;
+        AppMenuGroup group;
 
-        group = mSampleAppMenu.addGroup("", false);
+        group = mAppMenu.addGroup("", false);
         group.addTextItem(getString(R.string.menu_back), -1);
 
-        mSampleAppMenu.attachMenu();
+        mAppMenu.attachMenu();
     }
 
 

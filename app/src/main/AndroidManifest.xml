@@ -106,16 +106,13 @@
             android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
             android:screenOrientation="portrait"
             >
-        </activity>-->
+        </activity>
 
         <activity
             android:name="de.ye.yeapp.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
             android:screenOrientation="portrait"
             >
-
-
-
         </activity>
 
 
@@ -131,14 +128,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
             android:screenOrientation="portrait"
             >
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-        </activity>
+        </activity>-->
         
          <!--<activity
             android:name=".ui.ActivityList.AboutScreen"
@@ -147,14 +137,22 @@
             android:noHistory="true"
             >
         </activity>
-         
+         -->
         <activity
-            android:name=".app.ImageTargets.ImageTargets"
+            android:name="de.ye.yeapp.actions.ImageTargets"
             android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
         	android:theme="@style/SampleAppsTheme"
  	        android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+
+        <!--
         
         <activity
             android:name=".app.TextRecognition.TextReco"

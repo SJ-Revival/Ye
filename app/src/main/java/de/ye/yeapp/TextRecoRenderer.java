@@ -23,10 +23,6 @@ import com.qualcomm.vuforia.Vec2F;
 import com.qualcomm.vuforia.Vuforia;
 import com.qualcomm.vuforia.Word;
 import com.qualcomm.vuforia.WordResult;
-import com.qualcomm.vuforia.samples.SampleApplication.SampleApplicationSession;
-import com.qualcomm.vuforia.samples.SampleApplication.utils.LineShaders;
-import com.qualcomm.vuforia.samples.SampleApplication.utils.SampleUtils;
-import com.qualcomm.vuforia.samples.VuforiaSamples.app.TextRecognition.TextReco;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -38,6 +34,8 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import de.ye.yeapp.ScanActivity;
+import de.ye.yeapp.objects.LineShaders;
+import de.ye.yeapp.utils.Utils;
 
 
 // The renderer class for the ImageTargets sample. 
@@ -45,7 +43,7 @@ public class TextRecoRenderer implements GLSurfaceView.Renderer
 {
     private static final String LOGTAG = "TextRecoRenderer";
     
-    private SampleApplicationSession vuforiaAppSession;
+    private ApplicationSession vuforiaAppSession;
     
     private static final int MAX_NB_WORDS = 132;
     private static final float TEXTBOX_PADDING = 0.0f;
@@ -94,7 +92,7 @@ public class TextRecoRenderer implements GLSurfaceView.Renderer
     private ByteBuffer mQuadIndices;
     
     
-    public TextRecoRenderer(ScanActivity activity, SampleApplicationSession session)
+    public TextRecoRenderer(ScanActivity activity, ApplicationSession session)
     {
         mActivity = activity;
         vuforiaAppSession = session;
@@ -187,7 +185,7 @@ public class TextRecoRenderer implements GLSurfaceView.Renderer
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, Vuforia.requiresAlpha() ? 0.0f
             : 1.0f);
         
-        shaderProgramID = SampleUtils.createProgramFromShaderSrc(
+        shaderProgramID = Utils.createProgramFromShaderSrc(
             LineShaders.LINE_VERTEX_SHADER, LineShaders.LINE_FRAGMENT_SHADER);
         
         vertexHandle = GLES20.glGetAttribLocation(shaderProgramID,

@@ -28,9 +28,10 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 import com.qualcomm.vuforia.*;
-import com.qualcomm.vuforia.samples.VuforiaSamples.ui.SampleAppMenu.SampleAppMenu;
-import com.qualcomm.vuforia.samples.VuforiaSamples.ui.SampleAppMenu.SampleAppMenuGroup;
-import com.qualcomm.vuforia.samples.VuforiaSamples.ui.SampleAppMenu.SampleAppMenuInterface;
+
+import de.ye.yeapp.ui.AppMenu.AppMenu;
+import de.ye.yeapp.ui.AppMenu.AppMenuGroup;
+import de.ye.yeapp.ui.AppMenu.AppMenuInterface;
 
 import de.ye.yeapp.ApplicationControl;
 import de.ye.yeapp.ApplicationException;
@@ -45,7 +46,7 @@ import java.util.Vector;
 
 
 public class ImageTargets extends Activity implements ApplicationControl,
-    SampleAppMenuInterface
+        AppMenuInterface
 {
     private static final String LOGTAG = "ImageTargets";
     
@@ -77,7 +78,7 @@ public class ImageTargets extends Activity implements ApplicationControl,
 
     private RelativeLayout mUILayout;
 
-    private SampleAppMenu mSampleAppMenu;
+    private AppMenu mAppMenu;
 
     LoadingDialogHandler loadingDialogHandler = new LoadingDialogHandler(this);
 
@@ -427,9 +428,9 @@ public class ImageTargets extends Activity implements ApplicationControl,
             else
                 Log.e(LOGTAG, "Unable to enable continuous autofocus");
             
-            mSampleAppMenu = new SampleAppMenu(this, this, "Image Targets",
+            mAppMenu = new AppMenu(this, this, "Image Targets",
                 mGlView, mUILayout, null);
-            setSampleAppMenuSettings();
+            setAppMenuSettings();
             
         } else
         {
@@ -570,7 +571,7 @@ public class ImageTargets extends Activity implements ApplicationControl,
     public boolean onTouchEvent(MotionEvent event)
     {
         // Process the Gestures
-        if (mSampleAppMenu != null && mSampleAppMenu.processEvent(event))
+        if (mAppMenu != null && mAppMenu.processEvent(event))
             return true;
         
         return mGestureDetector.onTouchEvent(event);
@@ -592,14 +593,14 @@ public class ImageTargets extends Activity implements ApplicationControl,
     
     
     // This method sets the menu's settings
-    private void setSampleAppMenuSettings()
+    private void setAppMenuSettings()
     {
-        SampleAppMenuGroup group;
+        AppMenuGroup group;
         
-        group = mSampleAppMenu.addGroup("", false);
+        group = mAppMenu.addGroup("", false);
         group.addTextItem(getString(R.string.menu_back), -1);
         
-        group = mSampleAppMenu.addGroup("", true);
+        group = mAppMenu.addGroup("", true);
         group.addSelectionItem(getString(R.string.menu_extended_tracking),
             CMD_EXTENDED_TRACKING, false);
         group.addSelectionItem(getString(R.string.menu_contAutofocus),
@@ -621,7 +622,7 @@ public class ImageTargets extends Activity implements ApplicationControl,
         
         if (deviceHasBackCamera && deviceHasFrontCamera)
         {
-            group = mSampleAppMenu.addGroup(getString(R.string.menu_camera),
+            group = mAppMenu.addGroup(getString(R.string.menu_camera),
                 true);
             group.addRadioItem(getString(R.string.menu_camera_front),
                 CMD_CAMERA_FRONT, false);
@@ -629,7 +630,7 @@ public class ImageTargets extends Activity implements ApplicationControl,
                 CMD_CAMERA_REAR, true);
         }
         
-        group = mSampleAppMenu
+        group = mAppMenu
             .addGroup(getString(R.string.menu_datasets), true);
         mStartDatasetsIndex = CMD_DATASET_START_INDEX;
         mDatasetsNumber = mDatasetStrings.size();
@@ -639,7 +640,7 @@ public class ImageTargets extends Activity implements ApplicationControl,
         group.addRadioItem("Tarmac", mStartDatasetsIndex + 1, false);
         //group.addRadioItem("Ye", mStartDatasetsIndex + 2, false);
         
-        mSampleAppMenu.attachMenu();
+        mAppMenu.attachMenu();
     }
     
     
