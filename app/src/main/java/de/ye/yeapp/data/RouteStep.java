@@ -21,6 +21,8 @@ public class RouteStep {
 
     private TransitDetails transitDetails;
 
+    private List<Stop> stops;
+
     public String getDuration() {
         return duration;
     }
@@ -85,5 +87,13 @@ public class RouteStep {
 
     public void setTransitDetails(TransitDetails transitDetails) {
         this.transitDetails = transitDetails;
+    }
+
+    public List<Stop> getStops() {
+        return stops;
+    }
+
+    public void setStops(List<Stop> stops) {
+        this.stops = stops;
     }
 }

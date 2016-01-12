@@ -20,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +30,7 @@ import de.ye.yeapp.data.User;
 import de.ye.yeapp.utils.GeoFactory;
 import de.ye.yeapp.utils.JsonParser;
 import de.ye.yeapp.data.Address;
+import de.ye.yeapp.utils.MyApplication;
 import de.ye.yeapp.utils.RouteFactory;
 import de.ye.yeapp.utils.StationFactory;
 
@@ -43,12 +45,16 @@ public class RouteActivity extends Activity implements LocationListener {
     public static final String GOOGLE_DIRECTION = "https://maps.googleapis.com/maps/api/directions/json?";
     public static final String JSON_OBJECT = "results";
 
+    private String startStop = "Osloer+Strasse";
+    private String endStop = "Alexanderplatz";
+
     private Context context;
 
     private Address userAddress;
     private User user;
 
     private List<Route> listRoute;
+    private MyApplication myApplication;
 
 
     LocationManager locationManager;
@@ -58,17 +64,28 @@ public class RouteActivity extends Activity implements LocationListener {
         super.onCreate(savedInstanceState);
 
         context = this.getApplicationContext();
-        //userAddress = getLocation();
+        //Singleton Objekt um zwischen Activities untereinander Daten auszutauschen
+        myApplication = (MyApplication) this.getApplicationContext();
+        //ermittelt aktuelle Position des Users
+        userAddress = getLocation();
+
         listRoute = new ArrayList<Route>();
 
         //if(userAddress.getCity() != "EMPTY"){
+            //Ermittelt eine Route zwischen zwei Positionen
             new AsyncTaskGetDirection().execute();
         //}
+
+
         user = new User();
+        user.setAddress(userAddress);
+        //User-Daten in der Singleton fuer andere Activities zur Verfuegung stellen
+        myApplication.setUser(user);
 
         //Toast.makeText(this, ""+" "+userAddress.getCity(), Toast.LENGTH_LONG).show();
     }
 
+    //ermittelt die aktuelle Position des Users
     public Address getLocation() {
         Log.d(TAG, "getLocation");
 
@@ -166,7 +183,7 @@ public class RouteActivity extends Activity implements LocationListener {
         userAddress.setLat(location.getLatitude());
         userAddress.setLon(location.getLongitude());
         user.setAddress(userAddress);
-        //new AsyncTaskGetGeo().execute();
+        new AsyncTaskGetGeo().execute();
 
     }
 
@@ -238,10 +255,13 @@ public class RouteActivity extends Activity implements LocationListener {
             JsonParser parser = new JsonParser();
 
             String googleRequest = GOOGLE_DIRECTION;
-            googleRequest += "origin=Alexanderplatz";
-            googleRequest += "&destination=Prenzlauer+Allee";
+            googleRequest += "origin="+startStop;
+            googleRequest += "&destination="+endStop;
             googleRequest += "&key="+getResources().getString(R.string.google_browser_api);
             googleRequest += "&mode=transit";
+            googleRequest += "&transit_mode=subway";
+
+            Log.d(TAG, "google request: "+googleRequest);
 
             JSONObject jsonObject = parser.getJSONObjectFromUrl(googleRequest, new HashMap<String, String>(), "GET");
 
@@ -251,6 +271,7 @@ public class RouteActivity extends Activity implements LocationListener {
 
                     JSONArray jsonArray = jsonObject.getJSONArray("routes");
 
+                    //ist eine Array, da google mehrere Routen zurueckliefern kann
                     for(int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObjectLocation = jsonArray.getJSONObject(i);
                         Route route = RouteFactory.createRoute(jsonObjectLocation);
@@ -266,6 +287,7 @@ public class RouteActivity extends Activity implements LocationListener {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            myApplication.setRoute(listRoute);
         }
     }
 }

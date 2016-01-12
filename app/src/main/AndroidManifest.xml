@@ -67,6 +67,7 @@
       would allow the activity to be launched multiple times.
     -->
     <application
+        android:name=".utils.MyApplication"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:description="@string/app_description"
@@ -113,11 +114,7 @@
             android:screenOrientation="portrait"
             >
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
         </activity>
 
@@ -134,6 +131,13 @@
             android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
             android:screenOrientation="portrait"
             >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
         </activity>
         
          <!--<activity

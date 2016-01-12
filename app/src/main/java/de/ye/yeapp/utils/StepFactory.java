@@ -31,6 +31,8 @@ public class StepFactory {
         Log.d(TAG, "createStep()");
         RouteStep step = new RouteStep();
 
+        step.setStops( getStops() );
+
         Iterator<?> keys = jsonObject.keys();
 
         while( keys.hasNext() ) {
@@ -120,5 +122,17 @@ public class StepFactory {
         }
 
         return step;
+    }
+
+    public static List<Stop> getStops(int ){
+        List<Stop> stops = new ArrayList<Stop>();
+
+            for (int i = 0; i < 5; i++)
+            {
+                Stop stop = new Stop();
+                stop.setName("Stop "+i);
+                stops.add(stop);
+            }
+        return stops;
     }
 }
