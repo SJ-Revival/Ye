@@ -8,7 +8,7 @@ and other countries. Trademarks of QUALCOMM Incorporated are used with permissio
 package de.ye.yeapp.utils;
 
 import android.content.res.AssetManager;
-import com.qualcomm.vuforia.samples.SampleApplication.utils.MeshObject;
+import de.ye.yeapp.objects.MeshObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;

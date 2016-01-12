@@ -1,7 +1,5 @@
 package de.ye.yeapp.objects;
 
-import com.qualcomm.vuforia.samples.SampleApplication.utils.MeshObject;
-
 import java.nio.Buffer;
 
 public class Circle extends MeshObject {
