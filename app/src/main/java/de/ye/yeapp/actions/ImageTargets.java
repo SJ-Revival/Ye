@@ -28,27 +28,28 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 import com.qualcomm.vuforia.*;
-import com.qualcomm.vuforia.samples.SampleApplication.SampleApplicationControl;
-import com.qualcomm.vuforia.samples.SampleApplication.SampleApplicationException;
-import com.qualcomm.vuforia.samples.SampleApplication.SampleApplicationSession;
-import com.qualcomm.vuforia.samples.SampleApplication.utils.LoadingDialogHandler;
-import com.qualcomm.vuforia.samples.SampleApplication.utils.SampleApplicationGLView;
-import com.qualcomm.vuforia.samples.SampleApplication.utils.Texture;
-import com.qualcomm.vuforia.samples.VuforiaSamples.R;
 import com.qualcomm.vuforia.samples.VuforiaSamples.ui.SampleAppMenu.SampleAppMenu;
 import com.qualcomm.vuforia.samples.VuforiaSamples.ui.SampleAppMenu.SampleAppMenuGroup;
 import com.qualcomm.vuforia.samples.VuforiaSamples.ui.SampleAppMenu.SampleAppMenuInterface;
+
+import de.ye.yeapp.ApplicationControl;
+import de.ye.yeapp.ApplicationException;
+import de.ye.yeapp.ApplicationSession;
+import de.ye.yeapp.R;
+import de.ye.yeapp.objects.LoadingDialogHandler;
+import de.ye.yeapp.objects.Texture;
+import de.ye.yeapp.utils.SampleApplicationGLView;
 
 import java.util.ArrayList;
 import java.util.Vector;
 
 
-public class ImageTargets extends Activity implements SampleApplicationControl,
+public class ImageTargets extends Activity implements ApplicationControl,
     SampleAppMenuInterface
 {
     private static final String LOGTAG = "ImageTargets";
     
-    SampleApplicationSession vuforiaAppSession;
+    ApplicationSession vuforiaAppSession;
     
     private DataSet mCurrentDataset;
     private int mCurrentDatasetSelectionIndex = 0;
@@ -94,7 +95,7 @@ public class ImageTargets extends Activity implements SampleApplicationControl,
         Log.d(LOGTAG, "onCreate");
         super.onCreate(savedInstanceState);
 
-        vuforiaAppSession = new SampleApplicationSession(this);
+        vuforiaAppSession = new ApplicationSession(this);
 
         startLoadingAnimation();
         //mDatasetStrings.add("StonesAndChips.xml");
@@ -186,7 +187,7 @@ public class ImageTargets extends Activity implements SampleApplicationControl,
         try
         {
             vuforiaAppSession.resumeAR();
-        } catch (SampleApplicationException e)
+        } catch (ApplicationException e)
         {
             Log.e(LOGTAG, e.getString());
         }
@@ -241,7 +242,7 @@ public class ImageTargets extends Activity implements SampleApplicationControl,
         try
         {
             vuforiaAppSession.pauseAR();
-        } catch (SampleApplicationException e)
+        } catch (ApplicationException e)
         {
             Log.e(LOGTAG, e.getString());
         }
@@ -258,7 +259,7 @@ public class ImageTargets extends Activity implements SampleApplicationControl,
         try
         {
             vuforiaAppSession.stopAR();
-        } catch (SampleApplicationException e)
+        } catch (ApplicationException e)
         {
             Log.e(LOGTAG, e.getString());
         }
@@ -388,7 +389,7 @@ public class ImageTargets extends Activity implements SampleApplicationControl,
     
     
     @Override
-    public void onInitARDone(SampleApplicationException exception)
+    public void onInitARDone(ApplicationException exception)
     {
         
         if (exception == null)
@@ -413,7 +414,7 @@ public class ImageTargets extends Activity implements SampleApplicationControl,
             try
             {
                 vuforiaAppSession.startAR(CameraDevice.CAMERA.CAMERA_DEFAULT);
-            } catch (SampleApplicationException e)
+            } catch (ApplicationException e)
             {
                 Log.e(LOGTAG, e.getString());
             }
@@ -727,7 +728,7 @@ public class ImageTargets extends Activity implements SampleApplicationControl,
                     vuforiaAppSession
                         .startAR(command == CMD_CAMERA_FRONT ? CameraDevice.CAMERA.CAMERA_FRONT
                             : CameraDevice.CAMERA.CAMERA_BACK);
-                } catch (SampleApplicationException e)
+                } catch (ApplicationException e)
                 {
                     showToast(e.getString());
                     Log.e(LOGTAG, e.getString());
