@@ -1,4 +1,4 @@
-package com.yeBerlin.app.util;
+package com.yeBerlin.utils;
 
 public class Util {
 
