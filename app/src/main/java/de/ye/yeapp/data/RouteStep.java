@@ -9,6 +9,9 @@ public class RouteStep {
 
     private String distance;
     private String duration;
+    private String direction;
+    private String name;
+    private String number;
 
     private Position endLocation;
     private Position startLocation;
@@ -21,7 +24,13 @@ public class RouteStep {
 
     private TransitDetails transitDetails;
 
+    //Zwischenstopps
     private List<Stop> stops;
+
+    private Stop origin;
+    private Stop destination;
+
+
 
     public String getDuration() {
         return duration;
@@ -95,5 +104,45 @@ public class RouteStep {
 
     public void setStops(List<Stop> stops) {
         this.stops = stops;
+    }
+
+    public String getDirection() {
+        return direction;
+    }
+
+    public void setDirection(String direction) {
+        this.direction = direction;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public Stop getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(Stop origin) {
+        this.origin = origin;
+    }
+
+    public Stop getDestination() {
+        return destination;
+    }
+
+    public void setDestination(Stop destination) {
+        this.destination = destination;
     }
 }
