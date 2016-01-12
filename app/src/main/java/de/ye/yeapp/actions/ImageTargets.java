@@ -38,7 +38,7 @@ import de.ye.yeapp.ApplicationSession;
 import de.ye.yeapp.R;
 import de.ye.yeapp.objects.LoadingDialogHandler;
 import de.ye.yeapp.objects.Texture;
-import de.ye.yeapp.utils.SampleApplicationGLView;
+import de.ye.yeapp.utils.ApplicationGLView;
 
 import java.util.ArrayList;
 import java.util.Vector;
@@ -58,7 +58,7 @@ public class ImageTargets extends Activity implements ApplicationControl,
     private ArrayList<String> mDatasetStrings = new ArrayList<String>();
     
     // Our OpenGL view:
-    private SampleApplicationGLView mGlView;
+    private ApplicationGLView mGlView;
     
     // Our renderer:
     private ImageTargetRenderer mRenderer;
@@ -280,7 +280,7 @@ public class ImageTargets extends Activity implements ApplicationControl,
         int stencilSize = 0;
         boolean translucent = Vuforia.requiresAlpha();
 
-        mGlView = new SampleApplicationGLView(this);
+        mGlView = new ApplicationGLView(this);
         mGlView.init(translucent, depthSize, stencilSize);
 
         mRenderer = new ImageTargetRenderer(this, vuforiaAppSession);

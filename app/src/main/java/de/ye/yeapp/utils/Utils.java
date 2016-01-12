@@ -11,10 +11,10 @@ import android.opengl.GLES20;
 import android.util.Log;
 
 
-public class SampleUtils
+public class Utils
 {
     
-    private static final String LOGTAG = "Vuforia_Sample_Applications";
+    private static final String LOGTAG = "Vuforia_Applications";
     
     
     static int initShader(int shaderType, String source)

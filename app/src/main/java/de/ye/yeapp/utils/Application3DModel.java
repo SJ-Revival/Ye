@@ -19,7 +19,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 
-public class SampleApplication3DModel extends MeshObject
+public class Application3DModel extends MeshObject
 {
     
     private ByteBuffer verts;

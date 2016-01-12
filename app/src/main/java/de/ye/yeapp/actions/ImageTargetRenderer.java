@@ -50,7 +50,7 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
     private CubeObject mCube;
     
     private float kBuildingScale = 12.0f;
-    private SampleApplication3DModel mBuildingsModel;
+    private Application3DModel mBuildingsModel;
     
     private Renderer mRenderer;
     
@@ -128,7 +128,7 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
                 GLES20.GL_UNSIGNED_BYTE, t.mData);
         }
         
-        shaderProgramID = SampleUtils.createProgramFromShaderSrc(
+        shaderProgramID = Utils.createProgramFromShaderSrc(
             CubeShaders.CUBE_MESH_VERTEX_SHADER,
             CubeShaders.CUBE_MESH_FRAGMENT_SHADER);
         
@@ -145,7 +145,7 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
         
         try
         {
-            mBuildingsModel = new SampleApplication3DModel();
+            mBuildingsModel = new Application3DModel();
             mBuildingsModel.loadModel(mActivity.getResources().getAssets(),
                 "ImageTargets/Buildings.txt");
         } catch (IOException e)
@@ -308,10 +308,10 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
                 GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0,
                     mBuildingsModel.getNumObjectVertex());
                 
-                SampleUtils.checkGLError("Renderer DrawBuildings");
+                Utils.checkGLError("Renderer DrawBuildings");
             }
             
-            SampleUtils.checkGLError("Render Frame");
+            Utils.checkGLError("Render Frame");
             
         }
         
