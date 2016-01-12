@@ -33,6 +33,7 @@ import de.ye.yeapp.data.Address;
 import de.ye.yeapp.utils.MyApplication;
 import de.ye.yeapp.utils.RouteFactory;
 import de.ye.yeapp.utils.StationFactory;
+import de.ye.yeapp.utils.TripFactory;
 
 /**
  * Created by bianca on 30.11.15.
@@ -43,6 +44,7 @@ public class RouteActivity extends Activity implements LocationListener {
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
     public static final String GOOGLE_GEOCODER = "https://maps.googleapis.com/maps/api/geocode/json?&latlng=";
     public static final String GOOGLE_DIRECTION = "https://maps.googleapis.com/maps/api/directions/json?";
+    public static final String VBB_DIRECTION = "http://demo.hafas.de/openapi/vbb-proxy/trip?";
     public static final String JSON_OBJECT = "results";
 
     private String startStop = "Osloer+Strasse";
@@ -67,18 +69,18 @@ public class RouteActivity extends Activity implements LocationListener {
         //Singleton Objekt um zwischen Activities untereinander Daten auszutauschen
         myApplication = (MyApplication) this.getApplicationContext();
         //ermittelt aktuelle Position des Users
-        userAddress = getLocation();
+        //userAddress = getLocation();
 
         listRoute = new ArrayList<Route>();
 
         //if(userAddress.getCity() != "EMPTY"){
             //Ermittelt eine Route zwischen zwei Positionen
-            new AsyncTaskGetDirection().execute();
+            new AsyncTaskGetVbbDirection().execute();
         //}
 
 
         user = new User();
-        user.setAddress(userAddress);
+        //user.setAddress(userAddress);
         //User-Daten in der Singleton fuer andere Activities zur Verfuegung stellen
         myApplication.setUser(user);
 
@@ -247,7 +249,7 @@ public class RouteActivity extends Activity implements LocationListener {
     }
 
     // Umwandeln der Geo Daten in eine Adresse
-    public class AsyncTaskGetDirection extends AsyncTask<String, String,String> {
+    /*public class AsyncTaskGetDirection extends AsyncTask<String, String,String> {
 
         @Override
         protected String doInBackground(String... strings) {
@@ -289,5 +291,62 @@ public class RouteActivity extends Activity implements LocationListener {
             super.onPostExecute(s);
             myApplication.setRoute(listRoute);
         }
+    }*/
+
+    public class AsyncTaskGetVbbDirection extends AsyncTask<String, String,String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            JsonParser parser = new JsonParser();
+
+            String vbbRequest = VBB_DIRECTION;
+
+            //Leo
+            vbbRequest += "originExtId="+"9009102";
+            //Alex
+            vbbRequest += "&destExtId="+"009100003";
+            vbbRequest += "&accessId="+getResources().getString(R.string.vbb_api);
+            vbbRequest += "&format=json";
+
+            Log.d(TAG, "google request: "+vbbRequest);
+
+            JSONObject jsonObject = parser.getJSONObjectFromUrl(vbbRequest, new HashMap<String, String>(), "GET");
+
+            try {
+
+                if(jsonObject.has("errorCode")){
+                    /*@todo*/
+
+                }else{
+                    JSONArray jsonArray = jsonObject.getJSONArray("Trip");
+
+                    //ist eine Array, da google mehrere Routen zurueckliefern kann
+                    //for(int i = 0; i < jsonArray.length(); i++) {
+                    if(jsonArray.length() > 0) {
+                        for (int i = 0; i < 1; i++) {
+                            JSONObject jsonObjectLocation = jsonArray.getJSONObject(i);
+                            Route route = TripFactory.createTrip(jsonObjectLocation);
+                            listRoute.add(route);
+                        }
+                    }
+                }
+
+
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            myApplication.setRoute(listRoute);
+        }
     }
+
+
 }

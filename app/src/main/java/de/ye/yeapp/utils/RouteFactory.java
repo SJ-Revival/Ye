@@ -59,7 +59,7 @@ public class RouteFactory {
                     Log.d(TAG, "createRoute() Double: "+key);
                     Double doubleValue = (Double)value;
 
-                    if(key.equals("northeast_lat")){
+                    /*if(key.equals("northeast_lat")){
                         route.setNortheastLat(doubleValue);
                     }else if(key.equals("northeast_lon")){
                         route.setNortheastLat(doubleValue);
@@ -67,7 +67,7 @@ public class RouteFactory {
                         route.setNortheastLat(doubleValue);
                     }else if(key.equals("southwest_lon")){
                         route.setNortheastLat(doubleValue);
-                    }
+                    }*/
 
                 }else if(value instanceof JSONArray) {
                     Log.d(TAG, "createRoute() Array: "+key);
@@ -79,7 +79,7 @@ public class RouteFactory {
                             JSONObject object = (JSONObject) listValue.get(0);
 
                             // STRINGS
-                            if(object.has("arrival_time")){
+                            /*if(object.has("arrival_time")){
                                 Log.d(TAG, "createroute() Array: legs arrival_time "+object.getJSONObject("arrival_time").getString("text"));
                                 route.setArrivalTime(object.getJSONObject("arrival_time").getString("text"));
                             }
@@ -120,7 +120,7 @@ public class RouteFactory {
                                 pos.setLat((float) ob.getDouble("lat"));
                                 pos.setLon((float) ob.getDouble("lng"));
                                 route.setStartLocation(pos);
-                            }
+                            }*/
 
                             //STEPS
                             if(object.has("steps")){

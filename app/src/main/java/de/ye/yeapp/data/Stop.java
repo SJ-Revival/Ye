@@ -10,12 +10,24 @@ public class Stop {
     private String name;
     private Position position;
 
+    private String extId;
+
     public String getId() {
         return id;
     }
 
+
+
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getExtId() {
+        return extId;
+    }
+
+    public void setExtId(String extId) {
+        this.extId = extId;
     }
 
     public Position getPosition() {

@@ -6,12 +6,13 @@ import java.util.List;
  * Created by bianca on 30.11.15.
  */
 public class Route {
+    /* @todo schauen was man hier noch so benoetigt, dadurch, dass vbb api enutzt wird und nicht google maps api */
 
-    private double northeastLat;
+    /*private double northeastLat;
     private double northeastLon;
 
     private double southwestLat;
-    private double southwestLon;
+    private double southwestLon;*/
 
     private String arrivalTime;
     private String departureTime;
@@ -26,8 +27,9 @@ public class Route {
     private Position startLocation;
 
     private List<RouteStep> steps;
+    private String tripId;
 
-    public double getNortheastLat() {
+    /*public double getNortheastLat() {
         return northeastLat;
     }
 
@@ -57,7 +59,7 @@ public class Route {
 
     public void setSouthwestLon(double southwestLon) {
         this.southwestLon = southwestLon;
-    }
+    }*/
 
     public String getArrivalTime() {
         return arrivalTime;
@@ -129,5 +131,13 @@ public class Route {
 
     public void setSteps(List<RouteStep> steps) {
         this.steps = steps;
+    }
+
+    public void setTripId(String tripId) {
+        this.tripId = tripId;
+    }
+
+    public String getTripId() {
+        return tripId;
     }
 }

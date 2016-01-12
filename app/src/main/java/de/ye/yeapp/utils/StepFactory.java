@@ -44,10 +44,12 @@ public class StepFactory {
                 if(value instanceof String) {
                     Log.d(TAG, "createStep() String: "+key);
                     String stringValue = (String)value;
-                    if(key.equals("html_instructions")) {
-                        step.setInstruction(stringValue);
-                    }else if(key.equals("travel_mode")) {
-                        step.setTravelMode(stringValue);
+                    if(key.equals("name")) {
+                        step.setName(stringValue);
+                    }else if(key.equals("number")) {
+                        step.setNumber(stringValue);
+                    }else if(key.equals("direction")){
+                        step.setDirection(stringValue);
                     }
 
                     //Log.d(TAG, "Key:  " + key + " Value String: " + value);
@@ -69,7 +71,7 @@ public class StepFactory {
                     Log.d(TAG, "createStep() Array: "+key);
                     JSONArray listValue = (JSONArray)value;
 
-                    if(key.equals("steps")) {
+                    /*if(key.equals("steps")) {
                         List<RouteStep> routeSteps = new ArrayList<RouteStep>();
 
                         for (int i = 0; i < listValue.length(); i++) {
@@ -80,34 +82,39 @@ public class StepFactory {
                         }
 
                         step.setSteps(routeSteps);
-                    }
+                    }*/
 
                 }else if(value instanceof  JSONObject){
                     Log.d(TAG, "createStep() Object: "+key);
                     JSONObject object = (JSONObject)value;
 
-                    if(key.equals("distance")) {
+                    if(key.equals("Origin")) {
                         //Log.d(TAG, "createStep() Object: "+key + " distance "+object.getString("text"));
-                        step.setDistance(object.getString("text"));
-                    }else if(key.equals("duration")) {
-                        step.setDuration(object.getString("text"));
-                    }else if(key.equals("end_location")) {
-                        Position pos = new Position();
-                        pos.setLat((float) object.getDouble("lat"));
-                        pos.setLon((float) object.getDouble("lng"));
-                        step.setEndLocation(pos);
 
-                    }else if(key.equals("transit_details")) {
-                        Log.d(TAG, "createStep() Array: legs steps transit_details");
-
-                        TransitDetails transitDetails = TransitDetailsFactory.createTransitDetail(object);
-                        step.setTransitDetails(transitDetails);
-                    }else if(key.equals("start_location")) {
+                        Stop stop = new Stop();
+                        stop.setName(object.getString("name"));
+                        stop.setExtId(object.getString("extId"));
+                        stop.setId(object.getString("id"));
 
                         Position pos = new Position();
                         pos.setLat((float) object.getDouble("lat"));
-                        pos.setLon((float) object.getDouble("lng"));
-                        step.setEndLocation(pos);
+                        pos.setLon((float) object.getDouble("lon"));
+                        stop.setPosition(pos);
+
+                        step.setOrigin(stop);
+
+                    }else if(key.equals("Destination")) {
+                        Stop stop = new Stop();
+                        stop.setName(object.getString("name"));
+                        stop.setExtId(object.getString("extId"));
+                        stop.setId(object.getString("id"));
+
+                        Position pos = new Position();
+                        pos.setLat((float) object.getDouble("lat"));
+                        pos.setLon((float) object.getDouble("lon"));
+                        stop.setPosition(pos);
+
+                        step.setOrigin(stop);
                     }
 
                 }
