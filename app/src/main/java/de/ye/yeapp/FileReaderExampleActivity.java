@@ -1,10 +1,8 @@
 package de.ye.yeapp;
 
 import android.app.Activity;
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.util.Log;
-
 import de.ye.yeapp.utils.FileReader;
 
 /**

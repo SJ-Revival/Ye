@@ -17,32 +17,10 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.qualcomm.vuforia.CameraDevice;
-import com.qualcomm.vuforia.RectangleInt;
-import com.qualcomm.vuforia.Renderer;
-import com.qualcomm.vuforia.STORAGE_TYPE;
-import com.qualcomm.vuforia.State;
-import com.qualcomm.vuforia.TextTracker;
-import com.qualcomm.vuforia.Tracker;
-import com.qualcomm.vuforia.TrackerManager;
-import com.qualcomm.vuforia.VideoBackgroundConfig;
-import com.qualcomm.vuforia.VideoMode;
-import com.qualcomm.vuforia.Vuforia;
-import com.qualcomm.vuforia.WordList;
-
+import android.view.*;
+import android.widget.*;
+import com.qualcomm.vuforia.*;
+import de.ye.yeapp.data.Station;
 import de.ye.yeapp.objects.LoadingDialogHandler;
 import de.ye.yeapp.ui.AppMenu.AppMenu;
 import de.ye.yeapp.ui.AppMenu.AppMenuGroup;
@@ -57,54 +35,38 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.ye.yeapp.data.Station;
-
 /**
  * Created by bianca on 20.11.15.
  */
 public class ScanActivity extends Activity implements ApplicationControl,
         AppMenuInterface {
 
+    final public static int CMD_BACK = -1;
     private static final String TAG = ScanActivity.class.getSimpleName();
+    private static final String LOGTAG = "TextReco";
+    private final static int COLOR_OPAQUE = Color.argb(178, 0, 0, 0);
+    private final static int WORDLIST_MARGIN = 10;
+    ApplicationSession vuforiaAppSession;
+    boolean mIsDroidDevice = false;
     private TextView txtOutput;
     private List<Station> listStation;
     private ListView listView;
     private StationAdapter stationAdapter;
-
     private Context context;
-
-
-    private static final String LOGTAG = "TextReco";
-
-    ApplicationSession vuforiaAppSession;
-
-    private final static int COLOR_OPAQUE = Color.argb(178, 0, 0, 0);
-    private final static int WORDLIST_MARGIN = 10;
-
     // Our OpenGL view:
     private ApplicationGLView mGlView;
-
     // Our renderer:
     private TextRecoRenderer mRenderer;
-
     private AppMenu mAppMenu;
-
     private ArrayList<View> mSettingsAdditionalViews;
-
     private RelativeLayout mUILayout;
-
     private LoadingDialogHandler loadingDialogHandler = new LoadingDialogHandler(
             this);
     private boolean mIsTablet = false;
-
     private boolean mIsVuforiaStarted = false;
-
     private GestureDetector mGestureDetector;
-
     // Alert Dialog used to display SDK errors
     private AlertDialog mErrorDialog;
-
-    boolean mIsDroidDevice = false;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,18 +74,18 @@ public class ScanActivity extends Activity implements ApplicationControl,
 
         context = this.getApplicationContext();
 
-        listView = (ListView)findViewById(R.id.listStations);
+        listView = (ListView) findViewById(R.id.listStations);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(TAG, "onListItemClick");
 
                 Station station = (Station) listStation.get(position);
-                Toast.makeText(ScanActivity.this, station.getName()+ "", Toast.LENGTH_LONG).show();
+                Toast.makeText(ScanActivity.this, station.getName() + "", Toast.LENGTH_LONG).show();
 
                 Intent intent = new Intent(context, RouteActivity.class);
 
-                intent.putExtra("destination", ""+station.getName());
+                intent.putExtra("destination", "" + station.getName());
 
                 startActivity(intent);
 
@@ -149,78 +111,6 @@ public class ScanActivity extends Activity implements ApplicationControl,
 
     }
 
-
-    // you can make this class as another java file so it will be separated from your main activity.
-    public class AsyncTaskParseLocation extends AsyncTask<String, String, String> {
-
-        final String TAG = AsyncTaskParseLocation.class.getSimpleName();
-        final String JSON_URI = "http://demo.hafas.de/openapi/vbb-proxy/";
-        Station station;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-
-        }
-
-        @Override
-        protected String doInBackground(String... arg0) {
-            Log.d(TAG, "doInBackground");
-
-            JsonParser jParser = new JsonParser();
-            Map<String,String> map = new HashMap<String,String>();
-
-            String stringFilter = "location.name/";
-            stringFilter += "?accessId=" + getResources().getString(R.string.vbb_api);
-            //stringFilter += "&originCoordLat=0.12";
-            //stringFilter += "&originCoordLong=0.12";
-            stringFilter += "&input=Hauptbahnhof&type=S";
-            stringFilter += "&format=json";
-
-            JSONObject json = jParser.getJSONObjectFromUrl(JSON_URI + stringFilter, map, "GET");
-            //Log.d(TAG, "json: " + json.toString());
-
-            try {
-                JSONArray jsonArray = json.getJSONArray("StopLocation");
-
-                for(int i = 0; i < jsonArray.length(); i++){
-                    JSONObject jsonObjectLocation = jsonArray.getJSONObject(i);
-                    station = StationFactory.createStation(jsonObjectLocation);
-                    listStation.add(station);
-                    //txtOutput.setText(txtOutput.getText()+" "+station.getName());
-                }
-                //txtOutput.setText(""+jsonArray.toString());
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String strFromDoInBg) {
-            super.onPostExecute(strFromDoInBg);
-
-            String str = "";
-
-            /*for (Station station: listStation
-                 ) {
-
-                 str += station.getName()+"\r\n";
-
-            }*/
-
-            stationAdapter = new StationAdapter(getApplicationContext(), R.layout.station_row, listStation);
-
-            listView.setAdapter(stationAdapter);
-
-            //txtOutput.setText(str);
-
-        }
-    }
-
     //@Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         // TODO Auto-generated method stub
@@ -229,63 +119,21 @@ public class ScanActivity extends Activity implements ApplicationControl,
         Toast.makeText(this, selection, Toast.LENGTH_LONG).show();
     }
 
-
-    // Process Single Tap event to trigger autofocus
-    private class GestureListener extends
-            GestureDetector.SimpleOnGestureListener
-    {
-        // Used to set autofocus one second after a manual focus is triggered
-        private final Handler autofocusHandler = new Handler();
-
-
-        @Override
-        public boolean onDown(MotionEvent e)
-        {
-            return true;
-        }
-
-
-        @Override
-        public boolean onSingleTapUp(MotionEvent e)
-        {
-            // Generates a Handler to trigger autofocus
-            // after 1 second
-            autofocusHandler.postDelayed(new Runnable()
-            {
-                public void run()
-                {
-                    boolean result = CameraDevice.getInstance().setFocusMode(
-                            CameraDevice.FOCUS_MODE.FOCUS_MODE_TRIGGERAUTO);
-
-                    if (!result)
-                        Log.e("SingleTapUp", "Unable to trigger focus");
-                }
-            }, 1000L);
-
-            return true;
-        }
-    }
-
-
     // Called when the activity will start interacting with the user.
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         Log.d(LOGTAG, "onResume");
         super.onResume();
 
         // This is needed for some Droid devices to force portrait
-        if (mIsDroidDevice)
-        {
+        if (mIsDroidDevice) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 
-        try
-        {
+        try {
             vuforiaAppSession.resumeAR();
-        } catch (ApplicationException e)
-        {
+        } catch (ApplicationException e) {
             Log.e(LOGTAG, e.getString());
         }
 
@@ -293,32 +141,27 @@ public class ScanActivity extends Activity implements ApplicationControl,
             postStartCamera();
 
         // Resume the GL view:
-        if (mGlView != null)
-        {
+        if (mGlView != null) {
             mGlView.setVisibility(View.VISIBLE);
             mGlView.onResume();
         }
 
     }
 
-
     // Callback for configuration changes the activity handles itself
     @Override
-    public void onConfigurationChanged(Configuration config)
-    {
+    public void onConfigurationChanged(Configuration config) {
         Log.d(LOGTAG, "onConfigurationChanged");
         super.onConfigurationChanged(config);
 
         vuforiaAppSession.onConfigurationChanged();
 
-        if(mIsVuforiaStarted)
+        if (mIsVuforiaStarted)
             configureVideoBackgroundROI();
     }
 
-
     @Override
-    public boolean onTouchEvent(MotionEvent event)
-    {
+    public boolean onTouchEvent(MotionEvent event) {
         // Process the Gestures
         if (mAppMenu != null && mAppMenu.processEvent(event))
             return true;
@@ -326,53 +169,42 @@ public class ScanActivity extends Activity implements ApplicationControl,
         return mGestureDetector.onTouchEvent(event);
     }
 
-
     // Called when the system is about to start resuming a previous activity.
     @Override
-    protected void onPause()
-    {
+    protected void onPause() {
         Log.d(LOGTAG, "onPause");
         super.onPause();
 
-        if (mGlView != null)
-        {
+        if (mGlView != null) {
             mGlView.setVisibility(View.INVISIBLE);
             mGlView.onPause();
         }
 
-        try
-        {
+        try {
             vuforiaAppSession.pauseAR();
-        } catch (ApplicationException e)
-        {
+        } catch (ApplicationException e) {
             Log.e(LOGTAG, e.getString());
         }
 
         stopCamera();
     }
 
-
     // The final call you receive before your activity is destroyed.
     @Override
-    protected void onDestroy()
-    {
+    protected void onDestroy() {
         Log.d(LOGTAG, "onDestroy");
         super.onDestroy();
 
-        try
-        {
+        try {
             vuforiaAppSession.stopAR();
-        } catch (ApplicationException e)
-        {
+        } catch (ApplicationException e) {
             Log.e(LOGTAG, e.getString());
         }
 
         System.gc();
     }
 
-
-    private void startLoadingAnimation()
-    {
+    private void startLoadingAnimation() {
         LayoutInflater inflater = LayoutInflater.from(this);
         mUILayout = (RelativeLayout) inflater.inflate(
                 R.layout.camera_overlay_textreco, null, false);
@@ -394,10 +226,8 @@ public class ScanActivity extends Activity implements ApplicationControl,
 
     }
 
-
     // Initializes AR application components.
-    private void initApplicationAR()
-    {
+    private void initApplicationAR() {
         // Create OpenGL ES view:
         int depthSize = 16;
         int stencilSize = 0;
@@ -413,9 +243,7 @@ public class ScanActivity extends Activity implements ApplicationControl,
 
     }
 
-
-    private void postStartCamera()
-    {
+    private void postStartCamera() {
         // Sets the layout background to transparent
         mUILayout.setBackgroundColor(Color.TRANSPARENT);
 
@@ -428,9 +256,7 @@ public class ScanActivity extends Activity implements ApplicationControl,
         configureVideoBackgroundROI();
     }
 
-
-    void configureVideoBackgroundROI()
-    {
+    void configureVideoBackgroundROI() {
         VideoMode vm = CameraDevice.getInstance().getVideoMode(
                 CameraDevice.MODE.MODE_DEFAULT);
         VideoBackgroundConfig config = Renderer.getInstance()
@@ -464,10 +290,10 @@ public class ScanActivity extends Activity implements ApplicationControl,
         }
 
         // convert into camera coords
-        int[] loupeCenterX = { 0 };
-        int[] loupeCenterY = { 0 };
-        int[] loupeWidth = { 0 };
-        int[] loupeHeight = { 0 };
+        int[] loupeCenterX = {0};
+        int[] loupeCenterY = {0};
+        int[] loupeWidth = {0};
+        int[] loupeHeight = {0};
         Utils.screenCoordToCameraCoord((int) mRenderer.ROICenterX,
                 (int) mRenderer.ROICenterY, (int) mRenderer.ROIWidth,
                 (int) mRenderer.ROIHeight, screenWidth, screenHeight,
@@ -492,9 +318,7 @@ public class ScanActivity extends Activity implements ApplicationControl,
         mRenderer.setViewport(offx, offy, size[0], size[1]);
     }
 
-
-    private void stopCamera()
-    {
+    private void stopCamera() {
         doStopTrackers();
 
         CameraDevice.getInstance().stop();
@@ -502,19 +326,15 @@ public class ScanActivity extends Activity implements ApplicationControl,
     }
 
     /*@TODO*/
-    void updateWordListUI(final List<TextRecoRenderer.WordDesc> words)
-    {
-        runOnUiThread(new Runnable()
-        {
+    void updateWordListUI(final List<TextRecoRenderer.WordDesc> words) {
+        runOnUiThread(new Runnable() {
 
-            public void run()
-            {
+            public void run() {
                 RelativeLayout wordListLayout = (RelativeLayout) mUILayout
                         .findViewById(R.id.wordList);
                 wordListLayout.removeAllViews();
 
-                if (words.size() > 0)
-                {
+                if (words.size() > 0) {
                     ViewGroup.LayoutParams params = wordListLayout.getLayoutParams();
                     // Changes the height and width to the specified *pixels*
                     int maxTextHeight = params.height - (2 * WORDLIST_MARGIN);
@@ -526,11 +346,9 @@ public class ScanActivity extends Activity implements ApplicationControl,
                     int nbWords = textInfo[2]; // number of words we can display
                     TextView previousView = null;
                     TextView tv;
-                    for (TextRecoRenderer.WordDesc word : words)
-                    {
+                    for (TextRecoRenderer.WordDesc word : words) {
                         count++;
-                        if (count == nbWords)
-                        {
+                        if (count == nbWords) {
                             break;
                         }
                         tv = new TextView(ScanActivity.this);
@@ -562,9 +380,7 @@ public class ScanActivity extends Activity implements ApplicationControl,
         });
     }
 
-
-    private void showLoupe(boolean isActive)
-    {
+    private void showLoupe(boolean isActive) {
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int width = metrics.widthPixels;
@@ -611,8 +427,7 @@ public class ScanActivity extends Activity implements ApplicationControl,
 
         wordListLayout.setBackgroundColor(COLOR_OPAQUE);
 
-        if (isActive)
-        {
+        if (isActive) {
             topMargin.getLayoutParams().height = marginWidth;
             topMargin.getLayoutParams().width = width;
 
@@ -645,8 +460,7 @@ public class ScanActivity extends Activity implements ApplicationControl,
             loupeLayout.setVisibility(View.VISIBLE);
             wordListLayout.setVisibility(View.VISIBLE);
 
-        } else
-        {
+        } else {
             loadingIndicator.setVisibility(View.VISIBLE);
             loupeArea.setVisibility(View.GONE);
             topMargin.setVisibility(View.GONE);
@@ -656,14 +470,12 @@ public class ScanActivity extends Activity implements ApplicationControl,
 
     }
 
-
     // the funtions returns 3 values in an array of ints
     // [0] : the text size
     // [1] : the text component height
     // [2] : the number of words we can display
     private int[] fontSizeForTextHeight(int totalTextHeight, int nbWords,
-                                        int textWidth, int textSizeMax, int textSizeMin)
-    {
+                                        int textWidth, int textSizeMax, int textSizeMin) {
 
         int[] result = new int[3];
         String text = "Agj";
@@ -679,8 +491,7 @@ public class ScanActivity extends Activity implements ApplicationControl,
 
         final float densityMultiplier = getResources().getDisplayMetrics().density;
 
-        for (textSize = textSizeMax; textSize >= textSizeMin; textSize -= 2)
-        {
+        for (textSize = textSizeMax; textSize >= textSizeMin; textSize -= 2) {
             // Get the font size setting
             float fontScale = Settings.System.getFloat(getContentResolver(),
                     Settings.System.FONT_SCALE, 1.0f);
@@ -694,8 +505,7 @@ public class ScanActivity extends Activity implements ApplicationControl,
             StaticLayout layout = new StaticLayout(text, paint, textWidth,
                     Layout.Alignment.ALIGN_NORMAL, spacingMult, spacingAdd, true);
             layoutHeight = layout.getHeight();
-            if ((layoutHeight * nbWords) < totalTextHeight)
-            {
+            if ((layoutHeight * nbWords) < totalTextHeight) {
                 result[0] = textSize;
                 result[1] = layoutHeight;
                 result[2] = nbWords;
@@ -710,13 +520,10 @@ public class ScanActivity extends Activity implements ApplicationControl,
         return result;
     }
 
-
     @Override
-    public void onInitARDone(ApplicationException exception)
-    {
+    public void onInitARDone(ApplicationException exception) {
 
-        if (exception == null)
-        {
+        if (exception == null) {
             initApplicationAR();
 
             // Hint to the virtual machine that it would be a good time to
@@ -744,11 +551,9 @@ public class ScanActivity extends Activity implements ApplicationControl,
             // Sets the UILayout to be drawn in front of the camera
             mUILayout.bringToFront();
 
-            try
-            {
+            try {
                 vuforiaAppSession.startAR(CameraDevice.CAMERA.CAMERA_DEFAULT);
-            } catch (ApplicationException e)
-            {
+            } catch (ApplicationException e) {
                 Log.e(LOGTAG, e.getString());
             }
 
@@ -761,40 +566,31 @@ public class ScanActivity extends Activity implements ApplicationControl,
                     mGlView, mUILayout, mSettingsAdditionalViews);
             setAppMenuSettings();
 
-        } else
-        {
+        } else {
             Log.e(LOGTAG, exception.getString());
             showInitializationErrorMessage(exception.getString());
         }
     }
 
-
     // Shows initialization error messages as System dialogs
-    public void showInitializationErrorMessage(String message)
-    {
+    public void showInitializationErrorMessage(String message) {
         final String errorMessage = message;
-        runOnUiThread(new Runnable()
-        {
-            public void run()
-            {
-                if (mErrorDialog != null)
-                {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                if (mErrorDialog != null) {
                     mErrorDialog.dismiss();
                 }
 
                 // Generates an Alert Dialog to show the error message
                 AlertDialog.Builder builder = new AlertDialog.Builder(
                         ScanActivity.this);
-                builder
-                        .setMessage(errorMessage)
+                builder.setMessage(errorMessage)
                         .setTitle(getString(R.string.INIT_ERROR))
                         .setCancelable(false)
                         .setIcon(0)
                         .setPositiveButton(getString(R.string.button_OK),
-                                new DialogInterface.OnClickListener()
-                                {
-                                    public void onClick(DialogInterface dialog, int id)
-                                    {
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
                                         finish();
                                     }
                                 });
@@ -805,11 +601,9 @@ public class ScanActivity extends Activity implements ApplicationControl,
         });
     }
 
-
     // Functions to load and destroy tracking data.
     @Override
-    public boolean doLoadTrackersData()
-    {
+    public boolean doLoadTrackersData() {
         TrackerManager tm = TrackerManager.getInstance();
         TextTracker tt = (TextTracker) tm
                 .getTracker(TextTracker.getClassType());
@@ -819,18 +613,15 @@ public class ScanActivity extends Activity implements ApplicationControl,
                 STORAGE_TYPE.STORAGE_APPRESOURCE);
     }
 
-
     @Override
-    public boolean doUnloadTrackersData()
-    {
+    public boolean doUnloadTrackersData() {
         // Indicate if the trackers were unloaded correctly
         boolean result = true;
         TrackerManager tm = TrackerManager.getInstance();
         TextTracker tt = (TextTracker) tm
                 .getTracker(TextTracker.getClassType());
 
-        if(tt != null)
-        {
+        if (tt != null) {
             WordList wl = tt.getWordList();
             wl.unloadAllLists();
         }
@@ -838,16 +629,12 @@ public class ScanActivity extends Activity implements ApplicationControl,
         return result;
     }
 
-
     @Override
-    public void onQCARUpdate(State state)
-    {
+    public void onQCARUpdate(State state) {
     }
 
-
     @Override
-    public boolean doInitTrackers()
-    {
+    public boolean doInitTrackers() {
         TrackerManager tManager = TrackerManager.getInstance();
         Tracker tracker;
 
@@ -855,24 +642,20 @@ public class ScanActivity extends Activity implements ApplicationControl,
         boolean result = true;
 
         tracker = tManager.initTracker(TextTracker.getClassType());
-        if (tracker == null)
-        {
+        if (tracker == null) {
             Log.e(
                     LOGTAG,
                     "Tracker not initialized. Tracker already initialized or the camera is already started");
             result = false;
-        } else
-        {
+        } else {
             Log.i(LOGTAG, "Tracker successfully initialized");
         }
 
         return result;
     }
 
-
     @Override
-    public boolean doStartTrackers()
-    {
+    public boolean doStartTrackers() {
         // Indicate if the trackers were started correctly
         boolean result = true;
 
@@ -884,10 +667,8 @@ public class ScanActivity extends Activity implements ApplicationControl,
         return result;
     }
 
-
     @Override
-    public boolean doStopTrackers()
-    {
+    public boolean doStopTrackers() {
         // Indicate if the trackers were stopped correctly
         boolean result = true;
 
@@ -899,10 +680,8 @@ public class ScanActivity extends Activity implements ApplicationControl,
         return result;
     }
 
-
     @Override
-    public boolean doDeinitTrackers()
-    {
+    public boolean doDeinitTrackers() {
         // Indicate if the trackers were deinitialized correctly
         boolean result = true;
         Log.e(LOGTAG, "UnloadTrackersData");
@@ -913,22 +692,16 @@ public class ScanActivity extends Activity implements ApplicationControl,
         return result;
     }
 
-    final public static int CMD_BACK = -1;
-
-
     // This method sets the additional views to be moved along with the GLView
-    private void setAppMenuAdditionalViews()
-    {
+    private void setAppMenuAdditionalViews() {
         mSettingsAdditionalViews = new ArrayList<View>();
         mSettingsAdditionalViews.add(mUILayout.findViewById(R.id.topMargin));
         mSettingsAdditionalViews.add(mUILayout.findViewById(R.id.loupeLayout));
         mSettingsAdditionalViews.add(mUILayout.findViewById(R.id.wordList));
     }
 
-
     // This method sets the menu's settings
-    private void setAppMenuSettings()
-    {
+    private void setAppMenuSettings() {
         AppMenuGroup group;
 
         group = mAppMenu.addGroup("", false);
@@ -937,14 +710,11 @@ public class ScanActivity extends Activity implements ApplicationControl,
         mAppMenu.attachMenu();
     }
 
-
     @Override
-    public boolean menuProcess(int command)
-    {
+    public boolean menuProcess(int command) {
         boolean result = true;
 
-        switch (command)
-        {
+        switch (command) {
             case CMD_BACK:
                 finish();
                 break;
@@ -952,6 +722,108 @@ public class ScanActivity extends Activity implements ApplicationControl,
         }
 
         return result;
+    }
+
+    // you can make this class as another java file so it will be separated from your main activity.
+    public class AsyncTaskParseLocation extends AsyncTask<String, String, String> {
+
+        final String TAG = AsyncTaskParseLocation.class.getSimpleName();
+        final String JSON_URI = "http://demo.hafas.de/openapi/vbb-proxy/";
+        Station station;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+
+        }
+
+        @Override
+        protected String doInBackground(String... arg0) {
+            Log.d(TAG, "doInBackground");
+
+            JsonParser jParser = new JsonParser();
+            Map<String, String> map = new HashMap<String, String>();
+
+            String stringFilter = "location.name/";
+            stringFilter += "?accessId=" + getResources().getString(R.string.vbb_api);
+            //stringFilter += "&originCoordLat=0.12";
+            //stringFilter += "&originCoordLong=0.12";
+            stringFilter += "&input=Hauptbahnhof&type=S";
+            stringFilter += "&format=json";
+
+            JSONObject json = jParser.getJSONObjectFromUrl(JSON_URI + stringFilter, map, "GET");
+            //Log.d(TAG, "json: " + json.toString());
+
+            try {
+                JSONArray jsonArray = json.getJSONArray("StopLocation");
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObjectLocation = jsonArray.getJSONObject(i);
+                    station = StationFactory.createStation(jsonObjectLocation);
+                    listStation.add(station);
+                    //txtOutput.setText(txtOutput.getText()+" "+station.getName());
+                }
+                //txtOutput.setText(""+jsonArray.toString());
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String strFromDoInBg) {
+            super.onPostExecute(strFromDoInBg);
+
+            String str = "";
+
+            /*for (Station station: listStation
+                 ) {
+
+                 str += station.getName()+"\r\n";
+
+            }*/
+
+            stationAdapter = new StationAdapter(getApplicationContext(), R.layout.station_row, listStation);
+
+            listView.setAdapter(stationAdapter);
+
+            //txtOutput.setText(str);
+
+        }
+    }
+
+    // Process Single Tap event to trigger autofocus
+    private class GestureListener extends
+            GestureDetector.SimpleOnGestureListener {
+        // Used to set autofocus one second after a manual focus is triggered
+        private final Handler autofocusHandler = new Handler();
+
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
+
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            // Generates a Handler to trigger autofocus
+            // after 1 second
+            autofocusHandler.postDelayed(new Runnable() {
+                public void run() {
+                    boolean result = CameraDevice.getInstance().setFocusMode(
+                            CameraDevice.FOCUS_MODE.FOCUS_MODE_TRIGGERAUTO);
+
+                    if (!result)
+                        Log.e("SingleTapUp", "Unable to trigger focus");
+                }
+            }, 1000L);
+
+            return true;
+        }
     }
 }
 

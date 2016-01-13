@@ -311,19 +311,19 @@ public class AppMenu
     }
     
     
-    public void setAnimationX(float animtationX)
+    public void setAnimationX(float animationX)
     {
         mParentMenuView.setVisibility(View.VISIBLE);
-        setViewX(mMovableView, animtationX);
+        setViewX(mMovableView, animationX);
         
-        mParentMenuView.setHorizontalClipping((int) animtationX);
+        mParentMenuView.setHorizontalClipping((int) animationX);
         
         if (mAdditionalViews != null)
         {
             for (int i = 0; i < mAdditionalViews.size(); i++)
             {
                 setViewX(mAdditionalViews.get(i), mInitialAdditionalViewsX[i]
-                    + animtationX);
+                    + animationX);
             }
         }
     }

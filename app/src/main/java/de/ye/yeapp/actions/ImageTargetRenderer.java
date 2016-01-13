@@ -13,8 +13,10 @@ import android.opengl.Matrix;
 import android.util.Log;
 import com.qualcomm.vuforia.*;
 import de.ye.yeapp.ApplicationSession;
-import de.ye.yeapp.utils.*;
 import de.ye.yeapp.objects.*;
+import de.ye.yeapp.utils.Application3DModel;
+import de.ye.yeapp.utils.TimeParser;
+import de.ye.yeapp.utils.Utils;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -25,8 +27,9 @@ import java.util.Vector;
 
 // The renderer class for the ImageTargets sample. 
 public class ImageTargetRenderer implements GLSurfaceView.Renderer {
-    private static final String LOGTAG = "ImageTargetRenderer";
-
+    private static final String LOGTAG = ImageTargetRenderer.class.getSimpleName();
+    private static final float OBJECT_SCALE_FLOAT = 3.0f;
+    boolean mIsActive = false;
     private ApplicationSession vuforiaAppSession;
     private ImageTargets mActivity;
     private Vector<Texture> mTextures;
@@ -36,18 +39,11 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
     private int textureCoordHandle;
     private int mvpMatrixHandle;
     private int texSampler2DHandle;
-
     private Teapot mTeapot;
     private CubeObject mCube;
-
     private float kBuildingScale = 12.0f;
     private Application3DModel mBuildingsModel;
-
     private Renderer mRenderer;
-
-    boolean mIsActive = false;
-
-    private static final float OBJECT_SCALE_FLOAT = 3.0f;
 
 
     public ImageTargetRenderer(ImageTargets activity, ApplicationSession session) {
@@ -58,8 +54,9 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
     // Called to draw the current frame.
     @Override
     public void onDrawFrame(GL10 gl) {
-        if (!mIsActive)
+        if (!mIsActive) {
             return;
+        }
 
         // Call our function to render content
         renderFrame();
@@ -157,6 +154,7 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
         // to determine the direction of the culling
         GLES20.glEnable(GLES20.GL_CULL_FACE);
         GLES20.glCullFace(GLES20.GL_BACK);
+
         if (Renderer.getInstance().getVideoBackgroundConfig().getReflection() == VIDEO_BACKGROUND_REFLECTION.VIDEO_BACKGROUND_REFLECTION_ON)
             GLES20.glFrontFace(GLES20.GL_CW); // Front camera
         else
