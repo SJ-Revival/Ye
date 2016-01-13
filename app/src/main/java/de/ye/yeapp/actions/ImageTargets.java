@@ -91,11 +91,9 @@ public class ImageTargets extends Activity implements ApplicationControl, AppMen
         vuforiaAppSession = new ApplicationSession(this);
 
         startLoadingAnimation();
-        mDatasetStrings.add("Ye.xml");
-        // mDatasetStrings.add("Tarmac.xml");
+        mDatasetStrings.add("Berlin_SU.xml");
 
-        vuforiaAppSession
-                .initAR(this, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        vuforiaAppSession.initAR(this, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         mGestureDetector = new GestureDetector(this, new GestureListener());
 
@@ -220,16 +218,13 @@ public class ImageTargets extends Activity implements ApplicationControl, AppMen
         mUILayout.setBackgroundColor(Color.BLACK);
 
         // Gets a reference to the loading dialog
-        loadingDialogHandler.mLoadingDialogContainer = mUILayout
-                .findViewById(R.id.loading_indicator);
+        loadingDialogHandler.mLoadingDialogContainer = mUILayout.findViewById(R.id.loading_indicator);
 
         // Shows the loading indicator at start
-        loadingDialogHandler
-                .sendEmptyMessage(LoadingDialogHandler.SHOW_LOADING_DIALOG);
+        loadingDialogHandler.sendEmptyMessage(LoadingDialogHandler.SHOW_LOADING_DIALOG);
 
         // Adds the inflated layout to the view
-        addContentView(mUILayout, new LayoutParams(LayoutParams.MATCH_PARENT,
-                LayoutParams.MATCH_PARENT));
+        addContentView(mUILayout, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
     }
 
@@ -237,8 +232,7 @@ public class ImageTargets extends Activity implements ApplicationControl, AppMen
     @Override
     public boolean doLoadTrackersData() {
         TrackerManager tManager = TrackerManager.getInstance();
-        ObjectTracker objectTracker = (ObjectTracker) tManager
-                .getTracker(ObjectTracker.getClassType());
+        ObjectTracker objectTracker = (ObjectTracker) tManager.getTracker(ObjectTracker.getClassType());
         if (objectTracker == null)
             return false;
 
@@ -265,8 +259,7 @@ public class ImageTargets extends Activity implements ApplicationControl, AppMen
 
             String name = "Current Dataset : " + trackable.getName();
             trackable.setUserData(name);
-            Log.d(LOGTAG, "UserData:Set the following user data "
-                    + (String) trackable.getUserData());
+            Log.d(LOGTAG, "UserData:Set the following user data " + (String) trackable.getUserData());
         }
 
         return true;
