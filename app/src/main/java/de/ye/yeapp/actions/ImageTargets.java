@@ -106,8 +106,9 @@ public class ImageTargets extends Activity implements ApplicationControl, AppMen
     }
 
     private void loadTextures() {
-        mTextures.add(Texture.loadTextureFromApk("TextureTeapotBlue.png", getAssets()));
-        mTextures.add(Texture.loadTextureFromApk("ImageTargets/Buildings.jpeg", getAssets()));
+        mTextures.add(Texture.loadTextureFromApk("TrainSymbols/S41.png", getAssets()));
+        mTextures.add(Texture.loadTextureFromApk("TrainSymbols/S42.png", getAssets()));
+        mTextures.add(Texture.loadTextureFromApk("TrainSymbols/U8.png", getAssets()));
     }
 
     // Called when the activity will start interacting with the user.
@@ -211,8 +212,6 @@ public class ImageTargets extends Activity implements ApplicationControl, AppMen
     private void startLoadingAnimation() {
         mUILayout = (RelativeLayout) View.inflate(this, R.layout.camera_overlay,
                 null);
-
-        Log.d(LOGTAG, "" + ""); // TODO remove logging
 
         mUILayout.setVisibility(View.VISIBLE);
         mUILayout.setBackgroundColor(Color.BLACK);

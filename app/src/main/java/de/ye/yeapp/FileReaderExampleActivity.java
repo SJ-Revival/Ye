@@ -18,7 +18,7 @@ public class FileReaderExampleActivity extends Activity {
 
 
         try {
-            String str = FileReader.readFile(getApplicationContext(), "YeShader/cube_mesh.fs.glsl");
+            String str = FileReader.readFile(getApplicationContext(), "Shader/cube_mesh.fs.glsl");
             Log.d(TAG, "FileReader: "+str);
         } catch (Exception e) {
             e.printStackTrace();

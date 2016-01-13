@@ -14,13 +14,11 @@ import android.util.Log;
 import com.qualcomm.vuforia.*;
 import de.ye.yeapp.ApplicationSession;
 import de.ye.yeapp.objects.*;
-import de.ye.yeapp.utils.Application3DModel;
 import de.ye.yeapp.utils.TimeParser;
 import de.ye.yeapp.utils.Utils;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
@@ -39,10 +37,10 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
     private int textureCoordHandle;
     private int mvpMatrixHandle;
     private int texSampler2DHandle;
-    private Teapot mTeapot;
     private CubeObject mCube;
-    private float kBuildingScale = 12.0f;
-    private Application3DModel mBuildingsModel;
+    private CubeObject mCube2; // TODO only for testing... replace with Array
+    private Vec3F mCubeTransform;
+    private Vec3F mCube2Transform;
     private Renderer mRenderer;
 
 
@@ -85,7 +83,6 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
 
     // Function for initializing the renderer.
     private void initRendering() {
-        mTeapot = new Teapot();
         mCube = new CubeObject();
 
         mRenderer = Renderer.getInstance();
@@ -110,13 +107,6 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
         textureCoordHandle = GLES20.glGetAttribLocation(shaderProgramID, "vertexTexCoord");
         mvpMatrixHandle = GLES20.glGetUniformLocation(shaderProgramID, "modelViewProjectionMatrix");
         texSampler2DHandle = GLES20.glGetUniformLocation(shaderProgramID, "texSampler2D");
-
-        try {
-            mBuildingsModel = new Application3DModel();
-            mBuildingsModel.loadModel(mActivity.getResources().getAssets(), "ImageTargets/Buildings.txt");
-        } catch (IOException e) {
-            Log.e(LOGTAG, "Unable to load buildings");
-        }
 
         // Hide the Loading Dialog
         mActivity.loadingDialogHandler.sendEmptyMessage(LoadingDialogHandler.HIDE_LOADING_DIALOG);
@@ -162,12 +152,8 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
 
         // did we find any trackables this frame? If yes, show all objects on the found trackables
         for (int tIdx = 0; tIdx < state.getNumTrackableResults(); tIdx++) {
-            Log.d(LOGTAG, "targets: " + Integer.toString(state.getNumTrackableResults()));
-            Log.d(LOGTAG, "current target: " + Integer.toString(tIdx)); // TODO remove tracking
-
             TrackableResult result = state.getTrackableResult(tIdx);
             Trackable trackable = result.getTrackable();
-            printUserData(trackable);
             Matrix44F modelViewMatrix_Vuforia = Tool.convertPose2GLMatrix(result.getPose());
             float[] modelViewMatrix = modelViewMatrix_Vuforia.getData();
 
@@ -188,12 +174,15 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
             // activate the shader program and bind the vertex/normal/tex coords
             GLES20.glUseProgram(shaderProgramID);
 
+            // TODO try to translate only the 3D object
+            Log.d(LOGTAG, "output");
+
             // -----------------------------------------------------------------
             // pass the data to the shader
-            GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, mTeapot.getVertices());
-            GLES20.glVertexAttribPointer(normalHandle, 3, GLES20.GL_FLOAT, false, 0, mTeapot.getNormals());
+            GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, mCube.getVertices());
+            GLES20.glVertexAttribPointer(normalHandle, 3, GLES20.GL_FLOAT, false, 0, mCube.getNormals());
             GLES20.glVertexAttribPointer(textureCoordHandle, 2, GLES20.GL_FLOAT, false, 0,
-                    mTeapot.getTexCoords());
+                    mCube.getTexCoords());
 
             GLES20.glEnableVertexAttribArray(vertexHandle);
             GLES20.glEnableVertexAttribArray(normalHandle);
@@ -211,9 +200,6 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
             GLES20.glDrawElements(GLES20.GL_TRIANGLES,
                     mCube.getNumObjectIndex(), GLES20.GL_UNSIGNED_SHORT, mCube.getIndices());
 
-            GLES20.glDrawElements(GLES20.GL_TRIANGLES,
-                    mTeapot.getNumObjectIndex(), GLES20.GL_UNSIGNED_SHORT, mTeapot.getIndices());
-
             // disable the enabled arrays
             GLES20.glDisableVertexAttribArray(vertexHandle);
             GLES20.glDisableVertexAttribArray(normalHandle);
@@ -228,7 +214,7 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
 
     private void printUserData(Trackable trackable) {
         String userData = (String) trackable.getUserData();
-        // Log.d(LOGTAG, "UserData:Retreived User Data	\"" + userData + "\"");
+        Log.d(LOGTAG, "User Data: \"" + userData + "\"");
     }
 
     public void setTextures(Vector<Texture> textures) {
