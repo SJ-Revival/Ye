@@ -26,7 +26,7 @@ import java.util.Vector;
 // The renderer class for the ImageTargets sample. 
 public class ImageTargetRenderer implements GLSurfaceView.Renderer {
     private static final String LOGTAG = ImageTargetRenderer.class.getSimpleName();
-    private static final float OBJECT_SCALE_FLOAT = 3.0f;
+    private static final float OBJECT_SCALE_FLOAT = 6.0f;
     boolean mIsActive = false;
     private ApplicationSession vuforiaAppSession;
     private ImageTargets mActivity;
@@ -37,11 +37,13 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
     private int textureCoordHandle;
     private int mvpMatrixHandle;
     private int texSampler2DHandle;
-    private CubeObject mCube;
-    private CubeObject mCube2; // TODO only for testing... replace with Array
+    private Quad mQuad;
+    private Quad mCube2; // TODO only for testing... replace with Array
     private Vec3F mCubeTransform;
     private Vec3F mCube2Transform;
     private Renderer mRenderer;
+    private float maxTranslateX = 210f;
+    private float maxTranslateY = 148.485489f;
 
 
     public ImageTargetRenderer(ImageTargets activity, ApplicationSession session) {
@@ -83,7 +85,7 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
 
     // Function for initializing the renderer.
     private void initRendering() {
-        mCube = new CubeObject();
+        mQuad = new Quad();
 
         mRenderer = Renderer.getInstance();
 
@@ -112,11 +114,16 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
         mActivity.loadingDialogHandler.sendEmptyMessage(LoadingDialogHandler.HIDE_LOADING_DIALOG);
     }
 
+    // TODO try to translate only the 3D object
+    private void computeTargetTranslationFromScreenVector(float screenDeltaX, float screenDeltaY,
+                                                          Matrix44F modelViewMatrix) {
+
+        Vec3F localTargetDisplacement = new Vec3F(screenDeltaX, screenDeltaY, 0);
+        // Tool.setTranslation(modelViewMatrix, localTargetDisplacement);
+    }
+
     // The render function.
     private void renderFrame() {
-        float maxTranslateX = 210f;
-        float maxTranslateY = 148.485489f;
-
         Calendar calendar = Calendar.getInstance();
         Date date = new Date();
         calendar.setTime(date);
@@ -157,6 +164,12 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
             Matrix44F modelViewMatrix_Vuforia = Tool.convertPose2GLMatrix(result.getPose());
             float[] modelViewMatrix = modelViewMatrix_Vuforia.getData();
 
+            // TODO try to translate only the 3D object
+//            float screenDeltaX = mCubeTransform.getData()[0];
+//            float screenDeltaY = mCubeTransform.getData()[1];
+//            computeTargetTranslationFromScreenVector(screenDeltaX, screenDeltaY, modelViewMatrix_Vuforia);
+
+
             // set the texture index according to the found trackable
             // the string should match the *.dat and the *.xml file in /assets
             int textureIndex = trackable.getName().equalsIgnoreCase("berlin_su") ? 0 : 1;
@@ -165,7 +178,8 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
             float[] modelViewProjection = new float[16];
 
             // translate and scale Matrix
-            Matrix.translateM(modelViewMatrix, 0, translateX, translateY, OBJECT_SCALE_FLOAT);
+            // Matrix.translateM(modelViewMatrix, 0, translateX, translateY, OBJECT_SCALE_FLOAT);
+            Matrix.translateM(modelViewMatrix, 0, 0, 0, OBJECT_SCALE_FLOAT);
             Matrix.scaleM(modelViewMatrix, 0, OBJECT_SCALE_FLOAT, OBJECT_SCALE_FLOAT, OBJECT_SCALE_FLOAT);
 
             Matrix.multiplyMM(modelViewProjection, 0, vuforiaAppSession
@@ -174,15 +188,12 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
             // activate the shader program and bind the vertex/normal/tex coords
             GLES20.glUseProgram(shaderProgramID);
 
-            // TODO try to translate only the 3D object
-            Log.d(LOGTAG, "output");
-
             // -----------------------------------------------------------------
             // pass the data to the shader
-            GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, mCube.getVertices());
-            GLES20.glVertexAttribPointer(normalHandle, 3, GLES20.GL_FLOAT, false, 0, mCube.getNormals());
+            GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, mQuad.getVertices());
+            GLES20.glVertexAttribPointer(normalHandle, 3, GLES20.GL_FLOAT, false, 0, mQuad.getNormals());
             GLES20.glVertexAttribPointer(textureCoordHandle, 2, GLES20.GL_FLOAT, false, 0,
-                    mCube.getTexCoords());
+                    mQuad.getTexCoords());
 
             GLES20.glEnableVertexAttribArray(vertexHandle);
             GLES20.glEnableVertexAttribArray(normalHandle);
@@ -198,7 +209,7 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
 
             // finally draw the object
             GLES20.glDrawElements(GLES20.GL_TRIANGLES,
-                    mCube.getNumObjectIndex(), GLES20.GL_UNSIGNED_SHORT, mCube.getIndices());
+                    mQuad.getNumObjectIndex(), GLES20.GL_UNSIGNED_SHORT, mQuad.getIndices());
 
             // disable the enabled arrays
             GLES20.glDisableVertexAttribArray(vertexHandle);
