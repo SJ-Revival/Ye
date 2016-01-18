@@ -27,6 +27,7 @@ import java.util.List;
 
 import de.ye.yeapp.data.Route;
 import de.ye.yeapp.data.User;
+import de.ye.yeapp.utils.Connection;
 import de.ye.yeapp.utils.GeoFactory;
 import de.ye.yeapp.utils.JsonParser;
 import de.ye.yeapp.data.Address;
@@ -311,32 +312,33 @@ public class RouteActivity extends Activity implements LocationListener {
 
             Log.d(TAG, "google request: "+vbbRequest);
 
-            JSONObject jsonObject = parser.getJSONObjectFromUrl(vbbRequest, new HashMap<String, String>(), "GET");
+            if(Connection.isInternetAvailable()) {
+                JSONObject jsonObject = parser.getJSONObjectFromUrl(vbbRequest, new HashMap<String, String>(), "GET");
+                if (jsonObject != null) {
+                    try {
 
-            try {
+                        if (jsonObject.has("errorCode")) {
+                            /*@todo*/
 
-                if(jsonObject.has("errorCode")){
-                    /*@todo*/
+                        } else {
+                            JSONArray jsonArray = jsonObject.getJSONArray("Trip");
 
-                }else{
-                    JSONArray jsonArray = jsonObject.getJSONArray("Trip");
-
-                    //ist eine Array, da google mehrere Routen zurueckliefern kann
-                    //for(int i = 0; i < jsonArray.length(); i++) {
-                    if(jsonArray.length() > 0) {
-                        for (int i = 0; i < 1; i++) {
-                            JSONObject jsonObjectLocation = jsonArray.getJSONObject(i);
-                            Route route = TripFactory.createTrip(jsonObjectLocation);
-                            listRoute.add(route);
+                            //ist eine Array, da google mehrere Routen zurueckliefern kann
+                            //for(int i = 0; i < jsonArray.length(); i++) {
+                            if (jsonArray.length() > 0) {
+                                for (int i = 0; i < 1; i++) {
+                                    JSONObject jsonObjectLocation = jsonArray.getJSONObject(i);
+                                    Route route = TripFactory.createTrip(jsonObjectLocation);
+                                    listRoute.add(route);
+                                }
+                            }
                         }
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 }
-
-
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
             return null;
         }
