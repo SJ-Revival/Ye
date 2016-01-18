@@ -8,6 +8,7 @@ and other countries. Trademarks of QUALCOMM Incorporated are used with permissio
 package de.ye.yeapp.ui.AppMenu;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
@@ -20,6 +21,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import de.ye.yeapp.R;
+import de.ye.yeapp.RouteActivity;
+import de.ye.yeapp.ScanActivity;
 
 import java.util.ArrayList;
 
@@ -83,6 +86,28 @@ public class AppMenu
         mMovableListView = (LinearLayout) mParentMenuView
             .findViewById(R.id.settings_menu);
         mMovableListView.setBackgroundColor(Color.WHITE);
+
+        TextView startNavigation = (TextView) mParentMenuView.findViewById(R.id.startNavigationActivity);
+        startNavigation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*@TODO change Activity Class */
+                Intent i = new Intent(mActivity, RouteActivity.class);
+                mActivity.startActivity(i);
+
+            }
+        });
+
+        TextView startAnimation = (TextView) mParentMenuView.findViewById(R.id.startAnimationActivity);
+        startAnimation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*@TODO change Activity Class */
+                Intent i = new Intent(mActivity, ScanActivity.class);
+                mActivity.startActivity(i);
+
+            }
+        });
         
         TextView title = (TextView) mMovableListView
             .findViewById(R.id.settings_menu_title);

@@ -32,6 +32,26 @@
 			    android:textStyle="bold"
 			    android:textSize="@dimen/menu_title"
 		        />
+
+			<TextView
+				android:id="@+id/startNavigationActivity"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="Navigation"
+
+				android:textSize="@dimen/menu_entries_text"
+				android:gravity="center_horizontal"
+				android:padding="@dimen/menu_title_padding"/>
+
+			<TextView
+				android:id="@+id/startAnimationActivity"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="Animation"
+
+				android:textSize="@dimen/menu_entries_text"
+				android:gravity="center_horizontal"
+				android:padding="@dimen/menu_title_padding"/>
 		    
 	     </LinearLayout>
 	</ScrollView>
