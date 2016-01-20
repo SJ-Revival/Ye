@@ -119,7 +119,7 @@
 
 
         <activity
-            android:name="de.ye.yeapp.ScanActivity"
+            android:name=".ArrivalActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
             android:screenOrientation="portrait"
             android:exported="true"

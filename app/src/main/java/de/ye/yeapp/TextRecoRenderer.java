@@ -35,7 +35,7 @@ import java.util.List;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-//import de.ye.yeapp.ScanActivity;
+//import de.ye.yeapp.ArrivalActivity;
 import de.ye.yeapp.objects.LineShaders;
 import de.ye.yeapp.utils.Utils;
 

@@ -22,7 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import de.ye.yeapp.R;
 import de.ye.yeapp.RouteActivity;
-import de.ye.yeapp.ScanActivity;
+import de.ye.yeapp.ArrivalActivity;
 
 import java.util.ArrayList;
 
@@ -103,7 +103,7 @@ public class AppMenu
             @Override
             public void onClick(View v) {
                 /*@TODO change Activity Class */
-                Intent i = new Intent(mActivity, ScanActivity.class);
+                Intent i = new Intent(mActivity, ArrivalActivity.class);
                 mActivity.startActivity(i);
 
             }
