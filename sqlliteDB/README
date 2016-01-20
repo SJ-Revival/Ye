@@ -1,0 +1,8 @@
+Unzip a GTFS-compatible zip file into this directory. Then, run the script as so:
+./mksql3db.sh DBName.db theGTFSFolder/*.txt
+
+
+Requirements:
+sqllite3 binaries
+unix/linux system
+gtfs zip files

@@ -1,9 +1,11 @@
-/*===============================================================================
+===============================================================================
 Copyright (c) 2012-2014 Qualcomm Connected Experiences, Inc. All Rights Reserved.
 
 Vuforia is a trademark of QUALCOMM Incorporated, registered in the United States 
 and other countries. Trademarks of QUALCOMM Incorporated are used with permission.
-===============================================================================*/
+===============================================================================*//*
+
+
 
 package de.ye.yeapp;
 
@@ -33,52 +35,52 @@ import java.util.List;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import de.ye.yeapp.ScanActivity;
+//import de.ye.yeapp.ScanActivity;
 import de.ye.yeapp.objects.LineShaders;
 import de.ye.yeapp.utils.Utils;
 
 
-// The renderer class for the ImageTargets sample. 
+// The renderer class for the ImageTargets sample.
 public class TextRecoRenderer implements GLSurfaceView.Renderer
 {
     private static final String LOGTAG = "TextRecoRenderer";
-    
+
     private ApplicationSession vuforiaAppSession;
-    
+
     private static final int MAX_NB_WORDS = 132;
     private static final float TEXTBOX_PADDING = 0.0f;
-    
+
     private static final float ROIVertices[] = { -0.5f, -0.5f, 0.0f, 0.5f,
             -0.5f, 0.0f, 0.5f, 0.5f, 0.0f, -0.5f, 0.5f, 0.0f };
-    
+
     private static final int NUM_QUAD_OBJECT_INDICES = 8;
     private static final short ROIIndices[] = { 0, 1, 1, 2, 2, 3, 3, 0 };
-    
+
     private static final float quadVertices[] = { -0.5f, -0.5f, 0.0f, 0.5f,
             -0.5f, 0.0f, 0.5f, 0.5f, 0.0f, -0.5f, 0.5f, 0.0f, };
-    
+
     private static final short quadIndices[] = { 0, 1, 1, 2, 2, 3, 3, 0 };
-    
+
     private ByteBuffer mROIVerts = null;
     private ByteBuffer mROIIndices = null;
-    
+
     public boolean mIsActive = false;
-    
+
     // Reference to main activity *
     public ScanActivity mActivity;
-    
+
     private int shaderProgramID;
-    
+
     private int vertexHandle;
-    
+
     private int mvpMatrixHandle;
-    
+
     private Renderer mRenderer;
-    
+
     private int lineOpacityHandle;
-    
+
     private int lineColorHandle;
-    
+
     private List<WordDesc> mWords = new ArrayList<WordDesc>();
     public float ROICenterX;
     public float ROICenterY;
@@ -90,33 +92,33 @@ public class TextRecoRenderer implements GLSurfaceView.Renderer
     private int viewportSize_y;
     private ByteBuffer mQuadVerts;
     private ByteBuffer mQuadIndices;
-    
-    
+
+
     public TextRecoRenderer(ScanActivity activity, ApplicationSession session)
     {
         mActivity = activity;
         vuforiaAppSession = session;
     }
-    
-    
+
+
     // Called when the surface is created or recreated.
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config)
     {
         Log.d(LOGTAG, "GLRenderer.onSurfaceCreated");
-        
+
         // Call function to initialize rendering:
         initRendering();
-        
+
         // Call Vuforia function to (re)initialize rendering after first use
         // or after OpenGL ES context was lost (e.g. after onPause/onResume):
         vuforiaAppSession.onSurfaceCreated();
     }
-    
-    
+
+
     // Called to draw the current frame.
     @Override
-    public void onDrawFrame(GL10 gl) 
+    public void onDrawFrame(GL10 gl)
     {
         List<WordDesc> words= null;
         if (!mIsActive)
@@ -125,35 +127,35 @@ public class TextRecoRenderer implements GLSurfaceView.Renderer
             mActivity.updateWordListUI(mWords);
             return;
         }
-        
+
         // Call our function to render content
         renderFrame();
-        
+
         synchronized (mWords)
         {
             words = new ArrayList<WordDesc>(mWords);
         }
-        
+
         Collections.sort(words);
-        
+
         // update UI - we copy the list to avoid concurrent modifications
         mActivity.updateWordListUI(new ArrayList<WordDesc>(words));
     }
-    
-    
+
+
     // Called when the surface changed size.
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height)
     {
         Log.d(LOGTAG, "GLRenderer.onSurfaceChanged");
-        
+
         mActivity.configureVideoBackgroundROI();
-        
+
         // Call Vuforia function to handle render surface size changes:
         vuforiaAppSession.onSurfaceChanged(width, height);
     }
-    
-    
+
+
     // Function for initializing the renderer.
     private void initRendering()
     {
@@ -161,45 +163,45 @@ public class TextRecoRenderer implements GLSurfaceView.Renderer
         mROIVerts = ByteBuffer.allocateDirect(4 * ROIVertices.length);
         mROIVerts.order(ByteOrder.LITTLE_ENDIAN);
         updateROIVertByteBuffer();
-        
+
         mROIIndices = ByteBuffer.allocateDirect(2 * ROIIndices.length);
         mROIIndices.order(ByteOrder.LITTLE_ENDIAN);
         for (short s : ROIIndices)
             mROIIndices.putShort(s);
         mROIIndices.rewind();
-        
+
         mQuadVerts = ByteBuffer.allocateDirect(4 * quadVertices.length);
         mQuadVerts.order(ByteOrder.LITTLE_ENDIAN);
         for (float f : quadVertices)
             mQuadVerts.putFloat(f);
         mQuadVerts.rewind();
-        
+
         mQuadIndices = ByteBuffer.allocateDirect(2 * quadIndices.length);
         mQuadIndices.order(ByteOrder.LITTLE_ENDIAN);
         for (short s : quadIndices)
             mQuadIndices.putShort(s);
         mQuadIndices.rewind();
-        
+
         mRenderer = Renderer.getInstance();
-        
+
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, Vuforia.requiresAlpha() ? 0.0f
             : 1.0f);
-        
+
         shaderProgramID = Utils.createProgramFromShaderSrc(
             LineShaders.LINE_VERTEX_SHADER, LineShaders.LINE_FRAGMENT_SHADER);
-        
+
         vertexHandle = GLES20.glGetAttribLocation(shaderProgramID,
             "vertexPosition");
         mvpMatrixHandle = GLES20.glGetUniformLocation(shaderProgramID,
             "modelViewProjectionMatrix");
-        
+
         lineOpacityHandle = GLES20.glGetUniformLocation(shaderProgramID,
             "opacity");
         lineColorHandle = GLES20.glGetUniformLocation(shaderProgramID, "color");
-        
+
     }
-    
-    
+
+
     private void updateROIVertByteBuffer()
     {
         mROIVerts.rewind();
@@ -207,18 +209,18 @@ public class TextRecoRenderer implements GLSurfaceView.Renderer
             mROIVerts.putFloat(f);
         mROIVerts.rewind();
     }
-    
-    
+
+
     // The render function.
     public void renderFrame()
     {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-        
+
         State state = mRenderer.begin();
         mRenderer.drawVideoBackground();
-        
+
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-        
+
         // handle face culling, we need to detect if we are using reflection
         // to determine the direction of the culling
         GLES20.glEnable(GLES20.GL_CULL_FACE);
@@ -230,30 +232,30 @@ public class TextRecoRenderer implements GLSurfaceView.Renderer
         {
             GLES20.glFrontFace(GLES20.GL_CCW);   // Back camera
         }
-        
+
         // enable blending to support transparency
         GLES20.glEnable(GLES20.GL_BLEND);
         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA,
             GLES20.GL_ONE_MINUS_CONSTANT_ALPHA);
-        
+
         // clear words list
         mWords.clear();
-        
+
         // did we find any trackables this frame?
         for (int tIdx = 0; tIdx < state.getNumTrackableResults(); tIdx++)
         {
             // get the trackable
             TrackableResult result = state.getTrackableResult(tIdx);
-            
+
             Vec2F wordBoxSize = null;
-            
+
             if (result.isOfType(WordResult.getClassType()))
             {
                 WordResult wordResult = (WordResult) result;
                 Word word = (Word) wordResult.getTrackable();
                 Obb2D obb = wordResult.getObb();
                 wordBoxSize = word.getSize();
-                
+
                 String wordU = word.getStringU();
                 if (wordU != null)
                 {
@@ -270,7 +272,7 @@ public class TextRecoRenderer implements GLSurfaceView.Renderer
                     // - Y grows from top to bottom
                     float wordx = -obb.getCenter().getData()[1];
                     float wordy = obb.getCenter().getData()[0];
-                    
+
                     if (mWords.size() < MAX_NB_WORDS)
                     {
                         mWords.add(new WordDesc(wordU,
@@ -279,14 +281,14 @@ public class TextRecoRenderer implements GLSurfaceView.Renderer
                             (int) (wordx + wordBoxSize.getData()[0] / 2),
                             (int) (wordy + wordBoxSize.getData()[1] / 2)));
                     }
-                    
+
                 }
             } else
             {
                 Log.d(LOGTAG, "Unexpected Detection : " + result.getType());
                 continue;
             }
-            
+
             Matrix44F mvMat44f = Tool.convertPose2GLMatrix(result.getPose());
             float[] mvMat = mvMat44f.getData();
             float[] mvpMat = new float[16];
@@ -295,7 +297,7 @@ public class TextRecoRenderer implements GLSurfaceView.Renderer
                 wordBoxSize.getData()[1] - TEXTBOX_PADDING, 1.0f);
             Matrix.multiplyMM(mvpMat, 0, vuforiaAppSession
                 .getProjectionMatrix().getData(), 0, mvMat, 0);
-            
+
             GLES20.glUseProgram(shaderProgramID);
             GLES20.glLineWidth(3.0f);
             GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT,
@@ -310,18 +312,18 @@ public class TextRecoRenderer implements GLSurfaceView.Renderer
             GLES20.glLineWidth(1.0f);
             GLES20.glUseProgram(0);
         }
-        
+
         // Draw the region of interest
         GLES20.glDisable(GLES20.GL_DEPTH_TEST);
-        
+
         drawRegionOfInterest(ROICenterX, ROICenterY, ROIWidth, ROIHeight);
-        
+
         GLES20.glDisable(GLES20.GL_BLEND);
-        
+
         mRenderer.end();
     }
-    
-    
+
+
     public void setROI(float center_x, float center_y, float width, float height)
     {
         ROICenterX = center_x;
@@ -329,8 +331,8 @@ public class TextRecoRenderer implements GLSurfaceView.Renderer
         ROIWidth = width;
         ROIHeight = height;
     }
-    
-    
+
+
     static String fromShortArray(short[] str)
     {
         StringBuilder result = new StringBuilder();
@@ -338,8 +340,8 @@ public class TextRecoRenderer implements GLSurfaceView.Renderer
             result.appendCodePoint(c);
         return result.toString();
     }
-    
-    
+
+
     public void setViewport(int vpX, int vpY, int vpSizeX, int vpSizeY)
     {
         viewportPosition_x = vpX;
@@ -347,8 +349,8 @@ public class TextRecoRenderer implements GLSurfaceView.Renderer
         viewportSize_x = vpSizeX;
         viewportSize_y = vpSizeY;
     }
-    
-    
+
+
     private void drawRegionOfInterest(float center_x, float center_y,
         float width, float height)
     {
@@ -357,57 +359,57 @@ public class TextRecoRenderer implements GLSurfaceView.Renderer
         float[] orthProj = new float[16];
         setOrthoMatrix(0.0f, (float) viewportSize_x, (float) viewportSize_y,
             0.0f, -1.0f, 1.0f, orthProj);
-        
+
         // compute coordinates
         float minX = center_x - width / 2;
         float maxX = center_x + width / 2;
         float minY = center_y - height / 2;
         float maxY = center_y + height / 2;
-        
+
         // Update vertex coordinates of ROI rectangle
         ROIVertices[0] = minX - viewportPosition_x;
         ROIVertices[1] = minY - viewportPosition_y;
         ROIVertices[2] = 0;
-        
+
         ROIVertices[3] = maxX - viewportPosition_x;
         ROIVertices[4] = minY - viewportPosition_y;
         ROIVertices[5] = 0;
-        
+
         ROIVertices[6] = maxX - viewportPosition_x;
         ROIVertices[7] = maxY - viewportPosition_y;
         ROIVertices[8] = 0;
-        
+
         ROIVertices[9] = minX - viewportPosition_x;
         ROIVertices[10] = maxY - viewportPosition_y;
         ROIVertices[11] = 0;
-        
+
         updateROIVertByteBuffer();
-        
+
         GLES20.glUseProgram(shaderProgramID);
         GLES20.glLineWidth(3.0f);
-        
+
         GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false,
             0, mROIVerts);
         GLES20.glEnableVertexAttribArray(vertexHandle);
-        
+
         GLES20.glUniform1f(lineOpacityHandle, 1.0f); // 0.35f);
         GLES20.glUniform3f(lineColorHandle, 0.0f, 1.0f, 0.0f);// R,G,B
         GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, orthProj, 0);
-        
+
         // Then, we issue the render call
         GLES20.glDrawElements(GLES20.GL_LINES, NUM_QUAD_OBJECT_INDICES,
             GLES20.GL_UNSIGNED_SHORT, mROIIndices);
-        
+
         // Disable the vertex array handle
         GLES20.glDisableVertexAttribArray(vertexHandle);
-        
+
         // Restore default line width
         GLES20.glLineWidth(1.0f);
-        
+
         // Unbind shader program
         GLES20.glUseProgram(0);
     }
-    
+
     class WordDesc implements Comparable<WordDesc>
     {
         public WordDesc(String text, int aX, int aY, int bX, int bY)
@@ -418,18 +420,18 @@ public class TextRecoRenderer implements GLSurfaceView.Renderer
             this.Bx = bX;
             this.By = bY;
         }
-        
+
         String text;
         int Ax, Ay, Bx, By;
-        
-        
+
+
         @Override
         public int compareTo(WordDesc w2)
         {
             WordDesc w1 = this;
             int ret = 0;
-            
-            // We split the screen into 100 bins so that words on a line 
+
+            // We split the screen into 100 bins so that words on a line
             // are roughly kept together.
             int bins = viewportSize_y/100;
             if(bins == 0)
@@ -439,7 +441,7 @@ public class TextRecoRenderer implements GLSurfaceView.Renderer
             }
 
             // We want to order words starting from the top left to the bottom right.
-            // We therefore use the top-middle point of the word obb and bin the word 
+            // We therefore use the top-middle point of the word obb and bin the word
             // to an address that is consistently comparable to other word locations.
             int w1mx = w1.Ax/bins;
             int w1my = ((w1.By + w1.Ay)/2)/bins;
@@ -458,14 +460,14 @@ public class TextRecoRenderer implements GLSurfaceView.Renderer
             return text + " [" + Ax + ", " + Ay + ", " + Bx + ", " + By + "]";
         }
     }
-    
-    
+
+
     private void setOrthoMatrix(float nLeft, float nRight, float nBottom,
         float nTop, float nNear, float nFar, float[] _ROIOrthoProjMatrix)
     {
         for (int i = 0; i < 16; i++)
             _ROIOrthoProjMatrix[i] = 0.0f;
-        
+
         _ROIOrthoProjMatrix[0] = 2.0f / (nRight - nLeft);
         _ROIOrthoProjMatrix[5] = 2.0f / (nTop - nBottom);
         _ROIOrthoProjMatrix[10] = 2.0f / (nNear - nFar);
@@ -473,7 +475,9 @@ public class TextRecoRenderer implements GLSurfaceView.Renderer
         _ROIOrthoProjMatrix[13] = -(nTop + nBottom) / (nTop - nBottom);
         _ROIOrthoProjMatrix[14] = (nFar + nNear) / (nFar - nNear);
         _ROIOrthoProjMatrix[15] = 1.0f;
-        
+
     }
-    
+
 }
+
+
