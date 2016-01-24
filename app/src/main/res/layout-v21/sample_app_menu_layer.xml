@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<de.ye.app.ui.AppMenu.AppMenuView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#0000"
+        >
+
+    <ScrollView
+            android:background="#FFF"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+        <LinearLayout
+                android:id="@+id/settings_menu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#0000"
+                android:orientation="vertical"
+                >
+
+            <TextView
+                    android:id="@+id/settings_menu_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:background="@color/light_gray"
+                    android:padding="@dimen/menu_title_padding"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/menu_title"
+                    />
+
+            <TextView
+                    android:id="@+id/startNavigationActivity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/view_navigation"
+
+                    android:textSize="@dimen/menu_entries_text"
+                    android:gravity="center_horizontal"
+                    android:padding="@dimen/menu_title_padding"/>
+
+            <TextView
+                    android:id="@+id/startAnimationActivity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/view_animation"
+
+                    android:textSize="@dimen/menu_entries_text"
+                    android:gravity="center_horizontal"
+                    android:padding="@dimen/menu_title_padding"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</de.ye.app.ui.AppMenu.AppMenuView>

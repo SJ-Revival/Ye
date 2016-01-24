@@ -4,7 +4,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "de.ye.yeapp"
+        applicationId "de.ye.app"
         minSdkVersion 14
         targetSdkVersion 22
     }
