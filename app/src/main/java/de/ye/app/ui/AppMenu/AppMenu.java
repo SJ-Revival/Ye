@@ -78,7 +78,7 @@ public class AppMenu {
 
         LayoutInflater inflater = LayoutInflater.from(mActivity);
         mParentMenuView = (AppMenuView) inflater.inflate(
-                R.layout.sample_app_menu_layer, null, false);
+                R.layout.app_menu_layer, null, false);
         parentView.addView(mParentMenuView);
 
         mMovableListView = (LinearLayout) mParentMenuView
