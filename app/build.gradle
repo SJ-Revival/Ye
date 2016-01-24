@@ -4,7 +4,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "de.ye.yeapp"
+        applicationId "de.ye.app"
         minSdkVersion 14
         targetSdkVersion 22
     }
@@ -13,6 +13,14 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+
+    sourceSets {
+        main {
+            java {
+                exclude '**/TextRecoRenderer.java'
+            }
         }
     }
 }
