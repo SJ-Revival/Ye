@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.ye.app"
-    android:versionCode="200"
-    android:versionName="5.0" >
+    android:versionCode="1"
+    android:versionName="0.1" >
 
     <!--
         The application's compatibility with one or more versions of the Android
@@ -37,8 +37,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
 
-
-
     <!--
         Add this permission to allow opening network sockets.
     -->
@@ -72,7 +70,7 @@
         android:description="@string/app_description"
         android:launchMode="singleTask"
         android:allowBackup="true"
-        android:theme="@style/SampleAppsTheme"
+        android:theme="@style/YeLightTheme"
         >
         
 
@@ -112,9 +110,6 @@
             android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
             android:screenOrientation="portrait"
             >
-
-
-
         </activity>
 
 
@@ -131,103 +126,25 @@
             android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
             android:screenOrientation="portrait"
             >
+        </activity>
+
+        <activity
+                android:name="de.ye.app.ImageTargetsActivity"
+                android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
+                >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
 
         <activity
             android:name="de.ye.app.FileReaderExampleActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
             android:screenOrientation="portrait">
-
-
-        </activity>
-        
-         <!--<activity
-            android:name=".ui.ActivityList.AboutScreen"
-            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
-            android:screenOrientation="portrait"
-            android:noHistory="true"
-            >
-        </activity>
-         
-        <activity
-            android:name=".actions.ImageTargets"
-            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
-        	android:theme="@style/SampleAppsTheme"
- 	        android:launchMode="singleTask"
-            >
-        </activity>
-        
-        <activity
-            android:name=".app.TextRecognition.TextReco"
-            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
-        	android:theme="@style/SampleAppsTheme"
-  	        android:launchMode="singleTask"
-            >
         </activity>
 
-        <activity
-            android:name=".app.CylinderTargets.CylinderTargets"
-            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
-        	android:theme="@style/SampleAppsTheme"
- 	        android:launchMode="singleTask"
-            >
-        </activity>
-        
-        <activity
-            android:name=".app.FrameMarkers.FrameMarkers"
-            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
-        	android:theme="@style/SampleAppsTheme"
- 	        android:launchMode="singleTask"
-            >
-        </activity>
-        
-        <activity
-            android:name=".app.VirtualButtons.VirtualButtons"
-            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
-        	android:theme="@style/SampleAppsTheme"
- 	        android:launchMode="singleTask"
-            >
-        </activity>
-        
-        <activity
-            android:name=".app.UserDefinedTargets.UserDefinedTargets"
-            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
-        	android:theme="@style/SampleAppsTheme"
- 	        android:launchMode="singleTask"
-            >
-        </activity>
-                
-        <activity
-            android:name=".app.MultiTargets.MultiTargets"
-            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
-        	android:theme="@style/SampleAppsTheme"
- 	        android:launchMode="singleTask"
-            >
-        </activity>
-        
-        <activity
-            android:name=".app.CloudRecognition.CloudReco"
-            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
-        	android:theme="@style/SampleAppsTheme"
- 	        android:launchMode="singleTask"
-            >
-        </activity>
-         
-        <activity
-            android:name=".app.ObjectRecognition.ObjectTargets"
-            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
-        	android:theme="@style/SampleAppsTheme"
- 	        android:launchMode="singleTask"
-            >
-        </activity>-->
-         
     </application>
-
 </manifest>

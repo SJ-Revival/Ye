@@ -11,11 +11,6 @@ import de.ye.app.data.Station;
 
 import java.util.List;
 
-//import com.qualcomm.vuforia.samples.VuforiaSamples.R;
-
-/**
- * Created by bianca on 30.11.15.
- */
 public class StationAdapter extends ArrayAdapter {
     private static final String TAG = StationAdapter.class.getSimpleName();
 
@@ -30,18 +25,18 @@ public class StationAdapter extends ArrayAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater mInflater = LayoutInflater.from(getContext());
-        convertView = mInflater.inflate(R.layout.station_row, parent, false);
+        LayoutInflater vi = LayoutInflater.from(getContext());
 
-        Station station = (Station) getItem(position);
+        if(convertView == null) {
+            convertView = vi.inflate(R.layout.station_row, parent, false);
 
-        TextView title = (TextView) (convertView.findViewById(R.id.title));
-        title.setText(station.getName());
+            Station station = (Station) getItem(position);
 
+            TextView title = (TextView) (convertView.findViewById(R.id.title));
+            title.setText(station.getName());
 
+        }
         return convertView;
-
-
     }
 
     /*@Override
@@ -52,6 +47,4 @@ public class StationAdapter extends ArrayAdapter {
         Station station = (Station)getItem(position);
         System.out.println("BIANCA" + ""+station.getName() );
     }*/
-
-
 }

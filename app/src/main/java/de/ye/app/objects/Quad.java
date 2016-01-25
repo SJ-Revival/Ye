@@ -1,14 +1,16 @@
 package de.ye.app.objects;
 
+import java.lang.reflect.Array;
 import java.nio.Buffer;
+import java.util.Arrays;
 
 public class Quad extends MeshObject {
 
     private static final float[] mVertices = new float[]{
-            -1.0f, -1.0f, 0.0f, // bottom-left corner
-            1.0f, -1.0f, 0.0f,  // bottom-right corner
-            1.0f, 1.0f, 0.0f,   // top-right corner
-            -1.0f, 1.0f, 0.0f   // top-left corner
+            -3.0f, -1.0f, 0.0f, // bottom-left corner
+            3.0f, -1.0f, 0.0f,  // bottom-right corner
+            3.0f, 1.0f, 0.0f,   // top-right corner
+            -3.0f, 1.0f, 0.0f   // top-left corner
     };
 
     private static final float[] mNormals = new float[]{
@@ -41,6 +43,10 @@ public class Quad extends MeshObject {
         mNormBuff = fillBuffer(mNormals);
         mTexCoordBuff = fillBuffer(mTexCoords);
         mIndBuff = fillBuffer(mIndices);
+    }
+
+    public String getVerticesArray() {
+        return Arrays.toString(mVertices);
     }
 
     @Override

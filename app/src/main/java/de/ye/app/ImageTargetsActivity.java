@@ -5,7 +5,7 @@ Vuforia is a trademark of QUALCOMM Incorporated, registered in the United States
 and other countries. Trademarks of QUALCOMM Incorporated are used with permission.
 ===============================================================================*/
 
-package de.ye.app.actions;
+package de.ye.app;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -28,10 +28,6 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 import com.qualcomm.vuforia.*;
-import de.ye.app.ApplicationControl;
-import de.ye.app.ApplicationException;
-import de.ye.app.ApplicationSession;
-import de.ye.app.R;
 import de.ye.app.objects.LoadingDialogHandler;
 import de.ye.app.objects.Texture;
 import de.ye.app.ui.AppMenu.AppMenu;
@@ -43,7 +39,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 
-public class ImageTargets extends Activity implements ApplicationControl, AppMenuInterface {
+public class ImageTargetsActivity extends Activity implements ApplicationControl, AppMenuInterface {
     final public static int CMD_BACK = -1;
     final public static int CMD_EXTENDED_TRACKING = 1;
     final public static int CMD_AUTOFOCUS = 2;
@@ -51,7 +47,7 @@ public class ImageTargets extends Activity implements ApplicationControl, AppMen
     final public static int CMD_CAMERA_FRONT = 4;
     final public static int CMD_CAMERA_REAR = 5;
     final public static int CMD_DATASET_START_INDEX = 6;
-    private static final String LOGTAG = "ImageTargets";
+    private static final String LOGTAG = "ImageTargetsActivity";
     ApplicationSession vuforiaAppSession;
     LoadingDialogHandler loadingDialogHandler = new LoadingDialogHandler(this);
     boolean mIsDroidDevice = false;
@@ -345,7 +341,7 @@ public class ImageTargets extends Activity implements ApplicationControl, AppMen
 
                 // Generates an Alert Dialog to show the error message
                 AlertDialog.Builder builder = new AlertDialog.Builder(
-                        ImageTargets.this);
+                        ImageTargetsActivity.this);
                 builder.setMessage(errorMessage)
                         .setTitle(getString(R.string.INIT_ERROR))
                         .setCancelable(false)

@@ -3,7 +3,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#0000"
+        android:background="#FFF"
         >
 
     <ScrollView
@@ -17,7 +17,7 @@
                 android:id="@+id/settings_menu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#0000"
+                android:background="#FFF"
                 android:orientation="vertical"
                 >
 
@@ -27,10 +27,12 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:background="@color/light_gray"
+                    android:textColor="@color/black"
                     android:padding="@dimen/menu_title_padding"
                     android:fontFamily="sans-serif"
                     android:textStyle="bold"
                     android:textSize="@dimen/menu_title"
+                    android:text="@string/view_menu"
                     />
 
             <TextView
@@ -38,20 +40,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/view_navigation"
-
                     android:textSize="@dimen/menu_entries_text"
                     android:gravity="center_horizontal"
-                    android:padding="@dimen/menu_title_padding"/>
+                    android:textColor="@color/black"
+                    android:padding="@dimen/menu_title_padding"
+                    />
 
             <TextView
                     android:id="@+id/startAnimationActivity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/view_animation"
-
                     android:textSize="@dimen/menu_entries_text"
                     android:gravity="center_horizontal"
-                    android:padding="@dimen/menu_title_padding"/>
+                    android:textColor="@color/black"
+                    android:padding="@dimen/menu_title_padding"
+                    />
 
         </LinearLayout>
     </ScrollView>

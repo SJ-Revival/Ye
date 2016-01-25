@@ -17,11 +17,7 @@ android {
     }
 
     sourceSets {
-        main {
-            java {
-                exclude '**/TextRecoRenderer.java'
-            }
-        }
+
     }
 }
 

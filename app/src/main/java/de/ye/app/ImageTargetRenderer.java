@@ -5,18 +5,14 @@ Vuforia is a trademark of QUALCOMM Incorporated, registered in the United States
 and other countries. Trademarks of QUALCOMM Incorporated are used with permission.
 ===============================================================================*/
 
-package de.ye.app.actions;
+package de.ye.app;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.Log;
 import com.qualcomm.vuforia.*;
-import de.ye.app.ApplicationSession;
-import de.ye.app.objects.CubeShaders;
-import de.ye.app.objects.LoadingDialogHandler;
-import de.ye.app.objects.Quad;
-import de.ye.app.objects.Texture;
+import de.ye.app.objects.*;
 import de.ye.app.utils.TimeParser;
 import de.ye.app.utils.Utils;
 
@@ -26,13 +22,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
 
-// The renderer class for the ImageTargets sample. 
+// The renderer class for the ImageTargetsActivity sample.
 public class ImageTargetRenderer implements GLSurfaceView.Renderer {
     private static final String LOGTAG = ImageTargetRenderer.class.getSimpleName();
     private static final float OBJECT_SCALE_FLOAT = 6.0f;
     boolean mIsActive = false;
     private ApplicationSession vuforiaAppSession;
-    private ImageTargets mActivity;
+    private ImageTargetsActivity mActivity;
     private Vector<Texture> mTextures;
     private int shaderProgramID;
     private int vertexHandle;
@@ -40,8 +36,8 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
     private int textureCoordHandle;
     private int mvpMatrixHandle;
     private int texSampler2DHandle;
-    private Quad mQuad;
-    private Quad mCube2; // TODO only for testing... replace with Array
+    private Quad train_1;
+    private CubeObject train_2; // TODO only for testing... replace with Array
     private Vec3F mCubeTransform;
     private Vec3F mCube2Transform;
     private Renderer mRenderer;
@@ -49,7 +45,7 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
     private float maxTranslateY = 148.485489f;
 
 
-    public ImageTargetRenderer(ImageTargets activity, ApplicationSession session) {
+    public ImageTargetRenderer(ImageTargetsActivity activity, ApplicationSession session) {
         mActivity = activity;
         vuforiaAppSession = session;
     }
@@ -88,7 +84,10 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
 
     // Function for initializing the renderer.
     private void initRendering() {
-        mQuad = new Quad();
+        train_1 = new Quad();
+        train_2 = new CubeObject();
+
+        train_1.getVertices();
 
         mRenderer = Renderer.getInstance();
 
@@ -180,39 +179,8 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
             // deal with the modelview and projection matrices
             float[] modelViewProjection = new float[16];
 
-            // translate and scale Matrix
-            // Matrix.translateM(modelViewMatrix, 0, translateX, translateY, OBJECT_SCALE_FLOAT);
-            Matrix.translateM(modelViewMatrix, 0, 0, 0, OBJECT_SCALE_FLOAT);
-            Matrix.scaleM(modelViewMatrix, 0, OBJECT_SCALE_FLOAT, OBJECT_SCALE_FLOAT, OBJECT_SCALE_FLOAT);
-
-            Matrix.multiplyMM(modelViewProjection, 0, vuforiaAppSession
-                    .getProjectionMatrix().getData(), 0, modelViewMatrix, 0);
-
-            // activate the shader program and bind the vertex/normal/tex coords
-            GLES20.glUseProgram(shaderProgramID);
-
-            // -----------------------------------------------------------------
-            // pass the data to the shader
-            GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, mQuad.getVertices());
-            GLES20.glVertexAttribPointer(normalHandle, 3, GLES20.GL_FLOAT, false, 0, mQuad.getNormals());
-            GLES20.glVertexAttribPointer(textureCoordHandle, 2, GLES20.GL_FLOAT, false, 0,
-                    mQuad.getTexCoords());
-
-            GLES20.glEnableVertexAttribArray(vertexHandle);
-            GLES20.glEnableVertexAttribArray(normalHandle);
-            GLES20.glEnableVertexAttribArray(textureCoordHandle);
-
-            // activate texture 0, bind it, and pass to shader
-            GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextures.get(textureIndex).mTextureID[0]);
-            GLES20.glUniform1i(texSampler2DHandle, 0);
-
-            // pass the model view matrix to the shader
-            GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, modelViewProjection, 0);
-
-            // finally draw the object
-            GLES20.glDrawElements(GLES20.GL_TRIANGLES,
-                    mQuad.getNumObjectIndex(), GLES20.GL_UNSIGNED_SHORT, mQuad.getIndices());
+            renderMultiObjects(train_2, modelViewProjection, modelViewMatrix, textureIndex, translateX, translateY);
+            renderMultiObjects(train_1, modelViewProjection, modelViewMatrix, textureIndex, translateY, translateX + 20);
 
             // disable the enabled arrays
             GLES20.glDisableVertexAttribArray(vertexHandle);
@@ -224,6 +192,45 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
         }
         GLES20.glDisable(GLES20.GL_DEPTH_TEST);
         mRenderer.end();
+    }
+
+    private void renderMultiObjects(MeshObject object, float[] modelViewProjection, float[] modelViewMatrix, int textureIndex, float translateX, float translateY) {
+        // translate and scale Matrix
+        Matrix.translateM(modelViewMatrix, 0, translateX, translateY, OBJECT_SCALE_FLOAT);
+//        Matrix.translateM(modelViewMatrix, 0, 0, 0, OBJECT_SCALE_FLOAT);
+        Matrix.scaleM(modelViewMatrix, 0, OBJECT_SCALE_FLOAT, OBJECT_SCALE_FLOAT, OBJECT_SCALE_FLOAT);
+
+        Matrix.multiplyMM(modelViewProjection, 0, vuforiaAppSession
+                .getProjectionMatrix().getData(), 0, modelViewMatrix, 0);
+
+        // activate the shader program and bind the vertex/normal/tex coords
+        GLES20.glUseProgram(shaderProgramID);
+
+        // -----------------------------------------------------------------
+        // pass the data to the shader
+        GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, object.getVertices());
+        GLES20.glVertexAttribPointer(normalHandle, 3, GLES20.GL_FLOAT, false, 0, object.getNormals());
+        GLES20.glVertexAttribPointer(textureCoordHandle, 2, GLES20.GL_FLOAT, false, 0, object.getTexCoords());
+
+        // pass the model view matrix to the shader
+        GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, modelViewProjection, 0);
+
+        // activate texture 0, bind it, and pass to shader
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextures.get(textureIndex).mTextureID[0]);
+        GLES20.glUniform1i(texSampler2DHandle, 0);
+
+        GLES20.glEnableVertexAttribArray(vertexHandle);
+        GLES20.glEnableVertexAttribArray(normalHandle);
+        GLES20.glEnableVertexAttribArray(textureCoordHandle);
+
+        // finally draw the object
+        GLES20.glDrawElements(GLES20.GL_TRIANGLES,
+                object.getNumObjectIndex(), GLES20.GL_UNSIGNED_SHORT, object.getIndices());
+
+        // undo transformation
+        Matrix.scaleM(modelViewMatrix, 0, 1 / OBJECT_SCALE_FLOAT, 1 / OBJECT_SCALE_FLOAT, 1 / OBJECT_SCALE_FLOAT);
+        Matrix.translateM(modelViewMatrix, 0, -translateX, -translateY, -OBJECT_SCALE_FLOAT);
     }
 
     private void printUserData(Trackable trackable) {

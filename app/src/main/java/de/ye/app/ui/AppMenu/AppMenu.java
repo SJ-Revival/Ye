@@ -39,7 +39,7 @@ public class AppMenu {
     private GLSurfaceView mMovableView;
     private AppMenuView mParentMenuView;
     private LinearLayout mMovableListView;
-    private ArrayList<AppMenuGroup> mSettingsItems = new ArrayList<AppMenuGroup>();
+    private ArrayList<AppMenuGroup> mSettingsItems = new ArrayList<>();
 
     private ArrayList<View> mAdditionalViews;
     private float mInitialAdditionalViewsX[];
@@ -162,8 +162,7 @@ public class AppMenu {
 
 
     public boolean processEvent(MotionEvent event) {
-        boolean result = false;
-        result = mGestureDetector.onTouchEvent(event);
+        boolean result = mGestureDetector.onTouchEvent(event);
 
         if (event.getAction() == MotionEvent.ACTION_UP && !result) {
             setSwipingMenu(false);

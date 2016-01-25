@@ -1,4 +1,4 @@
-===============================================================================
+/*===============================================================================
         Copyright(c)2012-2014Qualcomm Connected Experiences,Inc.All Rights Reserved.
 
         Vuforia is a trademark of QUALCOMM Incorporated,registered in the United States
@@ -39,7 +39,7 @@
         import de.ye.yeapp.utils.Utils;
 
 
-// The renderer class for the ImageTargets sample.
+// The renderer class for the ImageTargetsActivity sample.
 public class TextRecoRenderer implements GLSurfaceView.Renderer {
     private static final String LOGTAG = "TextRecoRenderer";
 
@@ -451,5 +451,4 @@ public class TextRecoRenderer implements GLSurfaceView.Renderer {
     }
 
 }
-
-
+*/

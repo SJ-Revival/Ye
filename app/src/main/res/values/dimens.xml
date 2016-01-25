@@ -2,7 +2,7 @@
 <resources>
 
     <dimen name="menu_title">22sp</dimen>
-    <dimen name="menu_title_padding">14dp</dimen>
+    <dimen name="menu_title_padding">16dp</dimen>
     <dimen name="menu_activities_list_padding_left">24dp</dimen>
     <dimen name="menu_activities_list_padding_top_down">14dp</dimen>
     <dimen name="menu_entries_text">20sp</dimen>
