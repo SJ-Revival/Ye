@@ -38,6 +38,7 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
     private int texSampler2DHandle;
     private Quad train_1;
     private CubeObject train_2; // TODO only for testing... replace with Array
+    private TrainPath s42;
     private Vec3F mCubeTransform;
     private Vec3F mCube2Transform;
     private Renderer mRenderer;
@@ -87,7 +88,8 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
         train_1 = new Quad();
         train_2 = new CubeObject();
 
-        train_1.getVertices();
+        s42 = new TrainPath(); // TODO replace with complete constructor
+        s42.getTargetCoords("A", "B", .3d);
 
         mRenderer = Renderer.getInstance();
 
@@ -116,14 +118,6 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
         mActivity.loadingDialogHandler.sendEmptyMessage(LoadingDialogHandler.HIDE_LOADING_DIALOG);
     }
 
-    // TODO try to translate only the 3D object
-    private void computeTargetTranslationFromScreenVector(float screenDeltaX, float screenDeltaY,
-                                                          Matrix44F modelViewMatrix) {
-
-        Vec3F localTargetDisplacement = new Vec3F(screenDeltaX, screenDeltaY, 0);
-        // Tool.setTranslation(modelViewMatrix, localTargetDisplacement);
-    }
-
     // The render function.
     private void renderFrame() {
         Calendar calendar = Calendar.getInstance();
@@ -139,8 +133,6 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
 
         float translateX = maxTranslateX * animationFactor;
         float translateY = maxTranslateY * animationFactor;
-
-        // Log.d("ANIMATION: ", Float.toString(animationFactor));
 
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
