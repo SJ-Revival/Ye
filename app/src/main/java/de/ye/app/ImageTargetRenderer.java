@@ -25,7 +25,7 @@ import java.util.Vector;
 // The renderer class for the ImageTargetsActivity sample.
 public class ImageTargetRenderer implements GLSurfaceView.Renderer {
     private static final String LOGTAG = ImageTargetRenderer.class.getSimpleName();
-    private static final float OBJECT_SCALE_FLOAT = 3.0f;
+    private static final float OBJECT_SCALE_FLOAT = 2.0f;
     boolean mIsActive = false;
     private ApplicationSession vuforiaAppSession;
     private ImageTargetsActivity mActivity;
@@ -174,14 +174,9 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
             renderMultiObjects(train_2, modelViewProjection, modelViewMatrix, textureIndex, translateX, translateY);
             renderMultiObjects(train_1, modelViewProjection, modelViewMatrix, textureIndex, translateY, translateX + 20);
 
-            // disable the enabled arrays
-            GLES20.glDisableVertexAttribArray(vertexHandle);
-            GLES20.glDisableVertexAttribArray(normalHandle);
-            GLES20.glDisableVertexAttribArray(textureCoordHandle);
-            // -----------------------------------------------------------------
-
             Utils.checkGLError("Render Frame");
         }
+
         GLES20.glDisable(GLES20.GL_DEPTH_TEST);
         mRenderer.end();
     }
@@ -189,7 +184,7 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
     private void renderMultiObjects(MeshObject object, float[] modelViewProjection, float[] modelViewMatrix, int textureIndex, float translateX, float translateY) {
         // translate and scale Matrix
         Matrix.translateM(modelViewMatrix, 0, translateX, translateY, OBJECT_SCALE_FLOAT);
-//        Matrix.translateM(modelViewMatrix, 0, 0, 0, OBJECT_SCALE_FLOAT);
+        // Matrix.translateM(modelViewMatrix, 0, 0, 0, OBJECT_SCALE_FLOAT);
         Matrix.scaleM(modelViewMatrix, 0, OBJECT_SCALE_FLOAT, OBJECT_SCALE_FLOAT, OBJECT_SCALE_FLOAT);
 
         Matrix.multiplyMM(modelViewProjection, 0, vuforiaAppSession
@@ -207,6 +202,10 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
         // pass the model view matrix to the shader
         GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, modelViewProjection, 0);
 
+        // TODO enable alpha blending for textures
+        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+        GLES20.glEnable(GLES20.GL_BLEND);
+
         // activate texture 0, bind it, and pass to shader
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextures.get(textureIndex).mTextureID[0]);
@@ -219,6 +218,14 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
         // finally draw the object
         GLES20.glDrawElements(GLES20.GL_TRIANGLES,
                 object.getNumObjectIndex(), GLES20.GL_UNSIGNED_SHORT, object.getIndices());
+
+        GLES20.glDisable(GLES20.GL_BLEND);
+
+        // disable the enabled arrays
+        GLES20.glDisableVertexAttribArray(vertexHandle);
+        GLES20.glDisableVertexAttribArray(normalHandle);
+        GLES20.glDisableVertexAttribArray(textureCoordHandle);
+        // -----------------------------------------------------------------
 
         // undo transformation
         Matrix.scaleM(modelViewMatrix, 0, 1 / OBJECT_SCALE_FLOAT, 1 / OBJECT_SCALE_FLOAT, 1 / OBJECT_SCALE_FLOAT);
