@@ -7,10 +7,10 @@ import java.util.Arrays;
 public class Quad extends MeshObject {
 
     private static final float[] mVertices = new float[]{
-            -3.0f, -1.0f, 0.0f, // bottom-left corner
-            3.0f, -1.0f, 0.0f,  // bottom-right corner
-            3.0f, 1.0f, 0.0f,   // top-right corner
-            -3.0f, 1.0f, 0.0f   // top-left corner
+            -1.5f, -1f, 0.0f, // bottom-left corner
+            1.5f, -1f, 0.0f,  // bottom-right corner
+            1.5f, 1f, 0.0f,   // top-right corner
+            -1.5f, 1f, 0.0f   // top-left corner
     };
 
     private static final float[] mNormals = new float[]{

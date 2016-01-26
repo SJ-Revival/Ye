@@ -25,7 +25,7 @@ import java.util.Vector;
 // The renderer class for the ImageTargetsActivity sample.
 public class ImageTargetRenderer implements GLSurfaceView.Renderer {
     private static final String LOGTAG = ImageTargetRenderer.class.getSimpleName();
-    private static final float OBJECT_SCALE_FLOAT = 6.0f;
+    private static final float OBJECT_SCALE_FLOAT = 3.0f;
     boolean mIsActive = false;
     private ApplicationSession vuforiaAppSession;
     private ImageTargetsActivity mActivity;
@@ -37,7 +37,7 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
     private int mvpMatrixHandle;
     private int texSampler2DHandle;
     private Quad train_1;
-    private CubeObject train_2; // TODO only for testing... replace with Array
+    private Quad train_2; // TODO only for testing... replace with Array
     private TrainPath s42;
     private Vec3F mCubeTransform;
     private Vec3F mCube2Transform;
@@ -86,7 +86,7 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
     // Function for initializing the renderer.
     private void initRendering() {
         train_1 = new Quad();
-        train_2 = new CubeObject();
+        train_2 = new Quad();
 
         s42 = new TrainPath(); // TODO replace with complete constructor
         s42.getTargetCoords("A", "B", .3d);
