@@ -1,12 +1,15 @@
 package de.ye.app.objects;
 
 import android.util.Log;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class TrainPath {
+public class Train {
 
-    private static final String LOGTAG = TrainPath.class.getSimpleName();
+    private static final String LOGTAG = Train.class.getSimpleName();
 
     ArrayList<double[]> trainCorners;
     int[] trainStationIndices;
@@ -14,7 +17,7 @@ public class TrainPath {
     String trainLineName;
     Boolean ring;
 
-    public TrainPath(String trainLineName, ArrayList<double[]> trainCorners, int[] trainStationIndices, ArrayList<String> trainStationNames, Boolean ring) {
+    public Train(String trainLineName, ArrayList<double[]> trainCorners, int[] trainStationIndices, ArrayList<String> trainStationNames, Boolean ring) {
         this.trainLineName = trainLineName;
         this.trainCorners = trainCorners;
         this.trainStationIndices = trainStationIndices;
@@ -22,7 +25,19 @@ public class TrainPath {
         this.ring = ring;
     }
 
-    public TrainPath() { // TODO remove... only for testing
+    public Train(JSONObject object) {
+        try {
+            this.trainLineName = object.getString("name");
+            this.trainCorners = parseLinePoints(object.getJSONArray("linePoints"));
+            this.trainStationIndices = parseJSONArrayToIntArray(object.getJSONArray("stationIndices"));
+            this.trainStationNames = parseJSONArrayToStringArray(object.getJSONArray("stationNames"));
+            this.ring = object.getBoolean("ring");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Train() { // TODO remove... only for testing
         this.trainLineName = "S42";
         this.trainCorners = new ArrayList<>();
         this.trainStationIndices = new int[]{1, 3, 4, 5};
@@ -42,6 +57,45 @@ public class TrainPath {
         this.trainStationNames.add("D");
 
         this.ring = true;
+    }
+
+    private ArrayList<double[]> parseLinePoints(JSONArray array) {
+        ArrayList<double[]> corners = new ArrayList<>();
+
+        for (int i = 0; i < array.length(); i++) {
+            try {
+                JSONObject o = array.getJSONObject(i);
+                corners.add(new double[]{(double) o.get("x"), (double) o.get("y")});
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return corners;
+    }
+
+    private int[] parseJSONArrayToIntArray(JSONArray array) {
+        int[] numbers = new int[array.length()];
+
+        for (int i = 0; i < array.length(); ++i) {
+            numbers[i] = array.optInt(i);
+        }
+
+        return numbers;
+    }
+
+    private ArrayList<String> parseJSONArrayToStringArray(JSONArray array) {
+        ArrayList<String> str = new ArrayList<>();
+
+        for (int i = 0; i < array.length(); ++i) {
+            try {
+                str.add(array.getString(i));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return str;
     }
 
     /**

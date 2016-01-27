@@ -18,9 +18,7 @@ import de.ye.app.utils.Utils;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Vector;
+import java.util.*;
 
 // The renderer class for the ImageTargetsActivity sample.
 public class ImageTargetRenderer implements GLSurfaceView.Renderer {
@@ -38,7 +36,8 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
     private int texSampler2DHandle;
     private Quad train_1;
     private Quad train_2; // TODO only for testing... replace with Array
-    private TrainPath s42;
+    private ArrayList<Train> mTrains;
+    private ArrayList<Quad> lineS42;
     private Vec3F mCubeTransform;
     private Vec3F mCube2Transform;
     private Renderer mRenderer;
@@ -88,8 +87,10 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
         train_1 = new Quad();
         train_2 = new Quad();
 
-        s42 = new TrainPath(); // TODO replace with complete constructor
-        s42.getTargetCoords("A", "B", .3d);
+        for (Train train : mTrains) {
+            String s = Arrays.toString(train.getTargetCoords("Gesundbrunnen", "Landsberger Allee", .3d));
+            Log.i(LOGTAG, s);
+        }
 
         mRenderer = Renderer.getInstance();
 
@@ -239,5 +240,9 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
 
     public void setTextures(Vector<Texture> textures) {
         mTextures = textures;
+    }
+
+    public void setTrains(ArrayList<Train> trains) {
+        mTrains = trains;
     }
 }

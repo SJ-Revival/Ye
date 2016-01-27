@@ -30,11 +30,16 @@ import android.widget.Toast;
 import com.qualcomm.vuforia.*;
 import de.ye.app.objects.LoadingDialogHandler;
 import de.ye.app.objects.Texture;
+import de.ye.app.objects.Train;
 import de.ye.app.ui.AppMenu.AppMenu;
 import de.ye.app.ui.AppMenu.AppMenuGroup;
 import de.ye.app.ui.AppMenu.AppMenuInterface;
 import de.ye.app.utils.ApplicationGLView;
+import de.ye.app.utils.JsonParser;
+import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -47,7 +52,7 @@ public class ImageTargetsActivity extends Activity implements ApplicationControl
     final public static int CMD_CAMERA_FRONT = 4;
     final public static int CMD_CAMERA_REAR = 5;
     final public static int CMD_DATASET_START_INDEX = 6;
-    private static final String LOGTAG = "ImageTargetsActivity";
+    private static final String LOGTAG = ImageTargetsActivity.class.getSimpleName();
     ApplicationSession vuforiaAppSession;
     LoadingDialogHandler loadingDialogHandler = new LoadingDialogHandler(this);
     boolean mIsDroidDevice = false;
@@ -63,6 +68,8 @@ public class ImageTargetsActivity extends Activity implements ApplicationControl
     private GestureDetector mGestureDetector;
     // The textures we will use for rendering:
     private Vector<Texture> mTextures;
+    // The train symbols we will show
+    private ArrayList<Train> mTrains = new ArrayList<>();
     private boolean mSwitchDatasetAsap = false;
     private boolean mFlash = false;
     private boolean mContAutofocus = false;
@@ -96,15 +103,30 @@ public class ImageTargetsActivity extends Activity implements ApplicationControl
         // Load any sample specific textures:
         mTextures = new Vector<>();
         loadTextures();
+        loadTrains();
 
         mIsDroidDevice = Build.MODEL.toLowerCase().startsWith("droid");
-
     }
 
     private void loadTextures() {
         mTextures.add(Texture.loadTextureFromApk("TrainSymbols/S41.png", getAssets()));
         mTextures.add(Texture.loadTextureFromApk("TrainSymbols/S42.png", getAssets()));
         mTextures.add(Texture.loadTextureFromApk("TrainSymbols/U8.png", getAssets()));
+    }
+
+    private void loadTrains() { // TODO implement json loading
+        JsonParser jp = new JsonParser();
+
+        InputStream isS42 = null;
+
+        try {
+            isS42 = getAssets().open("TrainData/S42.json");
+            // TODO load all the trains
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        mTrains.add(new Train(jp.readJson(isS42)));
     }
 
     // Called when the activity will start interacting with the user.
@@ -201,13 +223,12 @@ public class ImageTargetsActivity extends Activity implements ApplicationControl
 
         mRenderer = new ImageTargetRenderer(this, vuforiaAppSession);
         mRenderer.setTextures(mTextures);
+        mRenderer.setTrains(mTrains);
         mGlView.setRenderer(mRenderer);
-
     }
 
     private void startLoadingAnimation() {
-        mUILayout = (RelativeLayout) View.inflate(this, R.layout.camera_overlay,
-                null);
+        mUILayout = (RelativeLayout) View.inflate(this, R.layout.camera_overlay, null);
 
         mUILayout.setVisibility(View.VISIBLE);
         mUILayout.setBackgroundColor(Color.BLACK);
@@ -220,7 +241,6 @@ public class ImageTargetsActivity extends Activity implements ApplicationControl
 
         // Adds the inflated layout to the view
         addContentView(mUILayout, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-
     }
 
     // Methods to load and destroy tracking data.
@@ -254,7 +274,7 @@ public class ImageTargetsActivity extends Activity implements ApplicationControl
 
             String name = "Current Dataset : " + trackable.getName();
             trackable.setUserData(name);
-            Log.d(LOGTAG, "UserData:Set the following user data " + (String) trackable.getUserData());
+            Log.d(LOGTAG, "UserData:Set the following user data " + trackable.getUserData());
         }
 
         return true;
@@ -266,8 +286,7 @@ public class ImageTargetsActivity extends Activity implements ApplicationControl
         boolean result = true;
 
         TrackerManager tManager = TrackerManager.getInstance();
-        ObjectTracker objectTracker = (ObjectTracker) tManager
-                .getTracker(ObjectTracker.getClassType());
+        ObjectTracker objectTracker = (ObjectTracker) tManager.getTracker(ObjectTracker.getClassType());
         if (objectTracker == null)
             return false;
 
@@ -297,8 +316,7 @@ public class ImageTargetsActivity extends Activity implements ApplicationControl
             // that the OpenGL ES surface view gets added
             // BEFORE the camera is started and video
             // background is configured.
-            addContentView(mGlView, new LayoutParams(LayoutParams.MATCH_PARENT,
-                    LayoutParams.MATCH_PARENT));
+            addContentView(mGlView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
             // Sets the UILayout to be drawn in front of the camera
             mUILayout.bringToFront();
@@ -315,13 +333,13 @@ public class ImageTargetsActivity extends Activity implements ApplicationControl
             boolean result = CameraDevice.getInstance().setFocusMode(
                     CameraDevice.FOCUS_MODE.FOCUS_MODE_CONTINUOUSAUTO);
 
-            if (result)
+            if (result) {
                 mContAutofocus = true;
-            else
+            } else {
                 Log.e(LOGTAG, "Unable to enable continuous autofocus");
+            }
 
-            mAppMenu = new AppMenu(this, this, "Image Targets",
-                    mGlView, mUILayout, null);
+            mAppMenu = new AppMenu(this, this, "Image Targets", mGlView, mUILayout, null);
             setAppMenuSettings();
 
         } else {
@@ -455,18 +473,25 @@ public class ImageTargetsActivity extends Activity implements ApplicationControl
         group.addSelectionItem(getString(R.string.menu_contAutofocus), CMD_AUTOFOCUS, mContAutofocus);
         mFlashOptionView = group.addSelectionItem(getString(R.string.menu_flash), CMD_FLASH, false);
 
-        CameraInfo ci = new CameraInfo();
+
         boolean deviceHasFrontCamera = false;
         boolean deviceHasBackCamera = false;
 
-        for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
-            Camera.getCameraInfo(i, ci);
-            if (ci.facing == CameraInfo.CAMERA_FACING_FRONT) {
-                deviceHasFrontCamera = true;
-            } else if (ci.facing == CameraInfo.CAMERA_FACING_BACK) {
-                deviceHasBackCamera = true;
+        // TODO support the new camera2 package for Lollipop and higher builds
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//
+//        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+            CameraInfo ci = new CameraInfo();
+
+            for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
+                Camera.getCameraInfo(i, ci);
+                if (ci.facing == CameraInfo.CAMERA_FACING_FRONT) {
+                    deviceHasFrontCamera = true;
+                } else if (ci.facing == CameraInfo.CAMERA_FACING_BACK) {
+                    deviceHasBackCamera = true;
+                }
             }
-        }
+//        }
 
         if (deviceHasBackCamera && deviceHasFrontCamera) {
             group = mAppMenu.addGroup(getString(R.string.menu_camera), true);

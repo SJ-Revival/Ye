@@ -11,11 +11,7 @@ public class Connection {
         try {
             InetAddress ipAddr = InetAddress.getByName("google.com");
 
-            if (ipAddr.equals("")) {
-                return false;
-            } else {
-                return true;
-            }
+            return !ipAddr.toString().equals("");
 
         } catch (Exception e) {
             return false;

@@ -22,7 +22,7 @@ import javax.microedition.khronos.egl.EGLDisplay;
 // This class does not contain any Vuforia specific code. 
 // You can use your own OpenGL implementation.
 public class ApplicationGLView extends GLSurfaceView {
-    private static final String LOGTAG = "Vuforia_SampleGLView";
+    private static final String LOGTAG = ApplicationGLView.class.getSimpleName();
 
 
     // Constructor.
