@@ -22,7 +22,7 @@ import com.qualcomm.vuforia.Vuforia.UpdateCallbackInterface;
 
 public class ApplicationSession implements UpdateCallbackInterface {
 
-    private static final String LOGTAG = "Vuforia_Application";
+    private static final String LOGTAG = ApplicationSession.class.getSimpleName();
 
     // Reference to the current activity
     private Activity mActivity;

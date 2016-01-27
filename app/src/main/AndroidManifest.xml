@@ -129,7 +129,7 @@
         </activity>
 
         <activity
-                android:name="de.ye.app.ImageTargetsActivity"
+                android:name=".TrainPositionsActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
                 >
 

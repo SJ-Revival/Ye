@@ -20,13 +20,13 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 import java.util.*;
 
-// The renderer class for the ImageTargetsActivity sample.
-public class ImageTargetRenderer implements GLSurfaceView.Renderer {
-    private static final String LOGTAG = ImageTargetRenderer.class.getSimpleName();
+// The renderer class for the TrainPositionsActivity sample.
+public class TrainPositionsRenderer implements GLSurfaceView.Renderer {
+    private static final String LOGTAG = TrainPositionsRenderer.class.getSimpleName();
     private static final float OBJECT_SCALE_FLOAT = 2.0f;
     boolean mIsActive = false;
     private ApplicationSession vuforiaAppSession;
-    private ImageTargetsActivity mActivity;
+    private TrainPositionsActivity mActivity;
     private Vector<Texture> mTextures;
     private int shaderProgramID;
     private int vertexHandle;
@@ -43,7 +43,7 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
     private float maxTranslateY = 148.485489f;
 
 
-    public ImageTargetRenderer(ImageTargetsActivity activity, ApplicationSession session) {
+    public TrainPositionsRenderer(TrainPositionsActivity activity, ApplicationSession session) {
         mActivity = activity;
         vuforiaAppSession = session;
     }
@@ -265,9 +265,5 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
 
     public void setTrains(ArrayList<Train> trains) {
         mTrains = trains;
-    }
-
-    public void setQuads(ArrayList<Quad> quads) {
-        lineS42 = quads;
     }
 }

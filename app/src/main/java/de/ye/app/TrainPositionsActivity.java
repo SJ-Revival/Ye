@@ -36,7 +36,6 @@ import de.ye.app.ui.AppMenu.AppMenuGroup;
 import de.ye.app.ui.AppMenu.AppMenuInterface;
 import de.ye.app.utils.ApplicationGLView;
 import de.ye.app.utils.JsonParser;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,7 +43,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 
-public class ImageTargetsActivity extends Activity implements ApplicationControl, AppMenuInterface {
+public class TrainPositionsActivity extends Activity implements ApplicationControl, AppMenuInterface {
     final public static int CMD_BACK = -1;
     final public static int CMD_EXTENDED_TRACKING = 1;
     final public static int CMD_AUTOFOCUS = 2;
@@ -52,7 +51,7 @@ public class ImageTargetsActivity extends Activity implements ApplicationControl
     final public static int CMD_CAMERA_FRONT = 4;
     final public static int CMD_CAMERA_REAR = 5;
     final public static int CMD_DATASET_START_INDEX = 6;
-    private static final String LOGTAG = ImageTargetsActivity.class.getSimpleName();
+    private static final String LOGTAG = TrainPositionsActivity.class.getSimpleName();
     ApplicationSession vuforiaAppSession;
     LoadingDialogHandler loadingDialogHandler = new LoadingDialogHandler(this);
     boolean mIsDroidDevice = false;
@@ -64,7 +63,7 @@ public class ImageTargetsActivity extends Activity implements ApplicationControl
     // Our OpenGL view:
     private ApplicationGLView mGlView;
     // Our renderer:
-    private ImageTargetRenderer mRenderer;
+    private TrainPositionsRenderer mRenderer;
     private GestureDetector mGestureDetector;
     // The textures we will use for rendering:
     private Vector<Texture> mTextures;
@@ -221,7 +220,7 @@ public class ImageTargetsActivity extends Activity implements ApplicationControl
         mGlView = new ApplicationGLView(this);
         mGlView.init(translucent, depthSize, stencilSize);
 
-        mRenderer = new ImageTargetRenderer(this, vuforiaAppSession);
+        mRenderer = new TrainPositionsRenderer(this, vuforiaAppSession);
         mRenderer.setTextures(mTextures);
         mRenderer.setTrains(mTrains);
         mGlView.setRenderer(mRenderer);
@@ -359,7 +358,7 @@ public class ImageTargetsActivity extends Activity implements ApplicationControl
 
                 // Generates an Alert Dialog to show the error message
                 AlertDialog.Builder builder = new AlertDialog.Builder(
-                        ImageTargetsActivity.this);
+                        TrainPositionsActivity.this);
                 builder.setMessage(errorMessage)
                         .setTitle(getString(R.string.INIT_ERROR))
                         .setCancelable(false)
