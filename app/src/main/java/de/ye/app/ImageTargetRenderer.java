@@ -34,12 +34,10 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
     private int textureCoordHandle;
     private int mvpMatrixHandle;
     private int texSampler2DHandle;
-    private Quad train_1;
-    private Quad train_2; // TODO only for testing... replace with Array
+//    private Quad train_1;
+//    private Quad train_2; // TODO only for testing... replace with Array
     private ArrayList<Train> mTrains;
-    private ArrayList<Quad> lineS42;
-    private Vec3F mCubeTransform;
-    private Vec3F mCube2Transform;
+    private ArrayList<Quad> lineS42 = new ArrayList<>();
     private Renderer mRenderer;
     private float maxTranslateX = 210f;
     private float maxTranslateY = 148.485489f;
@@ -84,8 +82,14 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
 
     // Function for initializing the renderer.
     private void initRendering() {
-        train_1 = new Quad();
-        train_2 = new Quad();
+
+//        train_1 = new Quad();
+//        train_2 = new Quad();
+
+        for (int i = 0; i < mTrains.get(0).getTrainCorners().size(); i++) {
+            Quad q = new Quad();
+            lineS42.add(q);
+        }
 
         for (Train train : mTrains) {
             String s = Arrays.toString(train.getTargetCoords("Gesundbrunnen", "Landsberger Allee", .3d));
@@ -121,19 +125,8 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
 
     // The render function.
     private void renderFrame() {
-        Calendar calendar = Calendar.getInstance();
-        Date date = new Date();
-        calendar.setTime(date);
-
-        int seconds = calendar.get(Calendar.SECOND);
-        int milliseconds = calendar.get(Calendar.MILLISECOND);
-
-        TimeParser timeParser = new TimeParser();
-        float animationFactor = timeParser.combineSecondsAndMilliseconds(seconds, milliseconds);
-        animationFactor = (animationFactor - 30000) / 30000f;
-
-        float translateX = maxTranslateX * animationFactor;
-        float translateY = maxTranslateY * animationFactor;
+        float translateX = calcTimeTransformations(maxTranslateX);
+        float translateY = calcTimeTransformations(maxTranslateY);
 
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
@@ -169,11 +162,20 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
             // the string should match the *.dat and the *.xml file in /assets
             int textureIndex = trackable.getName().equalsIgnoreCase("berlin_su") ? 0 : 1;
 
-            // deal with the modelview and projection matrices
+            // deal with the model view and projection matrices
             float[] modelViewProjection = new float[16];
 
-            renderMultiObjects(train_2, modelViewProjection, modelViewMatrix, textureIndex, translateX, translateY);
-            renderMultiObjects(train_1, modelViewProjection, modelViewMatrix, textureIndex, translateY, translateX + 20);
+            for (int i = 0; i < lineS42.size(); i++) {
+                Train currentTrain = mTrains.get(0);
+
+                translateX = (float)currentTrain.getTrainCorners().get(i)[0];
+                translateY = (float)currentTrain.getTrainCorners().get(i)[1];
+
+                renderMultiObjects(lineS42.get(i), modelViewProjection, modelViewMatrix, textureIndex, translateX, translateY);
+            }
+
+//            renderMultiObjects(train_2, modelViewProjection, modelViewMatrix, textureIndex, translateX, translateY);
+//            renderMultiObjects(train_1, modelViewProjection, modelViewMatrix, textureIndex, translateY, translateX + 20);
 
             Utils.checkGLError("Render Frame");
         }
@@ -182,14 +184,18 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
         mRenderer.end();
     }
 
-    private void renderMultiObjects(MeshObject object, float[] modelViewProjection, float[] modelViewMatrix, int textureIndex, float translateX, float translateY) {
+    private void renderMultiObjects(MeshObject object,
+                                    float[] modelViewProjection,
+                                    float[] modelViewMatrix,
+                                    int textureIndex,
+                                    float translateX,
+                                    float translateY) {
         // translate and scale Matrix
         Matrix.translateM(modelViewMatrix, 0, translateX, translateY, OBJECT_SCALE_FLOAT);
         // Matrix.translateM(modelViewMatrix, 0, 0, 0, OBJECT_SCALE_FLOAT);
         Matrix.scaleM(modelViewMatrix, 0, OBJECT_SCALE_FLOAT, OBJECT_SCALE_FLOAT, OBJECT_SCALE_FLOAT);
 
-        Matrix.multiplyMM(modelViewProjection, 0, vuforiaAppSession
-                .getProjectionMatrix().getData(), 0, modelViewMatrix, 0);
+        Matrix.multiplyMM(modelViewProjection, 0, vuforiaAppSession.getProjectionMatrix().getData(), 0, modelViewMatrix, 0);
 
         // activate the shader program and bind the vertex/normal/tex coords
         GLES20.glUseProgram(shaderProgramID);
@@ -233,6 +239,21 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
         Matrix.translateM(modelViewMatrix, 0, -translateX, -translateY, -OBJECT_SCALE_FLOAT);
     }
 
+    private float calcTimeTransformations(float maximum) {
+        Calendar calendar = Calendar.getInstance();
+        Date date = new Date();
+        calendar.setTime(date);
+
+        int seconds = calendar.get(Calendar.SECOND);
+        int milliseconds = calendar.get(Calendar.MILLISECOND);
+
+        TimeParser timeParser = new TimeParser();
+        float animationFactor = timeParser.combineSecondsAndMilliseconds(seconds, milliseconds);
+        animationFactor = (animationFactor - 30000) / 30000f;
+
+        return maximum * animationFactor;
+    }
+
     private void printUserData(Trackable trackable) {
         String userData = (String) trackable.getUserData();
         Log.d(LOGTAG, "User Data: \"" + userData + "\"");
@@ -244,5 +265,9 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer {
 
     public void setTrains(ArrayList<Train> trains) {
         mTrains = trains;
+    }
+
+    public void setQuads(ArrayList<Quad> quads) {
+        lineS42 = quads;
     }
 }
