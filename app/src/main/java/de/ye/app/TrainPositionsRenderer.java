@@ -34,10 +34,9 @@ public class TrainPositionsRenderer implements GLSurfaceView.Renderer {
     private int textureCoordHandle;
     private int mvpMatrixHandle;
     private int texSampler2DHandle;
-//    private Quad train_1;
-//    private Quad train_2; // TODO only for testing... replace with Array
-    private ArrayList<Train> mTrains;
-    private ArrayList<Quad> lineS42 = new ArrayList<>();
+    private ArrayList<TrainLine> mTrainLines;
+    private ArrayList<Train> mTrains; // The train symbols we will show
+    private ArrayList<Quad> lineS42; // the static train path data
     private Renderer mRenderer;
     private float maxTranslateX = 210f;
     private float maxTranslateY = 148.485489f;
@@ -83,16 +82,18 @@ public class TrainPositionsRenderer implements GLSurfaceView.Renderer {
     // Function for initializing the renderer.
     private void initRendering() {
 
-//        train_1 = new Quad();
-//        train_2 = new Quad();
+        lineS42 = new ArrayList<>();
 
-        for (int i = 0; i < mTrains.get(0).getTrainCorners().size(); i++) {
+        for (Train train : mTrains) { // only the first train in the array
             Quad q = new Quad();
             lineS42.add(q);
-        }
 
-        for (Train train : mTrains) {
-            String s = Arrays.toString(train.getTargetCoords("Gesundbrunnen", "Landsberger Allee", .3d));
+            Log.i(LOGTAG, train.getTrainLineName() + " with ID " + train.getTrainID()
+                    + " added to render pipeline");
+
+            TrainLine trainLine = mTrainLines.get(0);
+            String s = Arrays.toString(trainLine.getTargetCoords(train.getPreviousStopID(),
+                    train.getNextStopID(), train.getProgress()));
             Log.i(LOGTAG, s);
         }
 
@@ -152,12 +153,6 @@ public class TrainPositionsRenderer implements GLSurfaceView.Renderer {
             Matrix44F modelViewMatrix_Vuforia = Tool.convertPose2GLMatrix(result.getPose());
             float[] modelViewMatrix = modelViewMatrix_Vuforia.getData();
 
-            // TODO try to translate only the 3D object
-//            float screenDeltaX = mCubeTransform.getData()[0];
-//            float screenDeltaY = mCubeTransform.getData()[1];
-//            computeTargetTranslationFromScreenVector(screenDeltaX, screenDeltaY, modelViewMatrix_Vuforia);
-
-
             // set the texture index according to the found trackable
             // the string should match the *.dat and the *.xml file in /assets
             int textureIndex = trackable.getName().equalsIgnoreCase("berlin_su") ? 0 : 1;
@@ -166,16 +161,29 @@ public class TrainPositionsRenderer implements GLSurfaceView.Renderer {
             float[] modelViewProjection = new float[16];
 
             for (int i = 0; i < lineS42.size(); i++) {
-                Train currentTrain = mTrains.get(0);
+                TrainLine currentTrainLine = mTrainLines.get(0);
 
-                translateX = (float)currentTrain.getTrainCorners().get(i)[0];
-                translateY = (float)currentTrain.getTrainCorners().get(i)[1];
+                if (currentTrainLine.getTrainCorners().size() < lineS42.size()) {
+                    Log.e(LOGTAG, "Size " + currentTrainLine.getTrainCorners().size() + " of corners is smaller than the size of the lineS42 object: " + lineS42.size());
+                } else {
+                    Log.i(LOGTAG, "~~~~~~~~~~~~~~~~~~~~~");
+                    Log.i(LOGTAG, mTrains.get(i).getTrainID());
+
+                    // get the x and y coordinates for the current train
+                    int prevStopID = mTrains.get(i).getPreviousStopID();
+                    int nextStopID = mTrains.get(i).getNextStopID();
+                    double progress = mTrains.get(i).getProgress();
+
+                    double[] targetCoordinates = currentTrainLine.getTargetCoords(prevStopID,
+                            nextStopID, progress);
+
+                    translateX = (float) targetCoordinates[0];
+                    translateY = (float) targetCoordinates[1];
+                }
+
 
                 renderMultiObjects(lineS42.get(i), modelViewProjection, modelViewMatrix, textureIndex, translateX, translateY);
             }
-
-//            renderMultiObjects(train_2, modelViewProjection, modelViewMatrix, textureIndex, translateX, translateY);
-//            renderMultiObjects(train_1, modelViewProjection, modelViewMatrix, textureIndex, translateY, translateX + 20);
 
             Utils.checkGLError("Render Frame");
         }
@@ -261,6 +269,10 @@ public class TrainPositionsRenderer implements GLSurfaceView.Renderer {
 
     public void setTextures(Vector<Texture> textures) {
         mTextures = textures;
+    }
+
+    public void setTrainLines(ArrayList<TrainLine> trainLines) {
+        mTrainLines = trainLines;
     }
 
     public void setTrains(ArrayList<Train> trains) {

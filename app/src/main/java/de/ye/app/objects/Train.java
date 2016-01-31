@@ -1,221 +1,65 @@
 package de.ye.app.objects;
 
+
 import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
-public class Train {
+// TODO maybe Train should extend TrainLine?
+public class Train{
 
     private static final String LOGTAG = Train.class.getSimpleName();
 
-    ArrayList<double[]> trainCorners;
-    int[] trainStationIndices;
-    ArrayList<String> trainStationNames;
-    String trainLineName;
-    Boolean ring;
+    private String trainLineName;
+    private String trainID;
+    private int previousStopID;
+    private int nextStopID;
+    private JSONArray futureProgress;
+    private double progress;
 
-    public Train(String trainLineName, ArrayList<double[]> trainCorners, int[] trainStationIndices, ArrayList<String> trainStationNames, Boolean ring) {
+    public Train(String trainLineName,
+                 String trainID,
+                 int previousStopID,
+                 int nextStopID,
+                 JSONArray futureProgress,
+                 double progress) {
         this.trainLineName = trainLineName;
-        this.trainCorners = trainCorners;
-        this.trainStationIndices = trainStationIndices;
-        this.trainStationNames = trainStationNames;
-        this.ring = ring;
+        this.trainID = trainID;
+        this.previousStopID = previousStopID;
+        this.nextStopID = nextStopID;
+        this.futureProgress = futureProgress;
+        this.progress = progress;
     }
 
     public Train(JSONObject object) {
         try {
-            this.trainLineName = object.getString("name");
-            this.trainCorners = parseLinePoints(object.getJSONArray("linePoints"));
-            this.trainStationIndices = parseJSONArrayToIntArray(object.getJSONArray("stationIndices"));
-            this.trainStationNames = parseJSONArrayToStringArray(object.getJSONArray("stationNames"));
-            this.ring = object.getBoolean("ring");
+            // this.trainLineName = object.getString("trainLine");
+            this.trainID = object.getString("trainID");
+            this.previousStopID = object.getInt("startID");
+            this.nextStopID = object.getInt("stopID");
+            this.futureProgress = object.getJSONArray("p");
+            this.progress = object.getDouble("percentage") / 100;
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
 
-    public Train() { // TODO remove... only for testing
         this.trainLineName = "S42";
-        this.trainCorners = new ArrayList<>();
-        this.trainStationIndices = new int[]{1, 3, 4, 5};
-        this.trainStationNames = new ArrayList<>();
 
-        // x and y on the Vuforia target
-        this.trainCorners.add(new double[]{0, 0});
-        this.trainCorners.add(new double[]{0, 50});
-        this.trainCorners.add(new double[]{50, 50});
-        this.trainCorners.add(new double[]{100, 100});
-        this.trainCorners.add(new double[]{100, 0});
-        this.trainCorners.add(new double[]{0, -100});
-
-        this.trainStationNames.add("A");
-        this.trainStationNames.add("B");
-        this.trainStationNames.add("C");
-        this.trainStationNames.add("D");
-
-        this.ring = true;
-    }
-
-    private ArrayList<double[]> parseLinePoints(JSONArray array) {
-        ArrayList<double[]> corners = new ArrayList<>();
-
-        for (int i = 0; i < array.length(); i++) {
-            try {
-                JSONObject o = array.getJSONObject(i);
-                corners.add(new double[]{(double) o.get("x"), (double) o.get("y")});
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        // make sure progress is not higher than 1
+        if (this.progress > 1) {
+            this.progress = 1;
         }
 
-        return corners;
+        Log.i(LOGTAG, this.toString());
     }
 
-    private int[] parseJSONArrayToIntArray(JSONArray array) {
-        int[] numbers = new int[array.length()];
-
-        for (int i = 0; i < array.length(); ++i) {
-            numbers[i] = array.optInt(i);
-        }
-
-        return numbers;
+    public JSONArray getFutureProgress() {
+        return futureProgress;
     }
 
-    private ArrayList<String> parseJSONArrayToStringArray(JSONArray array) {
-        ArrayList<String> str = new ArrayList<>();
-
-        for (int i = 0; i < array.length(); ++i) {
-            try {
-                str.add(array.getString(i));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return str;
-    }
-
-    /**
-     * Returns the x- and y-position on the Vuforia target for the given data.
-     *
-     * @param prevStation the name of the previous train station
-     * @param nextStation the name of the next train station
-     * @param progress    the progress of the train between the two stations (between 0 and 1)
-     * @return the x- and y-position on the Vuforia target
-     */
-    public double[] getTargetCoords(String prevStation, String nextStation, double progress) {
-        int prevStationIndex = searchStationName(prevStation);
-        int nextStationIndex = searchStationName(nextStation);
-
-        if (prevStationIndex == -1 || nextStationIndex == -1) {
-            Log.d(LOGTAG, "Could not get the target coordinates for invalid station index");
-            return new double[]{0, 0};
-        }
-
-        double x = 0;
-        double y = 0;
-
-        // TODO check the loop for Ring Bahn
-        int prevStationCornerIndex = getTrainStationIndex(prevStation);
-        int nextStationCornerIndex = getTrainStationIndex(nextStation);
-
-        double[] distances = new double[nextStationCornerIndex - prevStationCornerIndex];
-
-        for (int i = prevStationCornerIndex; i <= nextStationCornerIndex; i++) {
-            int distanceIndex = i - prevStationCornerIndex - 1;
-
-            if (i != prevStationCornerIndex) {
-                double[] p = this.trainCorners.get(i - 1);
-                double[] n = this.trainCorners.get(i);
-
-                double x1 = p[0];
-                double y1 = p[1];
-
-                double x2 = n[0];
-                double y2 = n[1];
-                Log.d(LOGTAG, "x1: " + x1 + " y1: " + y1 + " | x2: " + x2 + " y2: " + y2);
-
-                distances[distanceIndex] = getDistanceBetweenTwoPoints(x1, x2, y1, y2);
-                Log.d(LOGTAG, "The Distance between x and y is " + distances[distanceIndex]);
-            }
-        }
-
-        // sum all corner distances
-        double totalDistance = 0;
-        for (double i : distances) {
-            totalDistance += i;
-        }
-        Log.d(LOGTAG, "Total distance: " + totalDistance);
-
-        // get the section index between tow corners, of the train position
-        double currentTrainDistance = totalDistance * progress;
-        int sectionIndex = distances.length - 1;
-        for (int i = sectionIndex; currentTrainDistance < totalDistance; i--) {
-            Log.d(LOGTAG, "Current total distance: " + totalDistance + " -> - " + distances[i]);
-            sectionIndex = i;
-            Log.d(LOGTAG, "Current section index: " + sectionIndex);
-            totalDistance -= distances[i];
-        }
-
-        // TODO actually calculate the position for the Vuforia target image
-        double p0x = this.trainCorners.get(sectionIndex)[0];
-        double p1x = this.trainCorners.get(sectionIndex + 1)[0];
-        double p0y = this.trainCorners.get(sectionIndex)[1];
-        double p1y = this.trainCorners.get(sectionIndex + 1)[1];
-
-        x = p0x + (p1x - p0x) * progress; // TODO remember to adapt the progress to the section
-        y = p0y + (p1y - p0y) * progress;
-
-        return new double[]{x, y};
-    }
-
-    private double getDistanceBetweenTwoPoints(double x1, double x2, double y1, double y2) {
-        return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
-    }
-
-    private int searchStationName(String stationName) {
-        if (this.trainStationNames.contains(stationName)) {
-            return this.trainStationNames.indexOf(stationName);
-        } else {
-            Log.d(LOGTAG, "unknown station name: " + stationName);
-            return -1;
-        }
-    }
-
-    public int getTrainStationIndex(String station) {
-        int stationIndex = this.trainStationNames.indexOf(station);
-        return this.trainStationIndices[stationIndex];
-    }
-
-    public String getTrainStationName(int index) {
-        return this.trainStationNames.get(index);
-    }
-
-    public ArrayList<double[]> getTrainCorners() {
-        return trainCorners;
-    }
-
-    public void setTrainCorners(ArrayList<double[]> trainCorners) {
-        this.trainCorners = trainCorners;
-    }
-
-    public int[] getTrainStationIndices() {
-        return trainStationIndices;
-    }
-
-    public void setTrainStationIndices(int[] trainStationIndices) {
-        this.trainStationIndices = trainStationIndices;
-    }
-
-    public ArrayList<String> getTrainStationNames() {
-        return trainStationNames;
-    }
-
-    public void setTrainStationNames(ArrayList<String> trainStationNames) {
-        this.trainStationNames = trainStationNames;
+    public void setFutureProgress(JSONArray futureProgress) {
+        this.futureProgress = futureProgress;
     }
 
     public String getTrainLineName() {
@@ -224,5 +68,80 @@ public class Train {
 
     public void setTrainLineName(String trainLineName) {
         this.trainLineName = trainLineName;
+    }
+
+    public String getTrainID() {
+        return trainID;
+    }
+
+    public void setTrainID(String trainID) {
+        this.trainID = trainID;
+    }
+
+    public int getPreviousStopID() {
+        return previousStopID;
+    }
+
+    public void setPreviousStopID(int previousStopID) {
+        this.previousStopID = previousStopID;
+    }
+
+    public int getNextStopID() {
+        return nextStopID;
+    }
+
+    public void setNextStopID(int nextStopID) {
+        this.nextStopID = nextStopID;
+    }
+
+    public double getProgress() {
+        return progress;
+    }
+
+    public void setProgress(double progress) {
+        this.progress = progress;
+    }
+
+    @Override
+    public String toString() {
+        return "Train{" +
+                "trainLineName='" + trainLineName + '\'' +
+                ", trainID='" + trainID + '\'' +
+                ", previousStopID=" + previousStopID +
+                ", nextStopID=" + nextStopID +
+                ", futureProgress=" + futureProgress +
+                ", progress=" + progress +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Train train = (Train) o;
+
+        if (previousStopID != train.previousStopID) return false;
+        if (nextStopID != train.nextStopID) return false;
+        if (Double.compare(train.progress, progress) != 0) return false;
+        if (trainLineName != null ? !trainLineName.equals(train.trainLineName) : train.trainLineName != null)
+            return false;
+        if (trainID != null ? !trainID.equals(train.trainID) : train.trainID != null) return false;
+        return futureProgress != null ? futureProgress.equals(train.futureProgress) : train.futureProgress == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = trainLineName != null ? trainLineName.hashCode() : 0;
+        result = 31 * result + (trainID != null ? trainID.hashCode() : 0);
+        result = 31 * result + previousStopID;
+        result = 31 * result + nextStopID;
+        result = 31 * result + (futureProgress != null ? futureProgress.hashCode() : 0);
+        temp = Double.doubleToLongBits(progress);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
     }
 }

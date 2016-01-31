@@ -15,6 +15,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,11 +32,14 @@ import com.qualcomm.vuforia.*;
 import de.ye.app.objects.LoadingDialogHandler;
 import de.ye.app.objects.Texture;
 import de.ye.app.objects.Train;
+import de.ye.app.objects.TrainLine;
 import de.ye.app.ui.AppMenu.AppMenu;
 import de.ye.app.ui.AppMenu.AppMenuGroup;
 import de.ye.app.ui.AppMenu.AppMenuInterface;
 import de.ye.app.utils.ApplicationGLView;
 import de.ye.app.utils.JsonParser;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -60,15 +64,13 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
     private int mStartDatasetsIndex = 0;
     private int mDatasetsNumber = 0;
     private ArrayList<String> mDatasetStrings = new ArrayList<>();
-    // Our OpenGL view:
-    private ApplicationGLView mGlView;
-    // Our renderer:
-    private TrainPositionsRenderer mRenderer;
+    private JSONArray trainFeed; // our feed that is updated every 30 seconds
+    private ApplicationGLView mGlView; // Our OpenGL view
+    private TrainPositionsRenderer mRenderer; // Our renderer
     private GestureDetector mGestureDetector;
-    // The textures we will use for rendering:
-    private Vector<Texture> mTextures;
-    // The train symbols we will show
-    private ArrayList<Train> mTrains = new ArrayList<>();
+    private Vector<Texture> mTextures; // The textures we will use for rendering
+    private ArrayList<TrainLine> mTrainLines; // The train line with the path position data
+    private ArrayList<Train> mTrains; // The train symbols we will show
     private boolean mSwitchDatasetAsap = false;
     private boolean mFlash = false;
     private boolean mContAutofocus = false;
@@ -102,7 +104,14 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
         // Load any sample specific textures:
         mTextures = new Vector<>();
         loadTextures();
-        loadTrains();
+
+        // Load all used train lines... currently only S42
+        mTrainLines = new ArrayList<>();
+        loadTrainLines();
+
+        // Load all trains we get from the live feed
+        mTrains = new ArrayList<>();
+        loadLiveFeed();
 
         mIsDroidDevice = Build.MODEL.toLowerCase().startsWith("droid");
     }
@@ -113,19 +122,51 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
         mTextures.add(Texture.loadTextureFromApk("TrainSymbols/U8.png", getAssets()));
     }
 
-    private void loadTrains() { // TODO implement json loading
-        JsonParser jp = new JsonParser();
+    private void loadTrainLines() { // TODO implement json loading
+        JsonParser jsonParser = new JsonParser();
+        InputStream s42InputStream = null;
 
-        InputStream isS42 = null;
+//        new Handler().postDelayed(new Runnable() {
+//            public void run() {
+//                // call JSON methods here
+//                //new AttemptJson().execute();
+//                Log.d(LOGTAG + " DUMM", "HALLO");
+//            }
+//        }, 30000);
 
         try {
-            isS42 = getAssets().open("TrainData/S42.json");
-            // TODO load all the trains
+            s42InputStream = getAssets().open("TrainData/S42.json");
+            // TODO load all the train lines
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        mTrains.add(new Train(jp.readJson(isS42)));
+        mTrainLines.add(new TrainLine(jsonParser.readJsonObject(s42InputStream)));
+    }
+
+    // TODO should load new data every 30 seconds
+    private void loadLiveFeed() {
+        JsonParser jsonParser = new JsonParser();
+        InputStream s42InputStream = null;
+
+        try {
+            s42InputStream = getAssets().open("JSON_Samples/bahnfeed_new.json");
+            // TODO load the data feed from the external resource
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        trainFeed = jsonParser.readJsonArray(s42InputStream);
+
+        Log.i(LOGTAG, "loadLiveFeed");
+
+        for (int i = 0; i < trainFeed.length(); i++) {
+            try {
+                mTrains.add(new Train(trainFeed.getJSONObject(i)));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     // Called when the activity will start interacting with the user.
@@ -222,6 +263,7 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
 
         mRenderer = new TrainPositionsRenderer(this, vuforiaAppSession);
         mRenderer.setTextures(mTextures);
+        mRenderer.setTrainLines(mTrainLines);
         mRenderer.setTrains(mTrains);
         mGlView.setRenderer(mRenderer);
     }
@@ -480,16 +522,16 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //
 //        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-            CameraInfo ci = new CameraInfo();
+        CameraInfo ci = new CameraInfo();
 
-            for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
-                Camera.getCameraInfo(i, ci);
-                if (ci.facing == CameraInfo.CAMERA_FACING_FRONT) {
-                    deviceHasFrontCamera = true;
-                } else if (ci.facing == CameraInfo.CAMERA_FACING_BACK) {
-                    deviceHasBackCamera = true;
-                }
+        for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
+            Camera.getCameraInfo(i, ci);
+            if (ci.facing == CameraInfo.CAMERA_FACING_FRONT) {
+                deviceHasFrontCamera = true;
+            } else if (ci.facing == CameraInfo.CAMERA_FACING_BACK) {
+                deviceHasBackCamera = true;
             }
+        }
 //        }
 
         if (deviceHasBackCamera && deviceHasFrontCamera) {
@@ -655,6 +697,23 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
             }, 1000L);
 
             return true;
+        }
+    }
+
+    private class AttemptJson extends AsyncTask<String, String, String> {
+
+        private final String LOGTAG = AttemptJson.class.getSimpleName();
+
+        @Override
+        protected String doInBackground(String... params) {
+            JsonParser jsonParser = new JsonParser();
+
+            String REQUEST_URL = getString(R.string.VBB_FEED_URL);
+
+            JSONArray json = jsonParser.getJSONArrayFromUrl(REQUEST_URL);
+            Log.d(LOGTAG, json.toString());
+
+            return null;
         }
     }
 }

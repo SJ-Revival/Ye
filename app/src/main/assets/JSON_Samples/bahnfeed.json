@@ -1,0 +1,812 @@
+[
+  {
+    "trainLine": "S42",
+    "trainID": "84/48491/18/52/86",
+    "stopStation": "S+U Frankfurter Allee (Berlin)",
+    "stopID": 9120001,
+    "stopLatX": 13475297,
+    "stopLongY": 52513615,
+    "stopDistance": 0.03457162646712735,
+    "startStation": "S Ostkreuz Bhf (Berlin)",
+    "startID": 9120003,
+    "startLatX": 13469095,
+    "startLongY": 52502846,
+    "startDistance": 1.3728434313116868,
+    "p": [
+      {
+        "percentage": 97.5436083139761,
+        "time": "0"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "2000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "4000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "6000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "8000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "10000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "12000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "14000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "16000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "18000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "20000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "22000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "24000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "26000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "28000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "30000"
+      }
+    ],
+    "percentage": 97.5436083139761
+  },
+  {
+    "trainLine": "S42",
+    "trainID": "84/48491/18/51/86",
+    "startStation": "S Prenzlauer Allee (Berlin)",
+    "startID": 9110002,
+    "startLatX": 13427421,
+    "startLongY": 52544799,
+    "startDistance": 0.6894425966949002,
+    "stopStation": "S+U Schönhauser Allee (Berlin)",
+    "stopID": 9110001,
+    "stopLatX": 13415141,
+    "stopLongY": 52549338,
+    "stopDistance": 0.7618977333233015,
+    "p": [
+      {
+        "percentage": 47.503854363797196,
+        "time": "0"
+      },
+      {
+        "percentage": 49.11593793745046,
+        "time": "2000"
+      },
+      {
+        "percentage": 50.81490615392993,
+        "time": "4000"
+      },
+      {
+        "percentage": 52.51286539499498,
+        "time": "6000"
+      },
+      {
+        "percentage": 54.187294630901704,
+        "time": "8000"
+      },
+      {
+        "percentage": 55.95894651716339,
+        "time": "10000"
+      },
+      {
+        "percentage": 57.674696147839505,
+        "time": "12000"
+      },
+      {
+        "percentage": 59.58519800855496,
+        "time": "14000"
+      },
+      {
+        "percentage": 61.38005485956969,
+        "time": "16000"
+      },
+      {
+        "percentage": 63.18245008788616,
+        "time": "18000"
+      },
+      {
+        "percentage": 65.07158479212485,
+        "time": "20000"
+      },
+      {
+        "percentage": 66.82987035999265,
+        "time": "22000"
+      },
+      {
+        "percentage": 68.69091866343012,
+        "time": "24000"
+      },
+      {
+        "percentage": 70.51450665174427,
+        "time": "26000"
+      },
+      {
+        "percentage": 72.3832528612731,
+        "time": "28000"
+      },
+      {
+        "percentage": 74.13871078946632,
+        "time": "30000"
+      }
+    ],
+    "percentage": 47.503854363797196
+  },
+  {
+    "trainLine": "S42",
+    "trainID": "84/48491/18/50/86",
+    "stopStation": "S Beusselstr. (Berlin)",
+    "stopID": 9020202,
+    "stopLatX": 13328701,
+    "stopLongY": 52534317,
+    "stopDistance": 0.10330102183247791,
+    "startStation": "S+U Westhafen (Berlin)",
+    "startID": 9001201,
+    "startLatX": 13343839,
+    "startLongY": 52536178,
+    "startDistance": 1.5920671980412653,
+    "p": [
+      {
+        "percentage": 93.90686809971164,
+        "time": "0"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "2000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "4000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "6000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "8000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "10000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "12000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "14000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "16000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "18000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "20000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "22000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "24000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "26000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "28000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "30000"
+      }
+    ],
+    "percentage": 93.90686809971164
+  },
+  {
+    "trainLine": "S42",
+    "trainID": "84/48491/18/49/86",
+    "stopStation": "S Westkreuz (Berlin)",
+    "stopID": 9024102,
+    "stopLatX": 13283036,
+    "stopLongY": 52501147,
+    "stopDistance": 0.09868141287016716,
+    "startStation": "S Messe Nord/ICC (Berlin)",
+    "startID": 9024106,
+    "startLatX": 13283045,
+    "startLongY": 52506451,
+    "startDistance": 0.6140396531615372,
+    "p": [
+      {
+        "percentage": 86.15427302863286,
+        "time": "0"
+      },
+      {
+        "percentage": 85.58777454283516,
+        "time": "2000"
+      },
+      {
+        "percentage": 85.58777454283516,
+        "time": "4000"
+      },
+      {
+        "percentage": 85.58777454283516,
+        "time": "6000"
+      },
+      {
+        "percentage": 85.58777454283516,
+        "time": "8000"
+      },
+      {
+        "percentage": 85.58777454283516,
+        "time": "10000"
+      },
+      {
+        "percentage": 84.0923827120978,
+        "time": "12000"
+      },
+      {
+        "percentage": 81.22525797047861,
+        "time": "14000"
+      },
+      {
+        "percentage": 78.47393032942036,
+        "time": "16000"
+      },
+      {
+        "percentage": 76.09467406161734,
+        "time": "18000"
+      },
+      {
+        "percentage": 73.74347680757337,
+        "time": "20000"
+      },
+      {
+        "percentage": 71.67688415718465,
+        "time": "22000"
+      },
+      {
+        "percentage": 69.87239953910074,
+        "time": "24000"
+      },
+      {
+        "percentage": 68.33869737032727,
+        "time": "26000"
+      },
+      {
+        "percentage": 66.99782996930375,
+        "time": "28000"
+      },
+      {
+        "percentage": 65.81861494931405,
+        "time": "30000"
+      }
+    ],
+    "percentage": 86.15427302863286
+  },
+  {
+    "trainLine": "S42",
+    "trainID": "84/48491/18/48/86",
+    "startStation": "S+U Innsbrucker Platz (Berlin)",
+    "startID": 9054105,
+    "startLatX": 13342877,
+    "startLongY": 52478099,
+    "startDistance": 0.14093802604103658,
+    "stopStation": "S Schöneberg (Berlin)",
+    "stopID": 9054104,
+    "stopLatX": 13352846,
+    "stopLongY": 52479807,
+    "stopDistance": 1.2624160407173393,
+    "p": [
+      {
+        "percentage": 10.042941363086722,
+        "time": "0"
+      },
+      {
+        "percentage": 10.042941363086722,
+        "time": "2000"
+      },
+      {
+        "percentage": 10.042941363086722,
+        "time": "4000"
+      },
+      {
+        "percentage": 10.042941363086722,
+        "time": "6000"
+      },
+      {
+        "percentage": 10.042941363086722,
+        "time": "8000"
+      },
+      {
+        "percentage": 10.042941363086722,
+        "time": "10000"
+      },
+      {
+        "percentage": 8.636036226791559,
+        "time": "12000"
+      },
+      {
+        "percentage": 5.484148971804155,
+        "time": "14000"
+      },
+      {
+        "percentage": 1.9154814845500243,
+        "time": "16000"
+      },
+      {
+        "percentage": 2.5068282191351825,
+        "time": "18000"
+      },
+      {
+        "percentage": 6.666569941874178,
+        "time": "20000"
+      },
+      {
+        "percentage": 10.929806705911606,
+        "time": "22000"
+      },
+      {
+        "percentage": 15.259527183032029,
+        "time": "24000"
+      },
+      {
+        "percentage": 19.418554872016973,
+        "time": "26000"
+      },
+      {
+        "percentage": 23.739663756522354,
+        "time": "28000"
+      },
+      {
+        "percentage": 27.967707744037543,
+        "time": "30000"
+      }
+    ],
+    "percentage": 10.042941363086722
+  },
+  {
+    "trainLine": "S42",
+    "trainID": "84/48491/18/46/86",
+    "stopStation": "S+U Frankfurter Allee (Berlin)",
+    "stopID": 9120001,
+    "stopLatX": 13475297,
+    "stopLongY": 52513615,
+    "stopDistance": 0.03457162646712735,
+    "startStation": "S Ostkreuz Bhf (Berlin)",
+    "startID": 9120003,
+    "startLatX": 13469095,
+    "startLongY": 52502846,
+    "startDistance": 1.3728434313116868,
+    "p": [
+      {
+        "percentage": 97.5436083139761,
+        "time": "0"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "2000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "4000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "6000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "8000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "10000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "12000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "14000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "16000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "18000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "20000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "22000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "24000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "26000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "28000"
+      },
+      {
+        "percentage": 99.99999999999999,
+        "time": "30000"
+      }
+    ],
+    "percentage": 97.5436083139761
+  },
+  {
+    "trainLine": "S42",
+    "trainID": "84/48491/18/45/86",
+    "startStation": "S Prenzlauer Allee (Berlin)",
+    "startID": 9110002,
+    "startLatX": 13427421,
+    "startLongY": 52544799,
+    "startDistance": 0.6894425966949002,
+    "stopStation": "S+U Schönhauser Allee (Berlin)",
+    "stopID": 9110001,
+    "stopLatX": 13415141,
+    "stopLongY": 52549338,
+    "stopDistance": 0.7618977333233015,
+    "p": [
+      {
+        "percentage": 47.503854363797196,
+        "time": "0"
+      },
+      {
+        "percentage": 49.11593793745046,
+        "time": "2000"
+      },
+      {
+        "percentage": 50.81490615392993,
+        "time": "4000"
+      },
+      {
+        "percentage": 52.51286539499498,
+        "time": "6000"
+      },
+      {
+        "percentage": 54.187294630901704,
+        "time": "8000"
+      },
+      {
+        "percentage": 55.95894651716339,
+        "time": "10000"
+      },
+      {
+        "percentage": 57.674696147839505,
+        "time": "12000"
+      },
+      {
+        "percentage": 59.58519800855496,
+        "time": "14000"
+      },
+      {
+        "percentage": 61.38005485956969,
+        "time": "16000"
+      },
+      {
+        "percentage": 63.18245008788616,
+        "time": "18000"
+      },
+      {
+        "percentage": 65.07158479212485,
+        "time": "20000"
+      },
+      {
+        "percentage": 66.82987035999265,
+        "time": "22000"
+      },
+      {
+        "percentage": 68.69091866343012,
+        "time": "24000"
+      },
+      {
+        "percentage": 70.51450665174427,
+        "time": "26000"
+      },
+      {
+        "percentage": 72.3832528612731,
+        "time": "28000"
+      },
+      {
+        "percentage": 74.13871078946632,
+        "time": "30000"
+      }
+    ],
+    "percentage": 47.503854363797196
+  },
+  {
+    "trainLine": "S42",
+    "trainID": "84/48491/18/44/86",
+    "stopStation": "S Beusselstr. (Berlin)",
+    "stopID": 9020202,
+    "stopLatX": 13328701,
+    "stopLongY": 52534317,
+    "stopDistance": 0.10330102183247791,
+    "startStation": "S+U Westhafen (Berlin)",
+    "startID": 9001201,
+    "startLatX": 13343839,
+    "startLongY": 52536178,
+    "startDistance": 1.5920671980412653,
+    "p": [
+      {
+        "percentage": 93.90686809971164,
+        "time": "0"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "2000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "4000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "6000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "8000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "10000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "12000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "14000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "16000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "18000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "20000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "22000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "24000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "26000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "28000"
+      },
+      {
+        "percentage": 95.87554404978714,
+        "time": "30000"
+      }
+    ],
+    "percentage": 93.90686809971164
+  },
+  {
+    "trainLine": "S42",
+    "trainID": "84/48491/18/43/86",
+    "stopStation": "S Westkreuz (Berlin)",
+    "stopID": 9024102,
+    "stopLatX": 13283036,
+    "stopLongY": 52501147,
+    "stopDistance": 0.09868141287016716,
+    "startStation": "S Messe Nord/ICC (Berlin)",
+    "startID": 9024106,
+    "startLatX": 13283045,
+    "startLongY": 52506451,
+    "startDistance": 0.6140396531615372,
+    "p": [
+      {
+        "percentage": 86.15427302863286,
+        "time": "0"
+      },
+      {
+        "percentage": 85.58777454283516,
+        "time": "2000"
+      },
+      {
+        "percentage": 85.58777454283516,
+        "time": "4000"
+      },
+      {
+        "percentage": 85.58777454283516,
+        "time": "6000"
+      },
+      {
+        "percentage": 85.58777454283516,
+        "time": "8000"
+      },
+      {
+        "percentage": 85.58777454283516,
+        "time": "10000"
+      },
+      {
+        "percentage": 84.0923827120978,
+        "time": "12000"
+      },
+      {
+        "percentage": 81.22525797047861,
+        "time": "14000"
+      },
+      {
+        "percentage": 78.47393032942036,
+        "time": "16000"
+      },
+      {
+        "percentage": 76.09467406161734,
+        "time": "18000"
+      },
+      {
+        "percentage": 73.74347680757337,
+        "time": "20000"
+      },
+      {
+        "percentage": 71.67688415718465,
+        "time": "22000"
+      },
+      {
+        "percentage": 69.87239953910074,
+        "time": "24000"
+      },
+      {
+        "percentage": 68.33869737032727,
+        "time": "26000"
+      },
+      {
+        "percentage": 66.99782996930375,
+        "time": "28000"
+      },
+      {
+        "percentage": 65.81861494931405,
+        "time": "30000"
+      }
+    ],
+    "percentage": 86.15427302863286
+  },
+  {
+    "trainLine": "S42",
+    "trainID": "84/48491/18/42/86",
+    "startStation": "S+U Innsbrucker Platz (Berlin)",
+    "startID": 9054105,
+    "startLatX": 13342877,
+    "startLongY": 52478099,
+    "startDistance": 0.14093802604103658,
+    "stopStation": "S Schöneberg (Berlin)",
+    "stopID": 9054104,
+    "stopLatX": 13352846,
+    "stopLongY": 52479807,
+    "stopDistance": 1.2624160407173393,
+    "p": [
+      {
+        "percentage": 10.042941363086722,
+        "time": "0"
+      },
+      {
+        "percentage": 10.042941363086722,
+        "time": "2000"
+      },
+      {
+        "percentage": 10.042941363086722,
+        "time": "4000"
+      },
+      {
+        "percentage": 10.042941363086722,
+        "time": "6000"
+      },
+      {
+        "percentage": 10.042941363086722,
+        "time": "8000"
+      },
+      {
+        "percentage": 10.042941363086722,
+        "time": "10000"
+      },
+      {
+        "percentage": 8.636036226791559,
+        "time": "12000"
+      },
+      {
+        "percentage": 5.484148971804155,
+        "time": "14000"
+      },
+      {
+        "percentage": 1.9154814845500243,
+        "time": "16000"
+      },
+      {
+        "percentage": 2.5068282191351825,
+        "time": "18000"
+      },
+      {
+        "percentage": 6.666569941874178,
+        "time": "20000"
+      },
+      {
+        "percentage": 10.929806705911606,
+        "time": "22000"
+      },
+      {
+        "percentage": 15.259527183032029,
+        "time": "24000"
+      },
+      {
+        "percentage": 19.418554872016973,
+        "time": "26000"
+      },
+      {
+        "percentage": 23.739663756522354,
+        "time": "28000"
+      },
+      {
+        "percentage": 27.967707744037543,
+        "time": "30000"
+      }
+    ],
+    "percentage": 10.042941363086722
+  }
+]

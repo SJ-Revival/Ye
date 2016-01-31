@@ -547,5 +547,4 @@ public class ApplicationSession implements UpdateCallbackInterface {
             mSessionControl.onInitARDone(vuforiaException);
         }
     }
-
 }
