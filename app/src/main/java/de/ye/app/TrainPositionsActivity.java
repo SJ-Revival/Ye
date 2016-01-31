@@ -712,7 +712,7 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
 
             String REQUEST_URL = getString(R.string.VBB_FEED_URL);
 
-            JSONArray json = jsonParser.getJSONArrayFromUrl(REQUEST_URL);
+            JSONArray json = jsonParser.getJSONArrayFromUrl(REQUEST_URL, "sj-revival", "yeProjekt16");
             Log.d(LOGTAG, "JSON requested");
 
             return null;
