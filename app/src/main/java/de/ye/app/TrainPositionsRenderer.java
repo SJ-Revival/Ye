@@ -88,13 +88,14 @@ public class TrainPositionsRenderer implements GLSurfaceView.Renderer {
             Quad q = new Quad();
             lineS42.add(q);
 
-            Log.i(LOGTAG, train.getTrainLineName() + " with ID " + train.getTrainID()
-                    + " added to render pipeline");
+//            Log.i(LOGTAG, train.getTrainLineName() + " with ID " + train.getTrainID()
+//                    + " added to render pipeline");
 
             TrainLine trainLine = mTrainLines.get(0);
             String s = Arrays.toString(trainLine.getTargetCoords(train.getPreviousStopID(),
                     train.getNextStopID(), train.getProgress()));
-            Log.i(LOGTAG, s);
+//            Log.i(LOGTAG, train.getTrainLineName() + " with ID " + train.getTrainID() + " " + s);
+//            Log.i(LOGTAG, "#############");
         }
 
         mRenderer = Renderer.getInstance();
@@ -166,8 +167,8 @@ public class TrainPositionsRenderer implements GLSurfaceView.Renderer {
                 if (currentTrainLine.getTrainCorners().size() < lineS42.size()) {
                     Log.e(LOGTAG, "Size " + currentTrainLine.getTrainCorners().size() + " of corners is smaller than the size of the lineS42 object: " + lineS42.size());
                 } else {
-                    Log.i(LOGTAG, "~~~~~~~~~~~~~~~~~~~~~");
-                    Log.i(LOGTAG, mTrains.get(i).getTrainID());
+//                    Log.i(LOGTAG, "~~~~~~~~~~~~~~~~~~~~~");
+//                    Log.i(LOGTAG, mTrains.get(i).getTrainID());
 
                     // get the x and y coordinates for the current train
                     int prevStopID = mTrains.get(i).getPreviousStopID();

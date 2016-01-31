@@ -126,16 +126,8 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
         JsonParser jsonParser = new JsonParser();
         InputStream s42InputStream = null;
 
-//        new Handler().postDelayed(new Runnable() {
-//            public void run() {
-//                // call JSON methods here
-//                //new AttemptJson().execute();
-//                Log.d(LOGTAG + " DUMM", "HALLO");
-//            }
-//        }, 30000);
-
         try {
-            s42InputStream = getAssets().open("TrainData/S42.json");
+            s42InputStream = getAssets().open("TrainLineData/S42.json");
             // TODO load all the train lines
         } catch (IOException e) {
             e.printStackTrace();
@@ -148,6 +140,16 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
     private void loadLiveFeed() {
         JsonParser jsonParser = new JsonParser();
         InputStream s42InputStream = null;
+
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                // call JSON methods here
+                new AttemptJson().execute();
+
+                Log.d(LOGTAG, "loadLiveFeed async event");
+                // mRenderer.setTrains(mTrains);
+            }
+        }, 1000); // TODO set to 30000
 
         try {
             s42InputStream = getAssets().open("JSON_Samples/bahnfeed_new.json");
@@ -711,7 +713,7 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
             String REQUEST_URL = getString(R.string.VBB_FEED_URL);
 
             JSONArray json = jsonParser.getJSONArrayFromUrl(REQUEST_URL);
-            Log.d(LOGTAG, json.toString());
+            Log.d(LOGTAG, "JSON requested");
 
             return null;
         }
