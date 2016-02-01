@@ -703,7 +703,7 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
                 // TODO delete this test
                 try {
                     JSONObject jo = trainFeed.getJSONObject(0);
-                    Log.i(LOGTAG, "trainfeed { ID: " + jo.getString("trainID") + " | start: " + jo.getString("startStation") + " | end: " + jo.getString("stopStation") +  " | %: " + jo.getDouble("percentage") + " }");
+//                    Log.i(LOGTAG, "trainfeed { ID: " + jo.getString("trainID") + " | start: " + jo.getString("startStation") + " | end: " + jo.getString("stopStation") +  " | %: " + jo.getDouble("percentage") + " }");
                 } catch (JSONException e) {
                     Log.e(LOGTAG, "JSON Error");
                     e.printStackTrace();

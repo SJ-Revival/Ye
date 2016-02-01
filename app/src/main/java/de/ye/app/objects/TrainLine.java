@@ -100,7 +100,7 @@ public class TrainLine {
         int prevStationIndex = getStationIndex(prevStation);
         int nextStationIndex = getStationIndex(nextStation);
 
-//        Log.i(LOGTAG, "prev: " + prevStation + " | next: " + nextStation);
+        Log.i(LOGTAG, "getTargetCoords 1 = " + "prev: " + prevStation + " | next: " + nextStation + " | %: " + progress);
 
         if (prevStationIndex == -1 || nextStationIndex == -1) {
             Log.e(LOGTAG, "Could not get the target coordinates for invalid station index");
@@ -112,6 +112,8 @@ public class TrainLine {
 
         int prevStationCornerIndex = getStationCornerIndex(prevStation);
         int nextStationCornerIndex = getStationCornerIndex(nextStation);
+
+        Log.i(LOGTAG, "getTargetCoords 2 = " + "prevCIndex: " + prevStationCornerIndex + " | nextCIndex: " + nextStationCornerIndex);
 
         double[] distances = null;
 
