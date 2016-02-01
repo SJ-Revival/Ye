@@ -71,6 +71,8 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
     private Vector<Texture> mTextures; // The textures we will use for rendering
     private ArrayList<TrainLine> mTrainLines; // The train line with the path position data
     private ArrayList<Train> mTrains; // The train symbols we will show
+    private JsonParser jsonParser;
+    private Handler jsonFeedHandler;
     private boolean mSwitchDatasetAsap = false;
     private boolean mFlash = false;
     private boolean mContAutofocus = false;
@@ -138,37 +140,28 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
 
     // TODO should load new data every 30 seconds
     private void loadLiveFeed() {
-        JsonParser jsonParser = new JsonParser();
+        jsonParser = new JsonParser();
         InputStream s42InputStream = null;
 
-        new Handler().postDelayed(new Runnable() {
+        jsonFeedHandler = new Handler();
+
+        jsonFeedHandler.postDelayed(new Runnable() {
             public void run() {
                 // call JSON methods here
                 new AttemptJson().execute();
+                Log.i(LOGTAG, "loadLiveFeed");
 
-                Log.d(LOGTAG, "loadLiveFeed async event");
-                // mRenderer.setTrains(mTrains);
             }
         }, 1000); // TODO set to 30000
 
-        try {
-            s42InputStream = getAssets().open("JSON_Samples/bahnfeed_new.json");
-            // TODO load the data feed from the external resource
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        trainFeed = jsonParser.readJsonArray(s42InputStream);
-
-        Log.i(LOGTAG, "loadLiveFeed");
-
-        for (int i = 0; i < trainFeed.length(); i++) {
-            try {
-                mTrains.add(new Train(trainFeed.getJSONObject(i)));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
+//        try {
+//            s42InputStream = getAssets().open("JSON_Samples/bahnfeed_new.json");
+//            // TODO load the data feed from the external resource
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        trainFeed = jsonParser.readJsonArray(s42InputStream);
     }
 
     // Called when the activity will start interacting with the user.
@@ -714,6 +707,16 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
 
             JSONArray json = jsonParser.getJSONArrayFromUrl(REQUEST_URL, "sj-revival", "yeProjekt16");
             Log.d(LOGTAG, "JSON requested");
+
+            trainFeed = json;
+
+            for (int i = 0; i < trainFeed.length(); i++) {
+                try {
+                    mTrains.add(new Train(trainFeed.getJSONObject(i)));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
 
             return null;
         }
