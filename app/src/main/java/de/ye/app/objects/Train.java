@@ -11,6 +11,8 @@ public class Train{
 
     private static final String LOGTAG = Train.class.getSimpleName();
 
+    public Quad quad;
+
     private String trainLineName;
     private String trainID;
     private int previousStopID;
@@ -24,6 +26,7 @@ public class Train{
                  int nextStopID,
                  JSONArray futureProgress,
                  double progress) {
+        this.quad = new Quad();
         this.trainLineName = trainLineName;
         this.trainID = trainID;
         this.previousStopID = previousStopID;
@@ -33,6 +36,8 @@ public class Train{
     }
 
     public Train(JSONObject object) {
+        this.quad = new Quad();
+
         try {
             // this.trainLineName = object.getString("trainLine");
             this.trainID = object.getString("trainID");
@@ -51,7 +56,7 @@ public class Train{
             this.progress = 1;
         }
 
-        Log.i(LOGTAG, this.toString());
+//        Log.i(LOGTAG, this.toString());
     }
 
     public JSONArray getFutureProgress() {

@@ -36,7 +36,7 @@ public class TrainPositionsRenderer implements GLSurfaceView.Renderer {
     private int texSampler2DHandle;
     private ArrayList<TrainLine> mTrainLines;
     private ArrayList<Train> mTrains; // The train symbols we will show
-    private ArrayList<Quad> lineS42; // the static train path data
+//    private ArrayList<Quad> lineS42; // the static train path data
     private Renderer mRenderer;
     private float maxTranslateX = 210f;
     private float maxTranslateY = 148.485489f;
@@ -82,11 +82,11 @@ public class TrainPositionsRenderer implements GLSurfaceView.Renderer {
     // Function for initializing the renderer.
     private void initRendering() {
 
-        lineS42 = new ArrayList<>();
+//        lineS42 = new ArrayList<>();
 
         for (Train train : mTrains) { // only the first train in the array
-            Quad q = new Quad();
-            lineS42.add(q);
+//            Quad q = new Quad();
+//            lineS42.add(q);
 
 //            Log.i(LOGTAG, train.getTrainLineName() + " with ID " + train.getTrainID()
 //                    + " added to render pipeline");
@@ -161,12 +161,12 @@ public class TrainPositionsRenderer implements GLSurfaceView.Renderer {
             // deal with the model view and projection matrices
             float[] modelViewProjection = new float[16];
 
-            for (int i = 0; i < lineS42.size(); i++) {
-                TrainLine currentTrainLine = mTrainLines.get(0);
+            for (int i = 0; i < mTrains.size(); i++) {
+                TrainLine currentTrainLine = mTrainLines.get(0); // TODO get the correct TrainLine for the current mTrain object
 
-                if (currentTrainLine.getTrainCorners().size() < lineS42.size()) {
-                    Log.e(LOGTAG, "Size " + currentTrainLine.getTrainCorners().size() + " of corners is smaller than the size of the lineS42 object: " + lineS42.size());
-                } else {
+//                if (currentTrainLine.getTrainCorners().size() < mTrains.size()) {
+//                    Log.e(LOGTAG, "Size " + currentTrainLine.getTrainCorners().size() + " of corners is smaller than the size of the mTrains object: " + mTrains.size());
+//                } else {
 //                    Log.i(LOGTAG, "~~~~~~~~~~~~~~~~~~~~~");
 //                    Log.i(LOGTAG, mTrains.get(i).getTrainID());
 
@@ -180,10 +180,9 @@ public class TrainPositionsRenderer implements GLSurfaceView.Renderer {
 
                     translateX = (float) targetCoordinates[0];
                     translateY = (float) targetCoordinates[1];
-                }
+//                }
 
-
-                renderMultiObjects(lineS42.get(i), modelViewProjection, modelViewMatrix, textureIndex, translateX, translateY);
+                renderMultiObjects(mTrains.get(i).quad, modelViewProjection, modelViewMatrix, textureIndex, translateX, translateY);
             }
 
             Utils.checkGLError("Render Frame");
@@ -277,6 +276,11 @@ public class TrainPositionsRenderer implements GLSurfaceView.Renderer {
     }
 
     public void setTrains(ArrayList<Train> trains) {
-        mTrains = trains;
+        if(mTrains != null) {
+            mTrains = (ArrayList<Train>)trains.clone();
+        } else {
+            mTrains = trains;
+        }
+        Log.i(LOGTAG, "setTrains..................... Length: " + mTrains.size() + " | trains: " + trains.size());
     }
 }

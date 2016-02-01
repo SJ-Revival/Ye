@@ -163,7 +163,7 @@ public class TrainLine {
             // get the section index between tow corners, of the train position
             double currentTrainDistance = totalDistance * progress;
             int sectionIndex = distances.length - 1;
-            for (int i = sectionIndex; currentTrainDistance < totalDistance; i--) {
+            for (int i = sectionIndex; currentTrainDistance < totalDistance; --i) {
                 // Log.d(LOGTAG, " ~~~~~~~~~~~~~~~~~~~~~~~~ ");
                 // Log.d(LOGTAG, "Current total distance: " + totalDistance + " -> - " + distances[i]);
                 sectionIndex = i;

@@ -126,9 +126,9 @@ public class JsonParser {
                 String contentType = httpConn.getContentType();
                 int contentLength = httpConn.getContentLength();
 
-                Log.d(LOGTAG, "Content-Type = " + contentType);
-                Log.d(LOGTAG, "Content-Disposition = " + disposition);
-                Log.d(LOGTAG, "Content-Length = " + contentLength);
+//                Log.d(LOGTAG, "Content-Type = " + contentType);
+//                Log.d(LOGTAG, "Content-Disposition = " + disposition);
+//                Log.d(LOGTAG, "Content-Length = " + contentLength);
 
                 // opens input stream from the HTTP connection
                 InputStream inputStream = httpConn.getInputStream();

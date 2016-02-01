@@ -40,6 +40,7 @@ import de.ye.app.utils.ApplicationGLView;
 import de.ye.app.utils.JsonParser;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -141,27 +142,11 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
     // TODO should load new data every 30 seconds
     private void loadLiveFeed() {
         jsonParser = new JsonParser();
-        InputStream s42InputStream = null;
-
         jsonFeedHandler = new Handler();
 
-        jsonFeedHandler.postDelayed(new Runnable() {
-            public void run() {
-                // call JSON methods here
-                new AttemptJson().execute();
-                Log.i(LOGTAG, "loadLiveFeed");
-
-            }
-        }, 1000); // TODO set to 30000
-
-//        try {
-//            s42InputStream = getAssets().open("JSON_Samples/bahnfeed_new.json");
-//            // TODO load the data feed from the external resource
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        trainFeed = jsonParser.readJsonArray(s42InputStream);
+        // call JSON methods here
+        new AttemptJson().execute();
+        Log.i(LOGTAG, "loadLiveFeed");
     }
 
     // Called when the activity will start interacting with the user.
@@ -244,6 +229,8 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
         mTextures = null;
 
         System.gc();
+
+
     }
 
     // Initializes AR application components.
@@ -308,9 +295,9 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
                 trackable.startExtendedTracking();
             }
 
-            String name = "Current Dataset : " + trackable.getName();
+            String name = "Current Dataset: " + trackable.getName();
             trackable.setUserData(name);
-            Log.d(LOGTAG, "UserData:Set the following user data " + trackable.getUserData());
+            Log.d(LOGTAG, "UserData: Set the following user data " + trackable.getUserData());
         }
 
         return true;
@@ -695,30 +682,58 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
         }
     }
 
-    private class AttemptJson extends AsyncTask<String, String, String> {
+    private class AttemptJson extends AsyncTask<String, Void, JSONArray> {
 
         private final String LOGTAG = AttemptJson.class.getSimpleName();
 
         @Override
-        protected String doInBackground(String... params) {
+        protected JSONArray doInBackground(String... params) {
             JsonParser jsonParser = new JsonParser();
 
             String REQUEST_URL = getString(R.string.VBB_FEED_URL);
 
             JSONArray json = jsonParser.getJSONArrayFromUrl(REQUEST_URL, "sj-revival", "yeProjekt16");
-            Log.d(LOGTAG, "JSON requested");
+//            Log.d(LOGTAG, "JSON requested");
 
             trainFeed = json;
 
-            for (int i = 0; i < trainFeed.length(); i++) {
+            mTrains = new ArrayList<>();
+
+            if (trainFeed != null) {
+                // TODO delete this test
                 try {
-                    mTrains.add(new Train(trainFeed.getJSONObject(i)));
+                    JSONObject jo = trainFeed.getJSONObject(0);
+                    Log.i(LOGTAG, "trainfeed { ID: " + jo.getString("trainID") + " | start: " + jo.getString("startStation") + " | end: " + jo.getString("stopStation") +  " | %: " + jo.getDouble("percentage") + " }");
                 } catch (JSONException e) {
+                    Log.e(LOGTAG, "JSON Error");
                     e.printStackTrace();
+                }
+
+                for (int i = 0; i < trainFeed.length(); i++) {
+                    try {
+                        Train train = new Train(trainFeed.getJSONObject(i));
+                        mTrains.add(train);
+//                        Log.i(LOGTAG, train.getTrainID() + " added to mTrains");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
-            return null;
+            return json;
+        }
+
+        @Override
+        protected void onPostExecute(JSONArray jsonArray) {
+            super.onPostExecute(jsonArray);
+//            Log.d(LOGTAG, "onPostExecute");
+
+            jsonFeedHandler.postDelayed(new Runnable() {
+                public void run() {
+                    new AttemptJson().execute();
+                    mRenderer.setTrains(mTrains);
+                }
+            }, 1000); // TODO set to 30000
         }
     }
 }
