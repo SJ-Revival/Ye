@@ -164,9 +164,9 @@ public class TrainPositionsRenderer implements GLSurfaceView.Renderer {
             for (int i = 0; i < mTrains.size(); i++) {
 
                 // show only the first train in Array
-                if(i != 0) { // TODO delete when testing is over
-                    continue;
-                }
+//                if(i != 0) { // TODO delete when testing is over
+//                    continue;
+//                }
 
                 TrainLine currentTrainLine = mTrainLines.get(0); // TODO get the correct TrainLine for the current mTrain object
 

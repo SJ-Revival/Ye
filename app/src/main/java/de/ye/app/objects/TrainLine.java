@@ -100,7 +100,7 @@ public class TrainLine {
         int prevStationIndex = getStationIndex(prevStation);
         int nextStationIndex = getStationIndex(nextStation);
 
-        Log.i(LOGTAG, "getTargetCoords 1 = " + "prev: " + prevStation + " | next: " + nextStation + " | %: " + progress);
+//        Log.i(LOGTAG, "getTargetCoords 1 = " + "prev: " + prevStation + " | next: " + nextStation + " | %: " + progress);
 
         if (prevStationIndex == -1 || nextStationIndex == -1) {
             Log.e(LOGTAG, "Could not get the target coordinates for invalid station index");
@@ -113,13 +113,15 @@ public class TrainLine {
         int prevStationCornerIndex = getStationCornerIndex(prevStation);
         int nextStationCornerIndex = getStationCornerIndex(nextStation);
 
-        Log.i(LOGTAG, "getTargetCoords 2 = " + "prevCIndex: " + prevStationCornerIndex + " | nextCIndex: " + nextStationCornerIndex);
+//        Log.i(LOGTAG, "getTargetCoords 2 = " + "prevCIndex: " + prevStationCornerIndex + " | nextCIndex: " + nextStationCornerIndex);
 
         double[] distances = null;
 
         if (nextStationCornerIndex > prevStationCornerIndex) {
+            int distancesSize = nextStationCornerIndex - prevStationCornerIndex;
+//            Log.d(LOGTAG, "getTargetCoords 5 = double size: " + distancesSize);
             // for the normal case
-            distances = new double[nextStationCornerIndex - prevStationCornerIndex];
+            distances = new double[distancesSize];
             int distanceIndex = 0;
 
             for (int i = prevStationCornerIndex; i <= nextStationCornerIndex; i++) {
@@ -129,8 +131,10 @@ public class TrainLine {
             }
         } else if (nextStationCornerIndex < prevStationCornerIndex && this.ring) {
             // if its a ring train and the train is between the last and the first station of the round
+            // e.g. next = 1 and prev = 33
             int distancesSize = (this.getTrainCorners().size() - nextStationCornerIndex)
-                    + prevStationCornerIndex;
+                    + prevStationCornerIndex + 1;
+//            Log.d(LOGTAG, "getTargetCoords 5 = distances size: " + distancesSize);
 
             distances = new double[distancesSize];
             int distanceIndex = 0;
@@ -162,19 +166,24 @@ public class TrainLine {
             }
             // Log.d(LOGTAG, "Total distance: " + totalDistance);
 
-            // get the section index between tow corners, of the train position
+            // get the section index between two corners, of the train position
             double currentTrainDistance = totalDistance * progress;
+//            Log.d(LOGTAG, "getTargetCoords 4 = Current train distance: " + currentTrainDistance);
             int sectionIndex = distances.length - 1;
             for (int i = sectionIndex; currentTrainDistance < totalDistance; --i) {
-                // Log.d(LOGTAG, " ~~~~~~~~~~~~~~~~~~~~~~~~ ");
-                // Log.d(LOGTAG, "Current total distance: " + totalDistance + " -> - " + distances[i]);
+//                Log.d(LOGTAG, "getTargetCoords 40 = i: " + i);
+//                Log.d(LOGTAG, "getTargetCoords 40 = Current total distance: " + totalDistance + " -> - " + distances[i]);
                 sectionIndex = i;
-                // Log.d(LOGTAG, "Current section index: " + sectionIndex);
+//                Log.d(LOGTAG, "getTargetCoords 41 = Current section index: " + sectionIndex);
                 totalDistance -= distances[i];
             }
 
+            sectionIndex = prevStationIndex + sectionIndex;
+
             // actually calculate the position for the Vuforia target image
             if (sectionIndex < this.trainCorners.size()) {
+                // Log.i(LOGTAG, "getTargetCoords 3 = sectionIndex: " + sectionIndex + " | ");
+
                 double p0x = this.trainCorners.get(sectionIndex)[0];
                 double p1x = this.trainCorners.get(sectionIndex + 1)[0];
                 double p0y = this.trainCorners.get(sectionIndex)[1];
@@ -190,6 +199,8 @@ public class TrainLine {
         } else {
             Log.e(LOGTAG, "distances is null");
         }
+
+//        Log.d(LOGTAG, "getTargetCoords ~~~~~~~~~~~~~~~~~~~~");
 
         return new double[]{x, y};
     }
