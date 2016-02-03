@@ -100,19 +100,35 @@ public class TrainLine {
         int prevStationIndex = getStationIndex(prevStation);
         int nextStationIndex = getStationIndex(nextStation);
 
-//        Log.i(LOGTAG, "getTargetCoords 1 = " + "prev: " + prevStation + " | next: " + nextStation + " | %: " + progress);
+        // Log.i(LOGTAG, "getTargetCoords 1 = " + "prev: " + prevStation + " | next: " + nextStation + " | %: " + progress);
 
         if (prevStationIndex == -1 || nextStationIndex == -1) {
             Log.e(LOGTAG, "Could not get the target coordinates for invalid station index");
             return new double[]{0, 0};
         }
 
+//        return getTargetCoords(prevStationID, nextStationID, progress);
+        return new double[]{0, 0};
+    }
+
+    public double[] getTargetCoords(int prevStationID, int nextStationID, double progress) {
         double x = 0;
         double y = 0;
 
-        int prevStationCornerIndex = getStationCornerIndex(prevStation);
-        int nextStationCornerIndex = getStationCornerIndex(nextStation);
+        int prevStationCornerIndex = getStationCornerIndexByID(prevStationID);
+        int nextStationCornerIndex = getStationCornerIndexByID(nextStationID);
 
+        int prevStationIndex = getStationIndexByID(prevStationID);
+        int nextStationIndex = getStationIndexByID(nextStationID);
+
+        // switch stations if backend values are switched
+        if (nextStationCornerIndex < prevStationCornerIndex
+                && nextStationCornerIndex != 0
+                && prevStationCornerIndex != 0) {
+            int tmp = prevStationCornerIndex;
+            prevStationCornerIndex = nextStationCornerIndex;
+            nextStationCornerIndex = tmp;
+        }
 //        Log.i(LOGTAG, "getTargetCoords 2 = " + "prevCIndex: " + prevStationCornerIndex + " | nextCIndex: " + nextStationCornerIndex);
 
         double[] distances = null;
@@ -169,25 +185,40 @@ public class TrainLine {
             // get the section index between two corners, of the train position
             double currentTrainDistance = totalDistance * progress;
 //            Log.d(LOGTAG, "getTargetCoords 4 = Current train distance: " + currentTrainDistance);
+
             int sectionIndex = distances.length - 1;
-            for (int i = sectionIndex; currentTrainDistance < totalDistance; --i) {
+            while (currentTrainDistance < totalDistance) {
+                if (sectionIndex < 0) {
+                    Log.e(LOGTAG, "sectionIndex is lower than 0");
+                    sectionIndex = 0;
+                    break;
+                } else {
 //                Log.d(LOGTAG, "getTargetCoords 40 = i: " + i);
 //                Log.d(LOGTAG, "getTargetCoords 40 = Current total distance: " + totalDistance + " -> - " + distances[i]);
-                sectionIndex = i;
 //                Log.d(LOGTAG, "getTargetCoords 41 = Current section index: " + sectionIndex);
-                totalDistance -= distances[i];
+                    totalDistance -= distances[sectionIndex];
+                    sectionIndex--;
+                }
             }
 
+            sectionIndex++; // compensate the last decrease of the loop
             sectionIndex = prevStationIndex + sectionIndex;
 
             // actually calculate the position for the Vuforia target image
             if (sectionIndex < this.trainCorners.size()) {
-                // Log.i(LOGTAG, "getTargetCoords 3 = sectionIndex: " + sectionIndex + " | ");
+//                Log.i(LOGTAG, "getTargetCoords 5 = prevStation: " + prevStation + " | sectionIndex: " + sectionIndex);
+                int nextSectionIndex = sectionIndex + 1;
+
+                if (this.ring && sectionIndex == this.trainCorners.size() - 1) { // next round of the ring train
+                    nextSectionIndex = 0;
+                } else if (sectionIndex == this.trainCorners.size() - 1) { // end station
+                    nextSectionIndex = sectionIndex;
+                }
 
                 double p0x = this.trainCorners.get(sectionIndex)[0];
-                double p1x = this.trainCorners.get(sectionIndex + 1)[0];
+                double p1x = this.trainCorners.get(nextSectionIndex)[0];
                 double p0y = this.trainCorners.get(sectionIndex)[1];
-                double p1y = this.trainCorners.get(sectionIndex + 1)[1];
+                double p1y = this.trainCorners.get(nextSectionIndex)[1];
 
                 x = p0x + (p1x - p0x) * progress; // TODO remember to adapt the progress to the section
                 y = p0y + (p1y - p0y) * progress;
@@ -203,13 +234,6 @@ public class TrainLine {
 //        Log.d(LOGTAG, "getTargetCoords ~~~~~~~~~~~~~~~~~~~~");
 
         return new double[]{x, y};
-    }
-
-    public double[] getTargetCoords(int prevStation, int nextStation, double progress) {
-        String prevStationName = getTrainStationNameByStationID(prevStation);
-        String nextStationName = getTrainStationNameByStationID(nextStation);
-
-        return getTargetCoords(prevStationName, nextStationName, progress);
     }
 
     private double getDistance(int point_1, int point_2) {
@@ -244,6 +268,24 @@ public class TrainLine {
     public int getStationCornerIndex(String station) {
         int stationIndex = this.trainStationNames.indexOf(station);
         return this.trainStationIndices[stationIndex];
+    }
+
+    public int getStationCornerIndex(int stationIndex) {
+        return this.trainStationIndices[stationIndex];
+    }
+
+    public int getStationCornerIndexByID(int stationID) {
+        return getStationCornerIndex(getStationIndexByID(stationID));
+    }
+
+    public int getStationIndexByID(int stationID) {
+        for (int i = 0; i < this.trainStationIDs.length; i++) {
+            if (this.trainStationIDs[i] == stationID) {
+                return i;
+            }
+        }
+        Log.e(LOGTAG, "ERROR: getStationIndexByID: " + stationID + " not found in trainStationIDs");
+        return -1;
     }
 
     public String getTrainStationNameByCorner(int index) {

@@ -733,7 +733,7 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
                     new AttemptJson().execute();
                     mRenderer.setTrains(mTrains);
                 }
-            }, 1000); // TODO set to 30000
+            }, 30000); // TODO set to 30000
         }
     }
 }

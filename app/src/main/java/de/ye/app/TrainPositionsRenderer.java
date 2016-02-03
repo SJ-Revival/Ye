@@ -36,7 +36,7 @@ public class TrainPositionsRenderer implements GLSurfaceView.Renderer {
     private int texSampler2DHandle;
     private ArrayList<TrainLine> mTrainLines;
     private ArrayList<Train> mTrains; // The train symbols we will show
-//    private ArrayList<Quad> lineS42; // the static train path data
+    //    private ArrayList<Quad> lineS42; // the static train path data
     private Renderer mRenderer;
     private float maxTranslateX = 210f;
     private float maxTranslateY = 148.485489f;
@@ -127,8 +127,8 @@ public class TrainPositionsRenderer implements GLSurfaceView.Renderer {
 
     // The render function.
     private void renderFrame() {
-        float translateX = calcTimeTransformations(maxTranslateX);
-        float translateY = calcTimeTransformations(maxTranslateY);
+        float translateX;
+        float translateY;
 
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
@@ -176,16 +176,16 @@ public class TrainPositionsRenderer implements GLSurfaceView.Renderer {
 //                    Log.i(LOGTAG, "~~~~~~~~~~~~~~~~~~~~~");
 //                    Log.i(LOGTAG, mTrains.get(i).getTrainID());
 
-                    // get the x and y coordinates for the current train
-                    int prevStopID = mTrains.get(i).getPreviousStopID();
-                    int nextStopID = mTrains.get(i).getNextStopID();
-                    double progress = mTrains.get(i).getProgress();
+                // get the x and y coordinates for the current train
+                int prevStopID = mTrains.get(i).getPreviousStopID();
+                int nextStopID = mTrains.get(i).getNextStopID();
+                double progress = mTrains.get(i).getCurrentProgress();
 
-                    double[] targetCoordinates = currentTrainLine.getTargetCoords(prevStopID,
-                            nextStopID, progress);
+                double[] targetCoordinates = currentTrainLine.getTargetCoords(prevStopID,
+                        nextStopID, progress);
 
-                    translateX = (float) targetCoordinates[0];
-                    translateY = (float) targetCoordinates[1];
+                translateX = (float) targetCoordinates[0];
+                translateY = (float) targetCoordinates[1];
 //                }
 
                 renderMultiObjects(mTrains.get(i).quad, modelViewProjection, modelViewMatrix, textureIndex, translateX, translateY);
@@ -282,8 +282,8 @@ public class TrainPositionsRenderer implements GLSurfaceView.Renderer {
     }
 
     public void setTrains(ArrayList<Train> trains) {
-        if(mTrains != null) {
-            mTrains = (ArrayList<Train>)trains.clone();
+        if (mTrains != null) {
+            mTrains = (ArrayList<Train>) trains.clone();
         } else {
             mTrains = trains;
         }
