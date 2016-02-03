@@ -84,10 +84,10 @@ public class Train {
 //                    Log.i(LOGTAG, "progress: " + progress);
 //                    Log.i(LOGTAG, "~~~~");
 
-                    if (progress > 1) { // ensure that the progress is not higher than 1 to prevent unexpected behaviour
-                        progress = 1;
-                        Log.e(LOGTAG, "getCurrentProgress: progress was set to 1");
-                    }
+//                    if (progress > 1) { // ensure that the progress is not higher than 1 to prevent unexpected behaviour
+//                        progress = 1;
+//                        Log.e(LOGTAG, "getCurrentProgress: progress was set to 1");
+//                    }
 
                     double lastProgress = 0;
 
@@ -100,6 +100,7 @@ public class Train {
 
 //                    Log.i(LOGTAG, "getCurrentProgress: result = " + result);
                     if (result < 0) { // TODO do something clever about the negative values
+                        Log.e(LOGTAG, "getCurrentProgress: result was set to 0");
                         result = 0;
                     }
                 }

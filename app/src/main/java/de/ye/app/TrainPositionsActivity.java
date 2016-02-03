@@ -65,14 +65,12 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
     private int mStartDatasetsIndex = 0;
     private int mDatasetsNumber = 0;
     private ArrayList<String> mDatasetStrings = new ArrayList<>();
-    private JSONArray trainFeed; // our feed that is updated every 30 seconds
     private ApplicationGLView mGlView; // Our OpenGL view
     private TrainPositionsRenderer mRenderer; // Our renderer
     private GestureDetector mGestureDetector;
     private Vector<Texture> mTextures; // The textures we will use for rendering
     private ArrayList<TrainLine> mTrainLines; // The train line with the path position data
     private ArrayList<Train> mTrains; // The train symbols we will show
-    private JsonParser jsonParser;
     private Handler jsonFeedHandler;
     private boolean mSwitchDatasetAsap = false;
     private boolean mFlash = false;
@@ -125,7 +123,7 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
         mTextures.add(Texture.loadTextureFromApk("TrainSymbols/U8.png", getAssets()));
     }
 
-    private void loadTrainLines() { // TODO implement json loading
+    private void loadTrainLines() {
         JsonParser jsonParser = new JsonParser();
         InputStream s42InputStream = null;
 
@@ -141,7 +139,6 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
 
     // TODO should load new data every 30 seconds
     private void loadLiveFeed() {
-        jsonParser = new JsonParser();
         jsonFeedHandler = new Handler();
 
         // call JSON methods here
@@ -692,10 +689,7 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
 
             String REQUEST_URL = getString(R.string.VBB_FEED_URL);
 
-            JSONArray json = jsonParser.getJSONArrayFromUrl(REQUEST_URL, "sj-revival", "yeProjekt16");
-//            Log.d(LOGTAG, "JSON requested");
-
-            trainFeed = json;
+            JSONArray trainFeed = jsonParser.getJSONArrayFromUrl(REQUEST_URL, "sj-revival", "yeProjekt16");
 
             mTrains = new ArrayList<>();
 
@@ -720,7 +714,7 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
                 }
             }
 
-            return json;
+            return trainFeed;
         }
 
         @Override
@@ -733,7 +727,7 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
                     new AttemptJson().execute();
                     mRenderer.setTrains(mTrains);
                 }
-            }, 30000); // TODO set to 30000
+            }, 15000); // TODO set to 30000
         }
     }
 }
