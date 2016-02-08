@@ -90,8 +90,8 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
     // activity.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(LOGTAG, "onCreate");
         super.onCreate(savedInstanceState);
+        Log.d(LOGTAG, "onCreate");
 
         vuforiaAppSession = new ApplicationSession(this);
 

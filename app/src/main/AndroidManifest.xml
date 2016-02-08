@@ -88,15 +88,8 @@
           'android:screenOrientation' or in code by calling
           Activity.setRequestedOrientation().
         -->
-        <!-- Splash Screen Activity -->
-        <!-- <activity
-            android:name=".ui.ActivityList.ActivitySplashScreen"
-            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
-            android:screenOrientation="portrait"
-            android:noHistory="true"
-            >
+        <!-- 
 
-         </activity>
         
         <activity
             android:name=".ui.ActivityList.ActivityLauncher"
@@ -112,6 +105,19 @@
             >
         </activity>
 
+        <activity
+                android:name=".ui.ActivityList.ActivitySplashScreen"
+                android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
+                android:screenOrientation="portrait"
+                android:noHistory="true"
+        >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name="de.ye.app.ArrivalActivity"
@@ -132,12 +138,6 @@
                 android:name=".TrainPositionsActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
                 >
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
