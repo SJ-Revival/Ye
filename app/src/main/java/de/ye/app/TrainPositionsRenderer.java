@@ -13,7 +13,6 @@ import android.opengl.Matrix;
 import android.util.Log;
 import com.qualcomm.vuforia.*;
 import de.ye.app.objects.*;
-import de.ye.app.utils.TimeParser;
 import de.ye.app.utils.Utils;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -251,21 +250,6 @@ public class TrainPositionsRenderer implements GLSurfaceView.Renderer {
         // undo transformation
         Matrix.scaleM(modelViewMatrix, 0, 1 / OBJECT_SCALE_FLOAT, 1 / OBJECT_SCALE_FLOAT, 1 / OBJECT_SCALE_FLOAT);
         Matrix.translateM(modelViewMatrix, 0, -translateX, -translateY, -OBJECT_SCALE_FLOAT);
-    }
-
-    private float calcTimeTransformations(float maximum) {
-        Calendar calendar = Calendar.getInstance();
-        Date date = new Date();
-        calendar.setTime(date);
-
-        int seconds = calendar.get(Calendar.SECOND);
-        int milliseconds = calendar.get(Calendar.MILLISECOND);
-
-        TimeParser timeParser = new TimeParser();
-        float animationFactor = timeParser.combineSecondsAndMilliseconds(seconds, milliseconds);
-        animationFactor = (animationFactor - 30000) / 30000f;
-
-        return maximum * animationFactor;
     }
 
     private void printUserData(Trackable trackable) {

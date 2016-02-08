@@ -13,7 +13,7 @@ import android.util.Log;
 
 public class Utils {
 
-    private static final String LOGTAG = "Vuforia_Applications";
+    private static final String LOGTAG = Utils.class.getSimpleName();
 
 
     static int initShader(int shaderType, String source) {
