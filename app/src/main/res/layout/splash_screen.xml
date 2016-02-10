@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="2"
         >
 
     <ImageView
@@ -10,52 +11,37 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            android:src="@drawable/vuforia_splash"
+            android:src="@drawable/ye_splash"
             android:contentDescription="@string/splash_screen_description"
             />
 
     <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:orientation="horizontal"
-            android:baselineAligned="false"
-            >
 
-        <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="25"
-                />
+            android:baselineAligned="false">
 
         <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="25"
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="2"
                 >
-
-            <View
-                    android:id="@+id/logo_image_base"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_centerVertical="true"
-                    />
-
-            <ImageView
-                    android:id="@+id/logo_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerInside"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_below="@+id/logo_image_base"
-                    android:layout_marginRight="25dp"
-                    android:layout_marginEnd="25dp"
-                    android:src="@drawable/logo"
-                    android:contentDescription="@string/splash_screen_description"
-                    />
-
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_centerInParent="true"
+                    >
+                <ImageView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:src="@drawable/logo"
+                        android:contentDescription="@string/ye_logo"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="2">
+                </ImageView>
+            </LinearLayout>
         </RelativeLayout>
-
     </LinearLayout>
-
 </RelativeLayout>

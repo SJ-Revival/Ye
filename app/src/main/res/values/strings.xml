@@ -66,7 +66,7 @@
     <string name="menu_button_yellow">Yellow</string>
     <string name="menu_button_green">Green</string>
 
-    <string name="splash_screen_description">Vuforia Splash</string>
+    <string name="splash_screen_description">Ye Splash</string>
     <string name="scan">Scan</string>
 
     <string name="VBB_FEED_URL">http://ec2-52-28-74-34.eu-central-1.compute.amazonaws.com:8080/vbb_feed/bahnfeed</string>
@@ -77,4 +77,5 @@
     <string name="view_navigation">Navigation</string>
     <string name="view_animation">Animation</string>
     <string name="view_menu">Menu</string>
+    <string name="ye_logo">ye_logo</string>
 </resources>
