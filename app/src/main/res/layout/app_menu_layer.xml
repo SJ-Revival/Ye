@@ -26,29 +26,11 @@
                     android:id="@+id/settings_menu_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/light_gray"
+                    android:background="@color/orange"
                     android:padding="@dimen/menu_title_padding"
-                    android:textStyle="bold"
+                    android:textStyle="normal"
                     android:text="@string/view_menu"
-                    android:textColor="@color/black"
-                    />
-
-            <TextView
-                    android:id="@+id/startNavigationActivity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/view_navigation"
-                    android:textColor="@color/black"
-                    android:padding="@dimen/menu_title_padding"
-                    />
-
-            <TextView
-                    android:id="@+id/startAnimationActivity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/view_animation"
-                    android:textColor="@color/black"
-                    android:padding="@dimen/menu_title_padding"
+                    android:textColor="@color/white"
                     />
 
         </LinearLayout>

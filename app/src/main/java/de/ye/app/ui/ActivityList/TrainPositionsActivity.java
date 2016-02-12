@@ -362,7 +362,7 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
                 Log.e(LOGTAG, "Unable to enable continuous autofocus");
             }
 
-            mAppMenu = new AppMenu(this, this, "Image Targets", mGlView, mUILayout, null);
+            mAppMenu = new AppMenu(this, this, "S-Bahn Navigation", mGlView, mUILayout, null);
             setAppMenuSettings();
 
         } else {
@@ -488,11 +488,8 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
     private void setAppMenuSettings() {
         AppMenuGroup group;
 
-        group = mAppMenu.addGroup("", false);
-        group.addTextItem(getString(R.string.menu_back), -1);
-
         group = mAppMenu.addGroup("", true);
-        group.addSelectionItem(getString(R.string.menu_extended_tracking), CMD_EXTENDED_TRACKING, false);
+//        group.addSelectionItem(getString(R.string.menu_extended_tracking), CMD_EXTENDED_TRACKING, false);
         group.addSelectionItem(getString(R.string.menu_contAutofocus), CMD_AUTOFOCUS, mContAutofocus);
         mFlashOptionView = group.addSelectionItem(getString(R.string.menu_flash), CMD_FLASH, false);
 
@@ -527,7 +524,7 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
         mDatasetsNumber = mDatasetStrings.size();
 
         //group.addRadioItem("Stones & Chips", mStartDatasetsIndex, true);
-        group.addRadioItem(getString(R.string.menu_radio_navigation), mStartDatasetsIndex, true);
+//        group.addRadioItem(getString(R.string.menu_radio_navigation), mStartDatasetsIndex, true);
         //group.addRadioItem("{item name}", mStartDatasetsIndex + 1, false);
 
         mAppMenu.attachMenu();
