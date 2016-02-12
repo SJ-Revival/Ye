@@ -105,6 +105,7 @@ public class Utils {
             // as the camera coordinates are always in landscape
             // we convert the inputs into a landscape based coordinate system
             int tmp = screenX;
+            //noinspection SuspiciousNameCombination
             screenX = screenY;
             screenY = screenWidth - tmp;
 
@@ -113,6 +114,7 @@ public class Utils {
             screenDY = tmp;
 
             tmp = screenWidth;
+            //noinspection SuspiciousNameCombination
             screenWidth = screenHeight;
             screenHeight = tmp;
         } else {
@@ -145,19 +147,19 @@ public class Utils {
         }
 
         if (cameraX != null && cameraX.length > 0) {
-            cameraX[0] = (int) ((scaledUpX / (float) scaledUpVideoWidth) * videoWidth);
+            cameraX[0] = (int) ((scaledUpX / scaledUpVideoWidth) * videoWidth);
         }
 
         if (cameraY != null && cameraY.length > 0) {
-            cameraY[0] = (int) ((scaledUpY / (float) scaledUpVideoHeight) * videoHeight);
+            cameraY[0] = (int) ((scaledUpY / scaledUpVideoHeight) * videoHeight);
         }
 
         if (cameraDX != null && cameraDX.length > 0) {
-            cameraDX[0] = (int) (((float) screenDX / (float) scaledUpVideoWidth) * videoWidth);
+            cameraDX[0] = (int) (((float) screenDX / scaledUpVideoWidth) * videoWidth);
         }
 
         if (cameraDY != null && cameraDY.length > 0) {
-            cameraDY[0] = (int) (((float) screenDY / (float) scaledUpVideoHeight) * videoHeight);
+            cameraDY[0] = (int) (((float) screenDY / scaledUpVideoHeight) * videoHeight);
         }
     }
 

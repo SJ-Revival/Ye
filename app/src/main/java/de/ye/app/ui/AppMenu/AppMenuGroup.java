@@ -6,7 +6,7 @@ and other countries. Trademarks of QUALCOMM Incorporated are used with permissio
 ===============================================================================*/
 
 
-package de.ye.app.ui.AppMenu;
+package de.ye.app.ui.appMenu;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

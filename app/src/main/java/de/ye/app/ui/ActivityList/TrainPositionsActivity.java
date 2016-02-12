@@ -5,7 +5,7 @@ Vuforia is a trademark of QUALCOMM Incorporated, registered in the United States
 and other countries. Trademarks of QUALCOMM Incorporated are used with permission.
 ===============================================================================*/
 
-package de.ye.app;
+package de.ye.app.ui.activityList;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -29,18 +29,21 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 import com.qualcomm.vuforia.*;
+import de.ye.app.ApplicationControl;
+import de.ye.app.ApplicationException;
+import de.ye.app.ApplicationSession;
+import de.ye.app.R;
 import de.ye.app.objects.LoadingDialogHandler;
 import de.ye.app.objects.Texture;
 import de.ye.app.objects.Train;
 import de.ye.app.objects.TrainLine;
-import de.ye.app.ui.AppMenu.AppMenu;
-import de.ye.app.ui.AppMenu.AppMenuGroup;
-import de.ye.app.ui.AppMenu.AppMenuInterface;
+import de.ye.app.ui.appMenu.AppMenu;
+import de.ye.app.ui.appMenu.AppMenuGroup;
+import de.ye.app.ui.appMenu.AppMenuInterface;
 import de.ye.app.utils.ApplicationGLView;
 import de.ye.app.utils.JsonParser;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -694,15 +697,6 @@ public class TrainPositionsActivity extends Activity implements ApplicationContr
             mTrains = new ArrayList<>();
 
             if (trainFeed != null) {
-                // TODO delete this test
-                try {
-                    JSONObject jo = trainFeed.getJSONObject(0);
-//                    Log.i(LOGTAG, "trainfeed { ID: " + jo.getString("trainID") + " | start: " + jo.getString("startStation") + " | end: " + jo.getString("stopStation") +  " | %: " + jo.getDouble("percentage") + " }");
-                } catch (JSONException e) {
-                    Log.e(LOGTAG, "JSON Error");
-                    e.printStackTrace();
-                }
-
                 for (int i = 0; i < trainFeed.length(); i++) {
                     try {
                         Train train = new Train(trainFeed.getJSONObject(i));

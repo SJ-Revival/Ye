@@ -5,10 +5,10 @@ Vuforia is a trademark of QUALCOMM Incorporated, registered in the United States
 and other countries. Trademarks of QUALCOMM Incorporated are used with permission.
 ===============================================================================*/
 
-package de.ye.app.ui.AppMenu;
+package de.ye.app.ui.appMenu;
 
 // To be implemented in the activities to handle any desired function 
 // previously set for a AppMenu instance
 public interface AppMenuInterface {
-    public boolean menuProcess(int command);
+    boolean menuProcess(int command);
 }

@@ -81,10 +81,6 @@ public class Texture {
 
         texture.mData.rewind();
 
-        // Cleans variables... Why Vuforia? Why?
-        dataBytes = null;
-        data = null;
-
         texture.mSuccess = true;
         return texture;
     }

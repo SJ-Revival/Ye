@@ -5,7 +5,7 @@ Vuforia is a trademark of QUALCOMM Incorporated, registered in the United States
 and other countries. Trademarks of QUALCOMM Incorporated are used with permission.
 ===============================================================================*/
 
-package de.ye.app.ui.AppMenu;
+package de.ye.app.ui.appMenu;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
@@ -31,7 +31,7 @@ public class AppMenuAnimator extends ValueAnimator implements
     @Override
     public void onAnimationUpdate(ValueAnimator animation) {
         Float f = (Float) animation.getAnimatedValue();
-        mAppMenu.setAnimationX(f.floatValue());
+        mAppMenu.setAnimationX(f);
     }
 
 

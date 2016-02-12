@@ -5,10 +5,9 @@ Vuforia is a trademark of QUALCOMM Incorporated, registered in the United States
 and other countries. Trademarks of QUALCOMM Incorporated are used with permission.
 ===============================================================================*/
 
-package de.ye.app.ui.AppMenu;
+package de.ye.app.ui.appMenu;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Color;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
@@ -20,9 +19,7 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import de.ye.app.ArrivalActivity;
 import de.ye.app.R;
-import de.ye.app.RouteActivity;
 
 import java.util.ArrayList;
 
@@ -31,6 +28,14 @@ import java.util.ArrayList;
 public class AppMenu {
 
     protected static final String SwipeSettingsInterface = null;
+    private static float SETTINGS_MENU_SCREEN_PERCENTAGE = .80f;
+    private static float SETTINGS_MENU_SCREEN_MIN_PERCENTAGE_TO_SHOW = .1f;
+    // True if dragging and displaying the menu
+    boolean mSwipingMenu = false;
+    // True if menu is showing and docked
+    boolean mStartMenuDisplaying = false;
+    float mGingerbreadMenuClipping = 0;
+    boolean mIsBelowICS = Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH;
     private GestureListener mGestureListener;
     private GestureDetector mGestureDetector;
     private AppMenuAnimator mMenuAnimator;
@@ -40,24 +45,10 @@ public class AppMenu {
     private AppMenuView mParentMenuView;
     private LinearLayout mMovableListView;
     private ArrayList<AppMenuGroup> mSettingsItems = new ArrayList<>();
-
     private ArrayList<View> mAdditionalViews;
     private float mInitialAdditionalViewsX[];
     private int mScreenWidth;
     private int mListViewWidth = 0;
-
-    // True if dragging and displaying the menu
-    boolean mSwipingMenu = false;
-
-    // True if menu is showing and docked
-    boolean mStartMenuDisplaying = false;
-
-    float mGingerbreadMenuClipping = 0;
-
-    private static float SETTINGS_MENU_SCREEN_PERCENTAGE = .80f;
-    private static float SETTINGS_MENU_SCREEN_MIN_PERCENTAGE_TO_SHOW = .1f;
-
-    boolean mIsBelowICS = Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH;
 
 
     // Parameters:
@@ -84,28 +75,6 @@ public class AppMenu {
         mMovableListView = (LinearLayout) mParentMenuView
                 .findViewById(R.id.settings_menu);
         mMovableListView.setBackgroundColor(Color.WHITE);
-
-        TextView startNavigation = (TextView) mParentMenuView.findViewById(R.id.startNavigationActivity);
-        startNavigation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*@TODO change Activity Class */
-                Intent i = new Intent(mActivity, RouteActivity.class);
-                mActivity.startActivity(i);
-
-            }
-        });
-
-        TextView startAnimation = (TextView) mParentMenuView.findViewById(R.id.startAnimationActivity);
-        startAnimation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*@TODO change Activity Class */
-                Intent i = new Intent(mActivity, ArrivalActivity.class);
-                mActivity.startActivity(i);
-
-            }
-        });
 
         TextView title = (TextView) mMovableListView
                 .findViewById(R.id.settings_menu_title);
@@ -245,7 +214,7 @@ public class AppMenu {
 
 
     private float getViewX(View view) {
-        float x = 0;
+        float x;
         if (!mIsBelowICS)
             x = view.getX();
         else
@@ -420,6 +389,9 @@ public class AppMenu {
             return true;
         }
 
+        public float getMaxSwipe() {
+            return mMaxXSwipe;
+        }
 
         // Percentage of the screen to display and maintain the menu
         public void setMaxSwipe(float maxXSwipe) {
@@ -428,11 +400,6 @@ public class AppMenu {
                 mMenuAnimator.setMaxX(mMaxXSwipe);
                 mMenuAnimator.setStartEndX(0.0f, mMaxXSwipe);
             }
-        }
-
-
-        public float getMaxSwipe() {
-            return mMaxXSwipe;
         }
 
     }

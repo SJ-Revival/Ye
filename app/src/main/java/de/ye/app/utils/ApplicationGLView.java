@@ -30,6 +30,13 @@ public class ApplicationGLView extends GLSurfaceView {
         super(context);
     }
 
+    // Checks the OpenGL error.
+    private static void checkEglError(String prompt, EGL10 egl) {
+        int error;
+        while ((error = egl.eglGetError()) != EGL10.EGL_SUCCESS) {
+            Log.e(LOGTAG, String.format("%s: EGL error: 0x%x", prompt, error));
+        }
+    }
 
     // Initialization.
     public void init(boolean translucent, int depth, int stencil) {
@@ -92,18 +99,17 @@ public class ApplicationGLView extends GLSurfaceView {
         }
     }
 
-
-    // Checks the OpenGL error.
-    private static void checkEglError(String prompt, EGL10 egl) {
-        int error;
-        while ((error = egl.eglGetError()) != EGL10.EGL_SUCCESS) {
-            Log.e(LOGTAG, String.format("%s: EGL error: 0x%x", prompt, error));
-        }
-    }
-
     // The config chooser.
     private static class ConfigChooser implements
             EGLConfigChooser {
+        // Subclasses can adjust these values:
+        protected int mRedSize;
+        protected int mGreenSize;
+        protected int mBlueSize;
+        protected int mAlphaSize;
+        protected int mDepthSize;
+        protected int mStencilSize;
+        private int[] mValue = new int[1];
         public ConfigChooser(int r, int g, int b, int a, int depth, int stencil) {
             mRedSize = r;
             mGreenSize = g;
@@ -112,7 +118,6 @@ public class ApplicationGLView extends GLSurfaceView {
             mDepthSize = depth;
             mStencilSize = stencil;
         }
-
 
         private EGLConfig getMatchingConfig(EGL10 egl, EGLDisplay display,
                                             int[] configAttribs) {
@@ -133,7 +138,6 @@ public class ApplicationGLView extends GLSurfaceView {
             return chooseConfig(egl, display, configs);
         }
 
-
         public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display) {
             // This EGL config specification is used to specify 2.0
             // rendering. We use a minimum size of 4 bits for
@@ -147,7 +151,6 @@ public class ApplicationGLView extends GLSurfaceView {
 
             return getMatchingConfig(egl, display, s_configAttribs_gl20);
         }
-
 
         public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display,
                                       EGLConfig[] configs) {
@@ -179,7 +182,6 @@ public class ApplicationGLView extends GLSurfaceView {
             return null;
         }
 
-
         private int findConfigAttrib(EGL10 egl, EGLDisplay display,
                                      EGLConfig config, int attribute, int defaultValue) {
 
@@ -188,14 +190,5 @@ public class ApplicationGLView extends GLSurfaceView {
 
             return defaultValue;
         }
-
-        // Subclasses can adjust these values:
-        protected int mRedSize;
-        protected int mGreenSize;
-        protected int mBlueSize;
-        protected int mAlphaSize;
-        protected int mDepthSize;
-        protected int mStencilSize;
-        private int[] mValue = new int[1];
     }
 }

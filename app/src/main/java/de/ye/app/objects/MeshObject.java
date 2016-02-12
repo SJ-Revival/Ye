@@ -14,30 +14,21 @@ import java.nio.ByteOrder;
 
 public abstract class MeshObject {
 
-    public enum BUFFER_TYPE {
-        BUFFER_TYPE_VERTEX, BUFFER_TYPE_TEXTURE_COORD, BUFFER_TYPE_NORMALS, BUFFER_TYPE_INDICES
-    }
-
-
     public Buffer getVertices() {
         return getBuffer(BUFFER_TYPE.BUFFER_TYPE_VERTEX);
     }
-
 
     public Buffer getTexCoords() {
         return getBuffer(BUFFER_TYPE.BUFFER_TYPE_TEXTURE_COORD);
     }
 
-
     public Buffer getNormals() {
         return getBuffer(BUFFER_TYPE.BUFFER_TYPE_NORMALS);
     }
 
-
     public Buffer getIndices() {
         return getBuffer(BUFFER_TYPE.BUFFER_TYPE_INDICES);
     }
-
 
     protected Buffer fillBuffer(double[] array) {
         // Convert to floats because OpenGL doesn't work on doubles, and manually
@@ -53,7 +44,6 @@ public abstract class MeshObject {
 
     }
 
-
     protected Buffer fillBuffer(float[] array) {
         // Each float takes 4 bytes
         ByteBuffer bb = ByteBuffer.allocateDirect(4 * array.length);
@@ -65,7 +55,6 @@ public abstract class MeshObject {
         return bb;
 
     }
-
 
     protected Buffer fillBuffer(short[] array) {
         // Each short takes 2 bytes
@@ -79,13 +68,15 @@ public abstract class MeshObject {
 
     }
 
-
     public abstract Buffer getBuffer(BUFFER_TYPE bufferType);
-
 
     public abstract int getNumObjectVertex();
 
-
     public abstract int getNumObjectIndex();
+
+
+    public enum BUFFER_TYPE {
+        BUFFER_TYPE_VERTEX, BUFFER_TYPE_TEXTURE_COORD, BUFFER_TYPE_NORMALS, BUFFER_TYPE_INDICES
+    }
 
 }

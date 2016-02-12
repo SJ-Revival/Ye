@@ -191,7 +191,6 @@ public class Train {
             return false;
         if (trainID != null ? !trainID.equals(train.trainID) : train.trainID != null) return false;
         return futureProgress != null ? futureProgress.equals(train.futureProgress) : train.futureProgress == null;
-
     }
 
     @Override

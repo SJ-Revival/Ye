@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="de.ye.app"
-    android:versionCode="1"
-    android:versionName="0.1" >
+          package="de.ye.app"
+          android:versionCode="1"
+          android:versionName="0.1">
 
     <!--
         The application's compatibility with one or more versions of the Android
@@ -11,8 +11,7 @@
         android:minSdkVersion = application's required minimum API level to run
         android:targetSdkVersion = application's targeted API level
     -->
-
-    <uses-feature android:glEsVersion="0x00020000" />
+    <uses-feature android:glEsVersion="0x00020000"/>
 
     <!--
          The application requires a camera.
@@ -28,14 +27,14 @@
          other camera features that you do not request will no longer be
          assumed as required.
     -->
-    <uses-feature android:name="android.hardware.camera" />
-    
+    <uses-feature android:name="android.hardware.camera"/>
+
     <!--
         Add this permission to get access to the camera.
     -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <!--
         Add this permission to allow opening network sockets.
@@ -46,13 +45,13 @@
         Add this permission to check which network access properties (e.g.
         active type: 3G/WiFi).
      -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL"/>
 
-    
+
     <!--
       NOTE: The setting 'android:launchMode="singleTask"' makes sure
       that the activity can begin only one task and the device can hold only
@@ -64,78 +63,31 @@
       would allow the activity to be launched multiple times.
     -->
     <application
-        android:name="de.ye.app.utils.MyApplication"
-        android:icon="@drawable/icon"
-        android:label="@string/app_name"
-        android:description="@string/app_description"
-        android:launchMode="singleTask"
-        android:allowBackup="true"
-        android:theme="@style/YeLightTheme"
-        >
-        
-
-         <!--
-          NOTE: The values in 'android:configChanges' ensure that Android will 
-          not destroy and re-create the activity when the user flips the 
-          keyboard, changes the orientation of the device, or the actual or 
-          physical screen resolution changes, but calls the Activity's 
-          onConfigurationChanged() function instead.
-
-          NOTE 2: In order to prevent automatic reactions to orientation
-          changes in addition to setting proper values for
-          'android:configChanges', you also must explicitly specify the screen
-          orientation used by the application, either by setting the attribute
-          'android:screenOrientation' or in code by calling
-          Activity.setRequestedOrientation().
-        -->
-        <!-- 
-
-        
-        <activity
-            android:name=".ui.ActivityList.ActivityLauncher"
-            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
-            android:screenOrientation="portrait"
+            android:name="android.app.Application"
+            android:icon="@drawable/icon"
+            android:label="@string/app_name"
+            android:description="@string/app_description"
+            android:launchMode="singleTask"
+            android:allowBackup="true"
+            android:theme="@style/YeLightTheme"
             >
-        </activity>-->
 
         <activity
-            android:name="de.ye.app.MainActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
-            android:screenOrientation="portrait"
-            >
-        </activity>
-
-        <activity
-                android:name=".ui.ActivityList.ActivitySplashScreen"
+                android:name=".ui.activityList.ActivitySplashScreen"
                 android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
                 android:screenOrientation="portrait"
                 android:noHistory="true"
-        >
+                >
 
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
         <activity
-            android:name="de.ye.app.ArrivalActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
-            android:screenOrientation="portrait"
-            android:exported="true"
-            >
-        </activity>
-
-        <activity
-            android:name="de.ye.app.RouteActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
-            android:screenOrientation="portrait"
-            >
-        </activity>
-
-        <activity
-                android:name=".TrainPositionsActivity"
+                android:name=".ui.activityList.TrainPositionsActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"
                 >
         </activity>

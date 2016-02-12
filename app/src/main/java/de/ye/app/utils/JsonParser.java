@@ -122,9 +122,9 @@ public class JsonParser {
 
             // always check HTTP response code first
             if (responseCode == HttpURLConnection.HTTP_OK) {
-                String disposition = httpConn.getHeaderField("Content-Disposition");
-                String contentType = httpConn.getContentType();
-                int contentLength = httpConn.getContentLength();
+//                String disposition = httpConn.getHeaderField("Content-Disposition");
+//                String contentType = httpConn.getContentType();
+//                int contentLength = httpConn.getContentLength();
 
 //                Log.d(LOGTAG, "Content-Type = " + contentType);
 //                Log.d(LOGTAG, "Content-Disposition = " + disposition);
@@ -137,7 +137,7 @@ public class JsonParser {
                 // opens an output stream to save into file
                 StringBuilder sb = new StringBuilder();
 
-                int charsRead = -1;
+                int charsRead;
                 char[] chars = new char[BUFFER_SIZE];
                 while ((charsRead = reader.read(chars)) != -1) {
                     sb.append(chars, 0, charsRead);

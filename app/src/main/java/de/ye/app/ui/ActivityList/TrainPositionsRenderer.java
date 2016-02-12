@@ -5,19 +5,21 @@ Vuforia is a trademark of QUALCOMM Incorporated, registered in the United States
 and other countries. Trademarks of QUALCOMM Incorporated are used with permission.
 ===============================================================================*/
 
-package de.ye.app;
+package de.ye.app.ui.activityList;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.Log;
 import com.qualcomm.vuforia.*;
+import de.ye.app.ApplicationSession;
 import de.ye.app.objects.*;
 import de.ye.app.utils.Utils;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Vector;
 
 // The renderer class for the TrainPositionsActivity sample.
 public class TrainPositionsRenderer implements GLSurfaceView.Renderer {
@@ -80,22 +82,6 @@ public class TrainPositionsRenderer implements GLSurfaceView.Renderer {
 
     // Function for initializing the renderer.
     private void initRendering() {
-
-//        lineS42 = new ArrayList<>();
-
-        for (Train train : mTrains) { // only the first train in the array
-//            Quad q = new Quad();
-//            lineS42.add(q);
-
-//            Log.i(LOGTAG, train.getTrainLineName() + " with ID " + train.getTrainID()
-//                    + " added to render pipeline");
-
-            TrainLine trainLine = mTrainLines.get(0);
-            String s = Arrays.toString(trainLine.getTargetCoords(train.getPreviousStopID(),
-                    train.getNextStopID(), train.getProgress()));
-//            Log.i(LOGTAG, train.getTrainLineName() + " with ID " + train.getTrainID() + " " + s);
-//            Log.i(LOGTAG, "#############");
-        }
 
         mRenderer = Renderer.getInstance();
 
@@ -160,6 +146,7 @@ public class TrainPositionsRenderer implements GLSurfaceView.Renderer {
             // deal with the model view and projection matrices
             float[] modelViewProjection = new float[16];
 
+            //noinspection ForLoopReplaceableByForEach
             for (int i = 0; i < mTrains.size(); i++) {
 
                 // show only the first train in Array

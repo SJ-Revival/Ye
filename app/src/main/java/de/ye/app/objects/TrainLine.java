@@ -247,9 +247,7 @@ public class TrainLine {
         double y2 = n[1];
         // Log.d(LOGTAG, "x1: " + x1 + " y1: " + y1 + " | x2: " + x2 + " y2: " + y2);
 
-        double distance = getDistanceBetweenTwoPoints(x1, x2, y1, y2);
-        // Log.d(LOGTAG, "The Distance between x and y is " + distance);
-        return distance;
+        return getDistanceBetweenTwoPoints(x1, x2, y1, y2);
     }
 
     private double getDistanceBetweenTwoPoints(double x1, double x2, double y1, double y2) {

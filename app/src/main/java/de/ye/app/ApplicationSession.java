@@ -369,7 +369,7 @@ public class ApplicationSession implements UpdateCallbackInterface {
         config.setEnabled(true);
         config.setPosition(new Vec2I(0, 0));
 
-        int xSize = 0, ySize = 0;
+        int xSize, ySize;
         if (mIsPortrait) {
             xSize = (int) (vm.getHeight() * (mScreenHeight / (float) vm
                     .getWidth()));

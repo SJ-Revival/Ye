@@ -4,7 +4,7 @@ Vuforia is a trademark of QUALCOMM Incorporated, registered in the United States
 and other countries. Trademarks of QUALCOMM Incorporated are used with permission.
 ===============================================================================*/
 
-package de.ye.app.ui.ActivityList;
+package de.ye.app.ui.activityList;
 
 
 import android.app.Activity;
@@ -17,7 +17,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import de.ye.app.R;
-import de.ye.app.TrainPositionsActivity;
 
 
 public class ActivitySplashScreen extends Activity {
